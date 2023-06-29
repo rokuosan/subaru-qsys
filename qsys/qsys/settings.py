@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    "app",
     "django_bootstrap5",
     "django_prometheus",
     "django.contrib.admin",
@@ -133,3 +134,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+# Authentication
+AUTH_USER_MODEL = "app.AppUser"
