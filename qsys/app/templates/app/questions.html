@@ -1,0 +1,45 @@
+{% extends "base.html"%}
+{% block title%} Questions | Subaru CTF {% endblock title %}
+{% block content %}
+
+<body>
+  {% include "app/components/header.html" %}
+  <div class="container">
+    {% for item in list %}
+    <div class="row">
+      <div class="col my-4">
+        <h2 style="border-left-style: solid;padding-left: 12px;padding-bottom: 4px;">{{ item.category }}</h2>
+        <div class="row pt-2 gy-3">
+          {% if not item.questions %}
+          <div>
+            <div class="alert alert-warning" role="alert">
+              {{ item.category }} questions are not available yet.
+            </div>
+          </div>
+          {% else %}
+          {% for question in item.questions %}
+          <div class="col">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="{{ question.question_id }}" class="text-dark">
+                    {{ question.title}}
+                  </a>
+                </h4>
+                <div class="py-1">
+                  <h6 class="text-muted card-subtitle py-1">Level: {{ question.difficulty_name }}</h6>
+                  <h6 class="text-muted card-subtitle">Point: {{ question.point }}</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+
+{% endblock content %}
