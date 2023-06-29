@@ -1,0 +1,54 @@
+{% extends "base.html"%}
+{% block title%} {{ question.title }} | Subaru CTF {% endblock title %}
+{% block content %}
+
+<body>
+  {% include "app/components/header.html" %}
+  <div class="container" style="padding: 16px;">
+    {% if not error %}
+    <div class="row flex-column g-3">
+      <div class="col border-bottom my-4">
+        <h2>{{ question.title }}</h2>
+      </div>
+      <div class="col pb-4">
+        <p>{{ question.content | safe | linebreaksbr }}</p>
+      </div>
+      <div class="col border-top py-4">
+        <form action="{% url 'question' question.question_id %}" method="post">
+          <div class="mb-3">
+            {% csrf_token %}
+            <label for="answer" class="form-label">Answer</label>
+            <input type="text" class="form-control" id="answer" name="answer" placeholder="Enter the flag">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+          {% if status == 'correct' %}
+          <div class="container py-2">
+            <div class="alert alert-success" role="alert">
+              正解です！ <a href="{% url 'questions' %}">問題一覧へ戻る</a>
+            </div>
+          </div>
+          {% elif status == 'incorrect' %}
+          <div class="container py-2">
+            <div class="alert alert-danger" role="alert">
+              不正解
+            </div>
+          </div>
+          {% elif status == 'already_answered' %}
+          <div class="container py-2">
+            <div class="alert alert-danger" role="alert">
+              回答済みの問題です。
+            </div>
+          </div>
+          {% endif %}
+      </div>
+    </div>
+    {% else %}
+    <div>
+      <div class="alert alert-warning" role="alert">
+        そのような問題は存在しません。<a href="/questions">Questions</a>から問題を選択してください。
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</body>
+{% endblock content %}

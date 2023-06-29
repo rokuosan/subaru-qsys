@@ -17,4 +17,5 @@ urlpatterns = [
 
     # Questions
     path('questions/', questions, name='questions'),
+    path('questions/<int:question_id>/', questions, name='question_detail')
 ]
