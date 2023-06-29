@@ -1,6 +1,6 @@
 import datetime
 from django.http import HttpRequest
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 
 from app.models.category import CtfQuestionCategory
@@ -30,12 +30,12 @@ def questions(request: HttpRequest):
     # カテゴリ名を持った辞書を作成し、ctx['list']に追加
     for c in categories:
         info = {}
-        info['category'] = c['category_name']
+        info['category'] = c['name']
         ctx['list'].append(info)
 
     # 問題データに難易度名を追加し、カテゴリが対応するctx['list']に追加
     for q in questions:
-        cn = categories.get(pk=q['category_id'])['category_name']
+        cn = categories.get(pk=q['category_id'])['name']
         dn = diffs.get(difficulty_id=q['difficulty_id'])['name']
 
         for li in ctx['list']:
@@ -59,52 +59,62 @@ def question_detail(request: HttpRequest, question_id: int):
     ctx = {}
     question = get_object_or_404(CtfQuestion, pk=question_id)
     ctx['question'] = question
-    ctx['status'] = 'in_progress'
 
-    # POST /questions/<int:question_id>/
+
     if request.method == 'POST':
-        # Get sent answer
         answer = request.POST.get('answer')
 
-        if (answer == None or answer == ''):
-            ctx['status'] = 'invalid'
-            return render(request, 'app/questions/content.html', ctx)
+        now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
+        ctf = CtfInformation.objects.filter(
+            start_at__lte=now, end_at__gte=now).first()
 
-        print(question)
-        # Check answer
-        is_correct = question.flag == answer
-        if is_correct:
-            # 正解を表示
-            ctx['status'] = 'correct'
+        list = CtfAnswerHistory.objects.filter(
+            question=question, user=request.user, is_correct=True)
 
-            # 開催中のCTFを取得
-            now = datetime.datetime.now()
-            ctf = CtfInformation.objects.filter(
-                start_at__lte=now, end_at__gte=now).first()
+        if list.exists():
+            request.session['result'] = {
+                'message': '回答済みです',
+                'is_correct': False,
+            }
+            return redirect(question_detail, question_id=question_id)
 
-            # 回答済みかどうかを確認
-            if CtfScore.objects.filter(user=request.user, ctf=ctf, question=question).exists():
-                ctx['status'] = 'already_answered'
-                return render(request, 'app/questions/content.html', ctx)
-
-            # スコアを保存
-            CtfScore.objects.create(
-                user=request.user,
-                ctf=ctf,
-                question=question,
-                point=question.point
+        if answer == question.flag:
+            # 正解履歴を保存
+            history = CtfAnswerHistory(
+                question = question,
+                user = request.user,
+                content = answer,
+                is_correct = True,
             )
+            history.save()
 
+            request.session['result'] = {
+                'message': '正解！',
+                'is_correct': True,
+            }
         else:
-            # 不正解を表示
-            ctx['status'] = 'incorrect'
+            history = CtfAnswerHistory(
+                question = question,
+                user = request.user,
+                content = answer,
+                is_correct = False,
+            )
+            history.save()
 
-        # 回答履歴を保存
-        CtfAnswerHistory.objects.create(
-            user=request.user,
-            question=question,
-            answered_content=answer,
-            is_correct=is_correct
-        )
+            request.session['result'] = {
+                'message': '不正解',
+                'is_correct': False,
+            }
 
-    return render(request, 'app/questions/content.html', ctx)
+        return redirect(question_detail, question_id=question_id)
+
+    elif request.method == 'GET':
+        # セッションからcontextを取得
+        if 'result' in request.session.keys():
+            res = request.session['result']
+            ctx['message'] = res['message']
+            ctx['is_correct'] = res['is_correct']
+            del request.session['result']
+
+
+    return render(request, 'app/question_detail.html', ctx)

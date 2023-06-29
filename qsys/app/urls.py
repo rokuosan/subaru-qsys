@@ -2,7 +2,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
 from .views.index import index
-from .views.questions import questions
+from .views.questions import question_detail, questions
 
 
 urlpatterns = [
@@ -17,5 +17,5 @@ urlpatterns = [
 
     # Questions
     path('questions/', questions, name='questions'),
-    path('questions/<int:question_id>/', questions, name='question_detail')
+    path('questions/<int:question_id>/', question_detail, name='question_detail')
 ]
