@@ -12,4 +12,4 @@ class CtfQuestionCategory(ExportModelOperationsMixin('ctf_question_category'), m
         verbose_name = verbose_name_plural = 'カテゴリ'
 
     def __str__(self):
-        return self.category_name
+        return self.name
