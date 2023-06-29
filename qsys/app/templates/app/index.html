@@ -1,0 +1,35 @@
+{% extends "base.html"%}
+{% block title%} Dashboard | Subaru CTF {% endblock title %}
+{% block content %}
+
+<body>
+  {% include "app/components/header.html" %}
+  <section class="py-4 py-xl-5">
+    <div class="container">
+      <div class="text-center p-4 p-lg-5">
+        <p class="fw-bold text-primary mb-2">Proud to introduce</p>
+        <h1 class="fw-bold mb-4">Subaru CTF</h1>
+      </div>
+    </div>
+  </section>
+  <div class="container">
+    <!-- <div>
+            <div>
+                <canvas data-bss-chart="{&quot;type&quot;:&quot;bar&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;January&quot;,&quot;February&quot;,&quot;March&quot;,&quot;April&quot;,&quot;May&quot;,&quot;June&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Revenue&quot;,&quot;backgroundColor&quot;:&quot;#4e73df&quot;,&quot;borderColor&quot;:&quot;#4e73df&quot;,&quot;data&quot;:[&quot;4500&quot;,&quot;5300&quot;,&quot;6250&quot;,&quot;7800&quot;,&quot;9800&quot;,&quot;15000&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:true,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;bold&quot;},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}}],&quot;yAxes&quot;:[{&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}}]}}}">
+                </canvas>
+            </div>
+        </div> -->
+  </div>
+  <footer>
+    <div class="container py-4 py-lg-5">
+      <div class="row justify-content-center"></div>
+      <hr>
+      <div class="d-flex justify-content-between align-items-center pt-3">
+        <p class="text-muted mb-0">Subaru CTF</p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
+{% endblock content %}
