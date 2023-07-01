@@ -46,6 +46,9 @@ class CreateUserForm(forms.Form):
         name = cleaned_data.get("name")
         password = cleaned_data.get("password")
 
+        if name is None or password is None:
+            raise forms.ValidationError("ユーザー名とパスワードを入力してください。")
+
         if name:
             from app.models import AppUser
 
