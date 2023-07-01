@@ -6,19 +6,20 @@ from .ctf_information import CtfInformation
 from .question import CtfQuestion
 
 
-class CtfScore(ExportModelOperationsMixin('ctf_score'), models.Model):
+class CtfScore(ExportModelOperationsMixin("ctf_score"), models.Model):
     """CTFスコア"""
+
     score_id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(AppUser, models.CASCADE)
     ctf = models.ForeignKey(CtfInformation, models.CASCADE)
     question = models.ForeignKey(CtfQuestion, models.CASCADE)
 
-    date = models.DateField(help_text='日付', auto_now_add=True)
-    point = models.PositiveIntegerField(help_text='ポイント')
+    date = models.DateField(help_text="日付", auto_now_add=True)
+    point = models.PositiveIntegerField(help_text="ポイント")
 
     class Meta:
-        app_label = 'app'
-        verbose_name = verbose_name_plural = 'スコア'
+        app_label = "app"
+        verbose_name = verbose_name_plural = "スコア"
 
     def __str__(self):
-        return f'{self.user}, {self.point}'
+        return f"{self.user}, {self.point}"

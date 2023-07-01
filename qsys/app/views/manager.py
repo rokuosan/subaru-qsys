@@ -1,8 +1,8 @@
+from app.forms.create_user import CreateUserForm
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponseBadRequest
 from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
 
-from app.forms.create_user import CreateUserForm
 from .index import index
 
 

@@ -1,7 +1,7 @@
-from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import MinLengthValidator, RegexValidator
+from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
 from .team import CtfTeam
@@ -9,6 +9,7 @@ from .team import CtfTeam
 
 class AppUserManager(BaseUserManager):
     """App User Manager"""
+
     def create_user(self, username, password=None):
         if not username:
             raise ValueError("Users must have a username")
@@ -30,12 +31,23 @@ class AppUserManager(BaseUserManager):
         return user
 
 
-class AppUser(ExportModelOperationsMixin('app_user'), AbstractBaseUser, PermissionsMixin):
+class AppUser(
+    ExportModelOperationsMixin("app_user"), AbstractBaseUser, PermissionsMixin
+):
     """App User Model"""
+
     objects = AppUserManager()
 
-    username = models.CharField(max_length=255, unique=True,
-                                validators=[MinLengthValidator(3, ), RegexValidator(r'^[a-zA-Z0-9]+$')])
+    username = models.CharField(
+        max_length=255,
+        unique=True,
+        validators=[
+            MinLengthValidator(
+                3,
+            ),
+            RegexValidator(r"^[a-zA-Z0-9]+$"),
+        ],
+    )
     team = models.ForeignKey(CtfTeam, models.CASCADE, null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
