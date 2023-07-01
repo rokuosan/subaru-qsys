@@ -31,7 +31,7 @@ jobs:
               pip install black autoflake
 
           - name: Run black
-            run: black .
+            run: black . --line-length=79
 
           - name: Run autoflake
             run: autoflake -r .
