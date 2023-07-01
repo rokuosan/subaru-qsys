@@ -24,6 +24,19 @@
         <li class="nav-item"><a class="nav-link active" href="/">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link active" href="/questions">Questions</a></li>
         <li class="nav-item"><a class="nav-link active" href="#">Account</a></li>
+        {% if request.user.is_admin %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button"
+            aria-expanded="false">For admin</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'manager' %}">Manager</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/admin">Django Admin Panel</a></li>
+          </ul>
+        </li>
+        {% endif %}
       </ul>
       {% if not request.user.is_authenticated %}
       <a class="btn btn-primary" href="{% url 'login' %}" role="button" type="button">
