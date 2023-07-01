@@ -2,7 +2,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
 from .views.index import index
-from .views.manager import manager
+from .views.manager import manager_create_user
 from .views.questions import question_detail, questions
 
 urlpatterns = [
@@ -22,5 +22,5 @@ urlpatterns = [
         "questions/<int:question_id>/", question_detail, name="question_detail"
     ),
     # For admin
-    path("manager/", manager, name="manager"),
+    path("manager/", manager_create_user, name="manager"),
 ]
