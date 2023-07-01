@@ -2,5 +2,16 @@
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
-  "python.formatting.provider": "none"
+  "python.linting.pylintEnabled": false,
+  "python.formatting.provider": "black",
+  "editor.formatOnSave": true,
+  "python.linting.flake8CategorySeverity.E": "Warning",
+  "python.linting.flake8CategorySeverity.F": "Warning",
+  "flake8.severity": {
+    "E": "Warning",
+    "F": "Warning"
+  },
+  "python.formatting.blackArgs": [
+    "--line-length=79"
+  ]
 }
