@@ -2,9 +2,10 @@ from django import forms
 
 
 class CreateUserForm(forms.Form):
-    name = forms.CharField(label='Username', max_length=100, required=True)
+    name = forms.CharField(label='Username', max_length=100, required=True,
+                            widget=forms.TextInput)
     password = forms.CharField(label='Password', max_length=100, required=True,
-                               widget=forms.PasswordInput)
+                                widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -38,6 +39,7 @@ class CreateUserForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         name = cleaned_data.get('name')
+        password = cleaned_data.get('password')
 
         if name:
             from app.models import AppUser
