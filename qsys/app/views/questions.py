@@ -62,9 +62,6 @@ def question_detail(request: HttpRequest, question_id: int):
     if request.method == "POST":
         answer = request.POST.get("answer")
 
-        now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
-        ctf = CtfInformation.objects.filter(start_at__lte=now, end_at__gte=now).first()
-
         list = CtfAnswerHistory.objects.filter(
             question=question, user=request.user, is_correct=True
         )
