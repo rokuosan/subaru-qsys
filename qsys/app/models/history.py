@@ -5,7 +5,9 @@ from .app_user import AppUser
 from .question import CtfQuestion
 
 
-class CtfAnswerHistory(ExportModelOperationsMixin("ctf_answer_history"), models.Model):
+class CtfAnswerHistory(
+    ExportModelOperationsMixin("ctf_answer_history"), models.Model
+):
     """CTF問題回答履歴"""
 
     history_id = models.BigAutoField(primary_key=True)

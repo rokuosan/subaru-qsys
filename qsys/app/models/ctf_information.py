@@ -2,7 +2,9 @@ from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
 
-class CtfInformation(ExportModelOperationsMixin("ctf_information"), models.Model):
+class CtfInformation(
+    ExportModelOperationsMixin("ctf_information"), models.Model
+):
     """CTF情報"""
 
     ctf_id = models.BigAutoField(primary_key=True)

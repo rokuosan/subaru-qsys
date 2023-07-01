@@ -31,7 +31,9 @@ class CtfQuestion(ExportModelOperationsMixin("ctf_question"), models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    note = models.TextField(max_length=8191, help_text="備考", blank=True, null=True)
+    note = models.TextField(
+        max_length=8191, help_text="備考", blank=True, null=True
+    )
 
     class Meta:
         app_label = "app"

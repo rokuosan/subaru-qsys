@@ -27,7 +27,10 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "password",
+                    models.CharField(max_length=128, verbose_name="password"),
+                ),
                 (
                     "last_login",
                     models.DateTimeField(
@@ -41,7 +44,9 @@ class Migration(migrations.Migration):
                         unique=True,
                         validators=[
                             django.core.validators.MinLengthValidator(3),
-                            django.core.validators.RegexValidator("^[a-zA-Z0-9]+$"),
+                            django.core.validators.RegexValidator(
+                                "^[a-zA-Z0-9]+$"
+                            ),
                         ],
                     ),
                 ),
@@ -66,14 +71,19 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "ユーザー",
             },
             bases=(
-                django_prometheus.models.ExportModelOperationsMixin("app_user"),
+                django_prometheus.models.ExportModelOperationsMixin(
+                    "app_user"
+                ),
                 models.Model,
             ),
         ),
         migrations.CreateModel(
             name="CtfInformation",
             fields=[
-                ("ctf_id", models.BigAutoField(primary_key=True, serialize=False)),
+                (
+                    "ctf_id",
+                    models.BigAutoField(primary_key=True, serialize=False),
+                ),
                 ("name", models.CharField(help_text="CTF名", max_length=255)),
                 ("description", models.TextField(help_text="CTF説明")),
                 ("start_at", models.DateTimeField(help_text="開始日時")),
@@ -84,16 +94,27 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "CTF情報",
             },
             bases=(
-                django_prometheus.models.ExportModelOperationsMixin("ctf_information"),
+                django_prometheus.models.ExportModelOperationsMixin(
+                    "ctf_information"
+                ),
                 models.Model,
             ),
         ),
         migrations.CreateModel(
             name="CtfQuestion",
             fields=[
-                ("question_id", models.BigAutoField(primary_key=True, serialize=False)),
-                ("title", models.CharField(help_text="問題タイトル", max_length=255)),
-                ("content", models.TextField(help_text="問題文", max_length=8191)),
+                (
+                    "question_id",
+                    models.BigAutoField(primary_key=True, serialize=False),
+                ),
+                (
+                    "title",
+                    models.CharField(help_text="問題タイトル", max_length=255),
+                ),
+                (
+                    "content",
+                    models.TextField(help_text="問題文", max_length=8191),
+                ),
                 (
                     "explanation",
                     models.TextField(
@@ -105,10 +126,16 @@ class Migration(migrations.Migration):
                 (
                     "file_path",
                     models.CharField(
-                        blank=True, help_text="問題ファイルパス", max_length=1023, null=True
+                        blank=True,
+                        help_text="問題ファイルパス",
+                        max_length=1023,
+                        null=True,
                     ),
                 ),
-                ("is_published", models.BooleanField(default=False, help_text="公開フラグ")),
+                (
+                    "is_published",
+                    models.BooleanField(default=False, help_text="公開フラグ"),
+                ),
                 (
                     "is_practice",
                     models.BooleanField(default=False, help_text="練習問題フラグ"),
@@ -127,14 +154,19 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "CTF問題",
             },
             bases=(
-                django_prometheus.models.ExportModelOperationsMixin("ctf_question"),
+                django_prometheus.models.ExportModelOperationsMixin(
+                    "ctf_question"
+                ),
                 models.Model,
             ),
         ),
         migrations.CreateModel(
             name="CtfQuestionCategory",
             fields=[
-                ("category_id", models.BigAutoField(primary_key=True, serialize=False)),
+                (
+                    "category_id",
+                    models.BigAutoField(primary_key=True, serialize=False),
+                ),
                 ("name", models.CharField(max_length=255)),
             ],
             options={
@@ -171,23 +203,34 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="CtfTeam",
             fields=[
-                ("team_id", models.BigAutoField(primary_key=True, serialize=False)),
+                (
+                    "team_id",
+                    models.BigAutoField(primary_key=True, serialize=False),
+                ),
                 ("name", models.CharField(help_text="チーム名", max_length=255)),
-                ("is_admin", models.BooleanField(default=False, help_text="管理者チーム")),
+                (
+                    "is_admin",
+                    models.BooleanField(default=False, help_text="管理者チーム"),
+                ),
             ],
             options={
                 "verbose_name": "チーム",
                 "verbose_name_plural": "チーム",
             },
             bases=(
-                django_prometheus.models.ExportModelOperationsMixin("ctf_team"),
+                django_prometheus.models.ExportModelOperationsMixin(
+                    "ctf_team"
+                ),
                 models.Model,
             ),
         ),
         migrations.CreateModel(
             name="CtfScore",
             fields=[
-                ("score_id", models.BigAutoField(primary_key=True, serialize=False)),
+                (
+                    "score_id",
+                    models.BigAutoField(primary_key=True, serialize=False),
+                ),
                 ("date", models.DateField(auto_now_add=True, help_text="日付")),
                 ("point", models.PositiveIntegerField(help_text="ポイント")),
                 (
@@ -217,7 +260,9 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "スコア",
             },
             bases=(
-                django_prometheus.models.ExportModelOperationsMixin("ctf_score"),
+                django_prometheus.models.ExportModelOperationsMixin(
+                    "ctf_score"
+                ),
                 models.Model,
             ),
         ),
@@ -241,9 +286,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="CtfAnswerHistory",
             fields=[
-                ("history_id", models.BigAutoField(primary_key=True, serialize=False)),
-                ("content", models.CharField(help_text="回答内容", max_length=1023)),
-                ("is_correct", models.BooleanField(default=False, help_text="正解フラグ")),
+                (
+                    "history_id",
+                    models.BigAutoField(primary_key=True, serialize=False),
+                ),
+                (
+                    "content",
+                    models.CharField(help_text="回答内容", max_length=1023),
+                ),
+                (
+                    "is_correct",
+                    models.BooleanField(default=False, help_text="正解フラグ"),
+                ),
                 ("answered_at", models.DateTimeField(auto_now_add=True)),
                 (
                     "question",

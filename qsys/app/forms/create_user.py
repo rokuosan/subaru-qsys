@@ -6,7 +6,10 @@ class CreateUserForm(forms.Form):
         label="Username", max_length=100, required=True, widget=forms.TextInput
     )
     password = forms.CharField(
-        label="Password", max_length=100, required=True, widget=forms.PasswordInput
+        label="Password",
+        max_length=100,
+        required=True,
+        widget=forms.PasswordInput,
     )
 
     def __init__(self, *args, **kwargs):
