@@ -27,11 +27,11 @@ def account(request: HttpRequest):
         # ratio = point / length
         ratio = point / 125782320
 
-    ctx['display'] = {
-        'username': request.user.username,
-        'answers': answers,
-        'point': point,
-        'ratio': ratio
+    ctx["display"] = {
+        "username": request.user.username,
+        "answers": answers,
+        "point": point,
+        "ratio": ratio,
     }
 
-    return render(request, 'app/account.html', ctx)
+    return render(request, "app/account.html", ctx)
