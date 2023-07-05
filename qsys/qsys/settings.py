@@ -141,3 +141,7 @@ LOGOUT_REDIRECT_URL = "/"
 
 # Authentication
 AUTH_USER_MODEL = "app.AppUser"
+
+# Session
+SESSION_COOKIE_AGE = 60 * 60 * 3  # 3 hours
+SESSION_SAVE_EVERY_REQUEST = True
