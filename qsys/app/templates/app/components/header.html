@@ -21,9 +21,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navcol-3">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="/">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link active" href="/questions">Questions</a></li>
-        <li class="nav-item"><a class="nav-link active" href="#">Account</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{% url 'index' %}">Dashboard</a></li>
+        {% if request.user.is_active %}
+        <li class="nav-item"><a class="nav-link active" href="{% url 'questions' %}">Questions</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{% url 'account' %}">Account</a></li>
+        {% endif %}
         {% if request.user.is_admin %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button"

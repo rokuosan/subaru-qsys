@@ -1,0 +1,48 @@
+{% extends "base.html"%}
+{% block title%} Account | Subaru CTF {% endblock title %}
+{% block content %}
+
+<body>
+  {% include "app/components/header.html" %}
+  <section class="bg-light">
+    <div class="container">
+      <div class="p-4 p-lg-5">
+        <h1 class="fw-bold mb-4">Hello, {{ display.username }}!</h1>
+      </div>
+    </div>
+  </section>
+  <section id="answer_history" class="pt-4">
+    <div class="container">
+      <div class="p-lg-4">
+        <div>
+          <h3 class="bg-black px-3 text-white" style="width: fit-content;">Answer History</h3>
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Question</th>
+              <th scope="col">Your Answer</th>
+              <th scope="col">Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for answer in display.answers %}
+            <tr>
+              <th scope="row" > {{ answer.answered_at | date:"Y/m/d H:i:s" }} </th>
+              <td>{{ answer.question.title }}</td>
+              <td>{{ answer.content }}</td>
+              {% if answer.is_correct %}
+              <td><span class="badge bg-success">Correct</span></td>
+              {% else %}
+              <td><span class="badge bg-secondary">Incorrect</span></td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</body>
+{% endblock content %}
