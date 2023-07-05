@@ -16,16 +16,15 @@ def account(request: HttpRequest):
     answers = answers_original[:10]
 
     # Your point
-    point = 12578232
-    # point = sum([answer.question.point for answer in answers_original])
+    point = 0
+    point = sum([answer.question.point for answer in answers_original])
 
     # Answer ratio
     length = len(answers_original)
     if length == 0:
         ratio = 0
     else:
-        # ratio = point / length
-        ratio = point / 125782320
+        ratio = point / length
 
     ctx["display"] = {
         "username": request.user.username,
