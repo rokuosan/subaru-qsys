@@ -1,9 +1,9 @@
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
-from .team import CtfTeam
 from .app_user import AppUser
 from .question import CtfQuestion
+from .team import CtfTeam
 
 
 class CtfAnswerHistory(
