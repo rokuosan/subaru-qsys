@@ -1,5 +1,3 @@
-import datetime
-
 from app.models.category import CtfQuestionCategory
 from app.models.ctf_information import CtfInformation
 from app.models.difficulty import CtfQuestionDifficulty
@@ -41,6 +39,10 @@ def questions(request: HttpRequest):
             if li["category"] == cn:
                 if "questions" not in li.keys():
                     li["questions"] = []
+
+                # この問題に公開フラグが立っているか
+                if not q["is_published"]:
+                    continue
 
                 q["difficulty_name"] = dn
                 li["questions"].append(q)
