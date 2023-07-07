@@ -21,9 +21,16 @@
           <div class="col">
             <div class="card">
               <div class="card-body">
+                {% if question.is_answered %}
+                {% if question.is_answered_by_team %}
+                <small class="badge bg-secondary rounded-pill">Solved by Team</small>
+                {% else %}
+                <small class="badge bg-success rounded-pill">Solved</small>
+                {% endif %}
+                {% endif %}
                 <h4 class="card-title">
                   <a href="{{ question.question_id }}" class="text-dark">
-                    {{ question.title}}
+                    {{ question.title }}
                   </a>
                 </h4>
                 <div class="py-1">

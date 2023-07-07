@@ -23,6 +23,17 @@ def questions(request: HttpRequest):
     questions = CtfQuestion.objects.all().values()
     categories = CtfQuestionCategory.objects.all().values()
     diffs = CtfQuestionDifficulty.objects.all().values()
+    history = CtfAnswerHistory.objects.filter(
+        user=request.user, is_correct=True)
+
+    # 回答済みの問題番号を取得
+    answered_ids = history.values_list("question_id", flat=True)
+    # ユーザがチームに所属している場合、チームの回答済み問題番号を取得
+    if request.user.team:
+        team_history = CtfAnswerHistory.objects.filter(
+            team=request.user.team, is_correct=True)
+        answered_ids_by_team = team_history.values_list(
+            "question_id", flat=True)
 
     # カテゴリ名を持った辞書を作成し、ctx['list']に追加
     for c in categories:
@@ -43,6 +54,14 @@ def questions(request: HttpRequest):
                 # この問題に公開フラグが立っているか
                 if not q["is_published"]:
                     continue
+
+                # すでに回答済みか
+                if q["question_id"] in answered_ids:
+                    q["is_answered"] = True
+                elif request.user.team:
+                    if q["question_id"] in answered_ids_by_team:
+                        q["is_answered"] = True
+                        q["is_answered_by_team"] = True
 
                 q["difficulty_name"] = dn
                 li["questions"].append(q)
@@ -87,6 +106,7 @@ def question_detail(request: HttpRequest, question_id: int):
             history = CtfAnswerHistory(
                 question=question,
                 user=request.user,
+                team=request.user.team,
                 content=answer,
                 is_correct=True,
             )
@@ -100,6 +120,7 @@ def question_detail(request: HttpRequest, question_id: int):
             history = CtfAnswerHistory(
                 question=question,
                 user=request.user,
+                team=request.user.team,
                 content=answer,
                 is_correct=False,
             )
