@@ -7,15 +7,29 @@
   <div class="container">
     <section id="">
       <div class="py-3">
-        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">Current CTFs</h2>
+        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">開催中のCTF</h2>
       </div>
       {% if current %}
         <div class="row justify-content-center">
           {% for ctf in current %}
           <div class="col-md-auto">
-            <div class="card px-2 py-5" style="width: fit-content;">
+            <div class="card px-2 " style="width: fit-content;">
               <div class="card-body">
                 <h5> {{ ctf.name }} </h4>
+                <button type="button" class="btn btn-primary btn-sm">開始</button>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-outline-danger btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    停止・終了
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><span class="dropdown-item disabled">ワンクリックで停止します。本当に大丈夫ですか？</span></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#">一時停止</a></li>
+                    <li><a class="dropdown-item" href="#">終了</a></li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -31,7 +45,7 @@
     </section>
     <section>
       <div class="py-3">
-        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">Upcoming CTFs</h2>
+        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">開催予定のCTF</h2>
       </div>
       <div class="w-75 container">
         <div class="alert alert-warning text-center" role="alert">
@@ -41,7 +55,7 @@
     </section>
     <section>
       <div class="py-3">
-        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">Past CTFs</h2>
+        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">開催済みのCTF</h2>
       </div>
       <div class="w-75 container">
         <div class="alert alert-warning text-center" role="alert">
