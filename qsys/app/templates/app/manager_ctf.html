@@ -1,0 +1,56 @@
+{% extends "base.html"%}
+{% block title%} CTF Manager | Subaru CTF {% endblock title %}
+{% block content %}
+
+<body>
+  {% include "app/components/header.html" %}
+  <div class="container">
+    <section id="">
+      <div class="py-3">
+        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">Current CTFs</h2>
+      </div>
+      {% if current %}
+        <div class="row justify-content-center">
+          {% for ctf in current %}
+          <div class="col-md-auto">
+            <div class="card px-2 py-5" style="width: fit-content;">
+              <div class="card-body">
+                <h5> {{ ctf.name }} </h4>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+      <div class="w-75 container">
+        <div class="alert alert-warning text-center" role="alert">
+          No current CTFs.
+        </div>
+      </div>
+      {% endif %}
+    </section>
+    <section>
+      <div class="py-3">
+        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">Upcoming CTFs</h2>
+      </div>
+      <div class="w-75 container">
+        <div class="alert alert-warning text-center" role="alert">
+          No upcoming CTFs.
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="py-3">
+        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">Past CTFs</h2>
+      </div>
+      <div class="w-75 container">
+        <div class="alert alert-warning text-center" role="alert">
+          No past CTFs.
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+
+</html>
+{% endblock content %}
