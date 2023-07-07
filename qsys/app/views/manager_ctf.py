@@ -22,14 +22,14 @@ def manager_ctf(request: HttpRequest):
 
     upcoming_ctf = ctfs.filter(start_at__gte=now)
     if upcoming_ctf.exists():
-        ctx['upcoming'] = upcoming_ctf
+        ctx["upcoming"] = upcoming_ctf
 
     past_ctf = ctfs.filter(end_at__lte=now)
     if past_ctf.exists():
-        ctx['past'] = past_ctf
+        ctx["past"] = past_ctf
 
     current_ctf = ctfs.filter(start_at__lte=now, end_at__gte=now)
     if current_ctf.exists():
-        ctx['current'] = current_ctf
+        ctx["current"] = current_ctf
 
     return render(request, "app/manager_ctf.html", ctx)

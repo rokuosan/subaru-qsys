@@ -15,9 +15,7 @@ class CtfInformation(
     start_at = models.DateTimeField(help_text="開始日時")
     end_at = models.DateTimeField(help_text="終了日時")
 
-    questions = models.ManyToManyField(
-        CtfQuestion, help_text="問題", blank=True
-    )
+    questions = models.ManyToManyField(CtfQuestion, help_text="問題", blank=True)
 
     class Meta:
         app_label = "app"
