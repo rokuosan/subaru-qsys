@@ -24,16 +24,19 @@ def questions(request: HttpRequest):
     categories = CtfQuestionCategory.objects.all().values()
     diffs = CtfQuestionDifficulty.objects.all().values()
     history = CtfAnswerHistory.objects.filter(
-        user=request.user, is_correct=True)
+        user=request.user, is_correct=True
+    )
 
     # 回答済みの問題番号を取得
     answered_ids = history.values_list("question_id", flat=True)
     # ユーザがチームに所属している場合、チームの回答済み問題番号を取得
     if request.user.team:
         team_history = CtfAnswerHistory.objects.filter(
-            team=request.user.team, is_correct=True)
+            team=request.user.team, is_correct=True
+        )
         answered_ids_by_team = team_history.values_list(
-            "question_id", flat=True)
+            "question_id", flat=True
+        )
 
     # カテゴリ名を持った辞書を作成し、ctx['list']に追加
     for c in categories:
@@ -92,7 +95,8 @@ def question_detail(request: HttpRequest, question_id: int):
 
         # この問題について自分が提出した回答一覧を取得
         ans_list = CtfAnswerHistory.objects.filter(
-            question=question, user=request.user)
+            question=question, user=request.user
+        )
 
         # すでに正解を回答済みか
         if ans_list.filter(is_correct=True).exists():
