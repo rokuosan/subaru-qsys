@@ -11,7 +11,8 @@ class CtfScore(ExportModelOperationsMixin("ctf_score"), models.Model):
 
     score_id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(AppUser, models.CASCADE)
-    ctf = models.ForeignKey(CtfInformation, models.CASCADE)
+    ctf = models.ForeignKey(CtfInformation, models.CASCADE,
+                            null=True, blank=True)
     question = models.ForeignKey(CtfQuestion, models.CASCADE)
 
     date = models.DateField(help_text="日付", auto_now_add=True)
