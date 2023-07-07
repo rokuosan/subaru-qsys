@@ -1,6 +1,7 @@
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
+from .app_user import AppUser
 from .question import CtfQuestion
 
 
@@ -16,6 +17,7 @@ class CtfInformation(
     end_at = models.DateTimeField(help_text="終了日時")
 
     questions = models.ManyToManyField(CtfQuestion, help_text="問題", blank=True)
+    participants = models.ManyToManyField(AppUser, help_text="参加者", blank=True)
 
     is_active = models.BooleanField(default=False, help_text="CTF実施状況")
 
