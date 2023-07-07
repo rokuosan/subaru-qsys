@@ -45,7 +45,7 @@ class AppUser(
             MinLengthValidator(
                 3,
             ),
-            RegexValidator(r"^[a-zA-Z0-9]+$"),
+            RegexValidator(r"^[a-zA-Z0-9 ]+$"),
         ],
     )
     team = models.ForeignKey(CtfTeam, models.CASCADE, null=True, blank=True)
