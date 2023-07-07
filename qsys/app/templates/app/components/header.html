@@ -1,6 +1,6 @@
 {% block header %}
-<nav class="navbar navbar-light navbar-expand-md py-3">
-  <div class="container bg-white rounded-pill py-2 px-4 shadow-sm">
+<nav class="navbar navbar-expand-md py-3 ">
+  <div class="container bg-white rounded-pill py-2 px-4 shadow-sm" id="navbar-bg">
     <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-3">
       <span class="visually-hidden">Toggle navigation</span>
       <span class="navbar-toggler-icon"></span>
@@ -17,6 +17,7 @@
           <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button"
             aria-expanded="false">For admin</a>
           <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'manager_ctf' %}">CTF Manager</a></li>
             <li><a class="dropdown-item" href="{% url 'manager_user' %}">User Manager</a></li>
             <li>
               <hr class="dropdown-divider">
@@ -38,4 +39,17 @@
     </div>
   </div>
 </nav>
+<script>
+  function toggleNavbarCorner(){
+    var navbar = document.getElementById('navbar-bg');
+    if (window.innerWidth < 768) {
+      navbar.classList.remove('rounded-pill');
+    } else {
+      navbar.classList.add('rounded-pill');
+    }
+  }
+
+  window.addEventListener('resize', toggleNavbarCorner);
+  window.addEventListener('load', toggleNavbarCorner);
+</script>
 {% endblock header%}
