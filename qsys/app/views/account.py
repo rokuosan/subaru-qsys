@@ -17,14 +17,16 @@ def account(request: HttpRequest):
 
     # Your point
     point = 0
-    point = sum([answer.question.point for answer in answers_original])
+    correct_answers = answers_original.filter(is_correct=True)
+    point = sum([answer.question.point for answer in correct_answers])
 
     # Answer ratio
-    length = len(answers_original)
-    if length == 0:
+    max = len(answers_original)
+    corrects = len(correct_answers)
+    if max == 0:
         ratio = 0
     else:
-        ratio = point / length
+        ratio = round(corrects / max * 100, 2)
 
     ctx["display"] = {
         "username": request.user.username,
