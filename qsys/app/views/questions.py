@@ -3,6 +3,7 @@ from app.models.difficulty import CtfQuestionDifficulty
 from app.models.history import CtfAnswerHistory
 from app.models.question import CtfQuestion
 from app.models.score import CtfScore
+from app.models.ctf_information import CtfInformation
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
@@ -19,8 +20,22 @@ def questions(request: HttpRequest):
         "list": []
     }
 
+    ctf = None
+    ctfs = CtfInformation.objects.filter(is_active=True)
+    if not ctfs:
+        ctx["message"] = "CTFが開催されていません"
+        render(request, "app/questions.html", ctx)
+    for c in ctfs:
+        if request.user in c.participants.all():
+            ctf = c
+            break
+
+    if ctf is None:
+        ctx["message"] = "CTFに参加していません"
+        render(request, "app/questions.html", ctx)
+
     # Questionから全データを取得して、辞書型に変換
-    questions = CtfQuestion.objects.all().values()
+    questions = ctf.questions.all().values()
     categories = CtfQuestionCategory.objects.all().values()
     diffs = CtfQuestionDifficulty.objects.all().values()
     history = CtfAnswerHistory.objects.filter(
