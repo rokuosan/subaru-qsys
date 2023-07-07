@@ -1,10 +1,10 @@
 import random
+
 from app.forms.create_user import CreateUserForm
+from app.models.app_user import AppUser
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
-
-from app.models.app_user import AppUser
 
 from .index import index
 
