@@ -1,6 +1,8 @@
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
+from .question import CtfQuestion
+
 
 class CtfInformation(
     ExportModelOperationsMixin("ctf_information"), models.Model
@@ -12,6 +14,10 @@ class CtfInformation(
     description = models.TextField(help_text="CTF説明")
     start_at = models.DateTimeField(help_text="開始日時")
     end_at = models.DateTimeField(help_text="終了日時")
+
+    questions = models.ManyToManyField(
+        CtfQuestion, help_text="問題", blank=True
+    )
 
     class Meta:
         app_label = "app"
