@@ -1,8 +1,8 @@
 from app.models.category import CtfQuestionCategory
-from app.models.ctf_information import CtfInformation
 from app.models.difficulty import CtfQuestionDifficulty
 from app.models.history import CtfAnswerHistory
 from app.models.question import CtfQuestion
+from app.models.score import CtfScore
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
@@ -90,16 +90,31 @@ def question_detail(request: HttpRequest, question_id: int):
             }
             return redirect(question_detail, question_id=question_id)
 
-        list = CtfAnswerHistory.objects.filter(
-            question=question, user=request.user, is_correct=True
-        )
+        # この問題について自分が提出した回答一覧を取得
+        ans_list = CtfAnswerHistory.objects.filter(
+            question=question, user=request.user)
 
-        if list.exists():
+        # すでに正解を回答済みか
+        if ans_list.filter(is_correct=True).exists():
             request.session["result"] = {
-                "message": "回答済みです",
+                "message": "正解を回答済みです",
                 "is_correct": False,
             }
             return redirect(question_detail, question_id=question_id)
+
+        # この問題についてチームが提出した回答一覧を取得
+        if request.user.team:
+            team_ans_list = CtfAnswerHistory.objects.filter(
+                question=question, team=request.user.team
+            )
+
+            # チームがすでに正解を回答済みか
+            if team_ans_list.filter(is_correct=True).exists():
+                request.session["result"] = {
+                    "message": "チームが回答済みです",
+                    "is_correct": False,
+                }
+                return redirect(question_detail, question_id=question_id)
 
         if answer == question.flag:
             # 正解履歴を保存
@@ -111,6 +126,15 @@ def question_detail(request: HttpRequest, question_id: int):
                 is_correct=True,
             )
             history.save()
+
+            # スコアを保存
+            score = CtfScore(
+                user=request.user,
+                team=request.user.team,
+                question=question,
+                point=question.point,
+            )
+            score.save()
 
             request.session["result"] = {
                 "message": "正解！",
