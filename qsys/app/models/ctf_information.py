@@ -17,6 +17,18 @@ class CtfInformation(
 
     questions = models.ManyToManyField(CtfQuestion, help_text="問題", blank=True)
 
+    is_active = models.BooleanField(default=False, help_text="CTF実施状況")
+
+    # CTFが開始しているかどうか
+    @property
+    def is_started(self):
+        return self.start_at <= self.now
+
+    # CTFが終了しているかどうか
+    @property
+    def is_ended(self):
+        return self.end_at <= self.now
+
     class Meta:
         app_label = "app"
         verbose_name = verbose_name_plural = "CTF情報"
