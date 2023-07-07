@@ -64,6 +64,13 @@ def question_detail(request: HttpRequest, question_id: int):
     if request.method == "POST":
         answer = request.POST.get("answer")
 
+        if answer.strip() == "":
+            request.session["result"] = {
+                "message": "回答が空です",
+                "is_correct": False,
+            }
+            return redirect(question_detail, question_id=question_id)
+
         list = CtfAnswerHistory.objects.filter(
             question=question, user=request.user, is_correct=True
         )
