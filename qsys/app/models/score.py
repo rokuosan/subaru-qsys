@@ -1,6 +1,7 @@
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
+from .team import CtfTeam
 from .app_user import AppUser
 from .ctf_information import CtfInformation
 from .question import CtfQuestion
@@ -11,6 +12,9 @@ class CtfScore(ExportModelOperationsMixin("ctf_score"), models.Model):
 
     score_id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(AppUser, models.CASCADE)
+    team = models.ForeignKey(
+        CtfTeam, models.CASCADE, null=True, blank=True
+    )
     ctf = models.ForeignKey(CtfInformation, models.CASCADE,
                             null=True, blank=True)
     question = models.ForeignKey(CtfQuestion, models.CASCADE)
