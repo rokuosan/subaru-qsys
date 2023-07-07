@@ -18,7 +18,7 @@ def manager(request: HttpRequest):
 
 
 @login_required
-def manager_create_user(request: HttpRequest):
+def manager_user(request: HttpRequest):
     if not request.user.is_admin:
         return redirect(index)
 
@@ -52,7 +52,7 @@ def manager_create_user(request: HttpRequest):
             response["Content-Disposition"] = content
             return response
 
-        return redirect(manager_create_user)
+        return redirect(manager_user)
 
     else:
         return HttpResponseBadRequest()

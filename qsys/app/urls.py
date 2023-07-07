@@ -3,7 +3,8 @@ from django.urls import path
 
 from .views.account import account
 from .views.index import index
-from .views.manager import manager_create_user
+from .views.manager import manager, manager_user
+from .views.manager_ctf import manager_ctf
 from .views.questions import question_detail, questions
 
 urlpatterns = [
@@ -25,5 +26,7 @@ urlpatterns = [
     # Account
     path("account/", account, name="account"),
     # For admin
-    path("manager/", manager_create_user, name="manager"),
+    path("manager/", manager, name="manager"),
+    path("manager/user/", manager_user, name="manager_user"),
+    path("manager/ctf/", manager_ctf, name="manager_ctf"),
 ]
