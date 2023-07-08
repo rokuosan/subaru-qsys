@@ -24,7 +24,7 @@ def questions(request: HttpRequest):
     ctfs = CtfInformation.objects.filter(is_active=True)
     if not ctfs:
         ctx["message"] = "CTFが開催されていません"
-        render(request, "app/questions.html", ctx)
+        return render(request, "app/questions.html", ctx)
     for c in ctfs:
         if request.user in c.participants.all():
             ctf = c
