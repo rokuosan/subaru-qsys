@@ -4,3 +4,6 @@ __pycache__
 *.css.map
 *.js
 *.js.map
+
+grafana/*
+!grafana/.gitkeep
