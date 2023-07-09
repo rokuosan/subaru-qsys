@@ -2,7 +2,7 @@
 {% block title%} CTF Manager | Subaru CTF {% endblock title %}
 {% block content %}
 
-<body>
+<body class="position-relative">
   <!-- Modals must be placed in a top-level position. ref https://getbootstrap.jp/docs/5.0/components/modal/ -->
   {% for c in ctfs %}
   <!-- Start Modal -->
@@ -98,7 +98,9 @@
   </div>
   {% endfor %}
 
-
+  <div class="position-absolute bottom-0 end-0 px-4">
+    {% include 'django_bootstrap5/messages.html' %}
+  </div>
 
   {% include "app/components/header.html" %}
   <div class="container">
