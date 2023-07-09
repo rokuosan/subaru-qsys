@@ -2,6 +2,7 @@ from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
 from .app_user import AppUser
+from .ctf_information import CtfInformation
 from .question import CtfQuestion
 from .team import CtfTeam
 
@@ -15,6 +16,10 @@ class CtfAnswerHistory(
     question = models.ForeignKey(CtfQuestion, models.CASCADE)
     user = models.ForeignKey(AppUser, models.CASCADE)
     team = models.ForeignKey(CtfTeam, models.CASCADE, null=True, blank=True)
+    ctf = models.ForeignKey(
+        CtfInformation, models.CASCADE, related_name="answer_history",
+        null=True
+    )
 
     content = models.CharField(max_length=1023, help_text="回答内容")
     is_correct = models.BooleanField(default=False, help_text="正解フラグ")
