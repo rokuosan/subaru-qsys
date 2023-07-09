@@ -1,4 +1,5 @@
 from app.models.history import CtfAnswerHistory
+from app.models.ctf_information import CtfInformation
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import render
@@ -8,8 +9,23 @@ from django.shortcuts import render
 def account(request: HttpRequest):
     ctx = {}
 
+    # Get CTF
+    ctfs = CtfInformation.objects.filter(is_active=True)
+    if not ctfs:
+        ctx["message"] = "CTFが開催されていません"
+        return render(request, "app/account.html", ctx)
+    for c in ctfs:
+        if request.user in c.participants.all():
+            ctf = c
+            break
+
+    if ctf is None:
+        ctx["message"] = "CTFに参加していません"
+        return render(request, "app/account.html", ctx)
+
     # Get Answers
-    answers_original = CtfAnswerHistory.objects.filter(user=request.user)
+    answers_original = CtfAnswerHistory.objects.filter(
+        user=request.user, ctf=ctf)
     answers_original = answers_original.order_by("-answered_at")
     # Last newest 10 answers
     answers = answers_original[:10]
