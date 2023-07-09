@@ -3,6 +3,103 @@
 {% block content %}
 
 <body>
+  <!-- Modals must be placed in a top-level position. ref https://getbootstrap.jp/docs/5.0/components/modal/ -->
+  {% for c in ctfs %}
+  <!-- Start Modal -->
+  <div class="modal fade" id="modalStart{{ c.ctf_id }}" tabindex="-1" aria-labelledby="{{ c.ctf_id }}-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="{{ c.ctf_id }}-modal-label">Start Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {{ c.name }} を開始します。よろしいですか？
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+          <form action="{% url 'manager_ctf' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ c.ctf_id }}">
+            <button type="submit" class="btn btn-primary" name="start">開始する</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Pause Modal -->
+  <div class="modal fade" id="modalPause{{ c.ctf_id }}" tabindex="-1" aria-labelledby="{{ c.ctf_id }}-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="{{ c.ctf_id }}-modal-label">Pause Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {{ c.name }} を一時停止します。よろしいですか？
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+          <form action="{% url 'manager_ctf' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ c.ctf_id }}">
+            <button type="submit" class="btn btn-danger" name="pause" >一時停止する</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Stop Modal -->
+  <div class="modal fade" id="modalStop{{ c.ctf_id }}" tabindex="-1" aria-labelledby="{{ c.ctf_id }}-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="{{ c.ctf_id }}-modal-label">Stop Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {{ c.name }} を終了します。よろしいですか？
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+          <form action="{% url 'manager_ctf' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ c.ctf_id }}">
+            <button type="submit" class="btn btn-danger" name="stop">終了する</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Restart Modal -->
+  <div class="modal fade" id="modalRestart{{ c.ctf_id }}" tabindex="-1" aria-labelledby="{{ c.ctf_id }}-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" action="{% url 'manager_ctf' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ c.ctf_id }}">
+        <div class="modal-header">
+          <h5 class="modal-title" id="{{ c.ctf_id }}-modal-label">Restart Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            {{ c.name }} の開始時刻を現在にして再開します。終了時刻は2時間後に設定します。詳細変更はDjango Admin Panelから行ってください。
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+          <button type="submit" class="btn btn-success" name="restart">再開する</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+
+
+
   {% include "app/components/header.html" %}
   <div class="container">
     <section id="">
@@ -13,26 +110,23 @@
         <div class="row justify-content-center">
           {% for ctf in current %}
           <div class="col-md-auto">
-            <div class="card px-2 " style="width: fit-content;">
-              <form class="card-body" action="{% url 'manager_ctf' %}" method="post">
-                {% csrf_token %}
+            <div class="card px-2 mx-auto" style="width: fit-content;">
+              <div class="card-body">
                 <h5> {{ ctf.name }} </h4>
-                <button type="submit" class="btn btn-primary btn-sm" name="start" disabled>開始</button>
-                <input type="hidden" value="{{ ctf.ctf_id }}">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-outline-danger btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    停止・終了
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><span class="dropdown-item disabled">ワンクリックで停止します。本当に大丈夫ですか？</span></li>
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#">一時停止</a></li>
-                    <li><a class="dropdown-item" href="#">終了</a></li>
-                  </ul>
-                </div>
-              </form>
+                {% if ctf.is_active %}
+                <span class="badge bg-success">開催中</span>
+                <button class="btn btn-primary btn-sm" disabled>開始</button>
+                <button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalPause{{ ctf.ctf_id }}">
+                  一時停止
+                </button>
+                {% else %}
+                <span class="badge bg-secondary" >一時停止中</span>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalStart{{ ctf.ctf_id }}">開始</button>
+                <button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalStop{{ ctf.ctf_id }}">
+                  終了
+                </button>
+                {% endif %}
+              </div>
             </div>
           </div>
           {% endfor %}
@@ -45,25 +139,62 @@
       </div>
       {% endif %}
     </section>
+
     <section>
       <div class="py-3">
         <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">開催予定のCTF</h2>
       </div>
+      {% if upcoming %}
+        <div class="row justify-content-center">
+          {% for ctf in upcoming %}
+          <div class="col-md-auto ">
+            <div class="card px-2 " style="width: fit-content;">
+              <div class="card-body">
+                <h5> {{ ctf.name }} </h4>
+                  <span class="badge bg-secondary">開催予定: {{ ctf.start_at }}</span>
+                  <button type="button" class="btn btn-outline-success btn-sm" name="start" data-bs-toggle="modal" data-bs-target="#modalRestart{{ ctf.ctf_id }}">
+                    開始
+                  </button>
+                </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
       <div class="w-75 container">
         <div class="alert alert-warning text-center" role="alert">
           No upcoming CTFs.
         </div>
       </div>
+      {% endif %}
     </section>
     <section>
       <div class="py-3">
         <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">開催済みのCTF</h2>
       </div>
+      {% if past %}
+      <div class="row justify-content-center">
+        {% for ctf in past %}
+        <div class="col-md-auto">
+          <div class="card px-2 " style="width: fit-content;">
+            <div class="card-body" >
+              <h5> {{ ctf.name }} </h4>
+                <span class="badge bg-secondary">終了</span>
+                <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalRestart{{ ctf.ctf_id }}">
+                  開催時刻を現在にして開始
+                </button>
+              </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
       <div class="w-75 container">
         <div class="alert alert-warning text-center" role="alert">
           No past CTFs.
         </div>
       </div>
+      {% endif %}
     </section>
   </div>
 </body>

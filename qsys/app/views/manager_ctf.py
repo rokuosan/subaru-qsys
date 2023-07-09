@@ -18,6 +18,7 @@ def manager_ctf(request: HttpRequest):
         ctx = {}
 
         ctfs = CtfInformation.objects.all()
+        ctx["ctfs"] = ctfs
 
         now = datetime.now(timezone.utc)
 
@@ -41,7 +42,27 @@ def manager_ctf(request: HttpRequest):
             ctf = CtfInformation.objects.get(pk=ctf_id)
             ctf.is_active = True
             ctf.save()
+        elif "stop" in request.POST:
+            ctf_id = request.POST.get("id")
+            ctf = CtfInformation.objects.get(pk=ctf_id)
+            ctf.end_at = datetime.now(timezone.utc)
+            ctf.is_active = False
+            ctf.save()
+        elif "pause" in request.POST:
+            ctf_id = request.POST.get("id")
+            ctf = CtfInformation.objects.get(pk=ctf_id)
+            ctf.is_active = False
+            ctf.save()
+        elif "restart" in request.POST:
+            ctf_id = request.POST.get("id")
+            ctf = CtfInformation.objects.get(pk=ctf_id)
+            ctf.start_at = datetime.now(timezone.utc)
+            ctf.end_at = datetime.now(timezone.utc) + timezone.timedelta(
+                hours=2
+            )
+            ctf.is_active = True
+            ctf.save()
 
-            return redirect(manager_ctf)
+        return redirect(manager_ctf)
 
     return redirect(index)
