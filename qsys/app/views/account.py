@@ -25,7 +25,8 @@ def account(request: HttpRequest):
 
     # Get Answers
     answers_original = CtfAnswerHistory.objects.filter(
-        user=request.user, ctf=ctf)
+        user=request.user, ctf=ctf
+    )
     answers_original = answers_original.order_by("-answered_at")
     # Last newest 10 answers
     answers = answers_original[:10]

@@ -17,8 +17,10 @@ class CtfAnswerHistory(
     user = models.ForeignKey(AppUser, models.CASCADE)
     team = models.ForeignKey(CtfTeam, models.CASCADE, null=True, blank=True)
     ctf = models.ForeignKey(
-        CtfInformation, models.CASCADE, related_name="answer_history",
-        null=True
+        CtfInformation,
+        models.CASCADE,
+        related_name="answer_history",
+        null=True,
     )
 
     content = models.CharField(max_length=1023, help_text="回答内容")
