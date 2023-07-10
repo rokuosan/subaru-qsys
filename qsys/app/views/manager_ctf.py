@@ -29,17 +29,18 @@ def manager_ctf(request: HttpRequest):
 
         now = datetime.now(timezone.utc)
 
-        upcoming_ctf = ctfs.filter(start_at__gte=now)
+        upcoming_ctf = ctfs.filter(start_at__gte=now, is_active=False)
         if upcoming_ctf.exists():
             ctx["upcoming"] = upcoming_ctf
 
-        past_ctf = ctfs.filter(end_at__lte=now)
+        past_ctf = ctfs.filter(end_at__lte=now, is_active=False)
         if past_ctf.exists():
             ctx["past"] = past_ctf
 
         current_ctf = ctfs.filter(start_at__lte=now, end_at__gte=now)
-        if current_ctf.exists():
-            ctx["current"] = current_ctf
+        active_ctf = ctfs.filter(is_active=True)
+        if current_ctf.exists() or active_ctf.exists():
+            ctx["current"] = current_ctf | active_ctf
 
         return render(request, "app/manager_ctf.html", ctx)
 
