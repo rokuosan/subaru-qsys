@@ -61,7 +61,8 @@ def score(request: HttpRequest):
             }
         )
     team_score_set = sorted(
-        team_score_set, key=lambda x: x["score"], reverse=True)
+        team_score_set, key=lambda x: x["score"], reverse=True
+    )
 
     # ユーザーごとのスコアを算出
     player_scores = []
@@ -83,7 +84,8 @@ def score(request: HttpRequest):
             }
         )
     player_score_set = sorted(
-        player_score_set, key=lambda x: x["score"], reverse=True)
+        player_score_set, key=lambda x: x["score"], reverse=True
+    )
 
     # ランキングを表示
     ctx["player_score_rank"] = player_score_set

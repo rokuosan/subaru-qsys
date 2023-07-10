@@ -31,5 +31,5 @@ urlpatterns = [
     path("manager/", manager, name="manager"),
     path("manager/user/", manager_user, name="manager_user"),
     path("manager/ctf/", manager_ctf, name="manager_ctf"),
-    path("score/", score, name="score")
+    path("score/", score, name="score"),
 ]
