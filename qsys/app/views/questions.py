@@ -92,6 +92,7 @@ def questions(request: HttpRequest):
     return render(request, "app/questions.html", ctx)
 
 
+@login_required
 def question_detail(request: HttpRequest, question_id: int):
     """問題の詳細を表示するView"""
     ctx = {}
