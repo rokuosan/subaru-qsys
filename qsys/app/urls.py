@@ -3,7 +3,8 @@ from django.urls import path
 
 from .views.account import account
 from .views.index import index
-from .views.manager import manager, manager_user
+from .views.manager import manager
+from .views.manager_user import manager_user
 from .views.manager_ctf import manager_ctf
 from .views.questions import question_detail, questions
 
