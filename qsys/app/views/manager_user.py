@@ -2,6 +2,7 @@ import random
 
 from app.forms.create_user import CreateUserForm
 from app.models.app_user import AppUser
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
@@ -18,12 +19,36 @@ def manager_user(request: HttpRequest):
         ctx = {}
         ctx["form"] = CreateUserForm()
 
+        # Set session message to messages
+        if "message" in request.session:
+            messages.add_message(
+                request, request.session["level"], request.session["message"])
+            del request.session["message"]
+            del request.session["level"]
+
         return render(request, "app/manager_user.html", ctx)
 
     elif request.method == "POST":
         usernames = request.POST.get("usernames")
         if usernames is None:
-            print("OK")
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                user.is_admin = request.POST.get("is_admin") == "on"
+                user.set_password(form.cleaned_data["password"])
+                user.save()
+
+                # Set success message to session
+                username = form.cleaned_data["name"]
+                request.session["message"] = f"ユーザー[ {username} ]を作成しました。"
+                request.session["level"] = messages.SUCCESS
+
+                return redirect(manager_user)
+            else:
+                request.session["message"] = "ユーザーの作成に失敗しました。"
+                request.session["level"] = messages.ERROR
+
+                return redirect(manager_user)
         else:
             users = [name.strip() for name in usernames.splitlines() if name]
             users_set = []

@@ -1,4 +1,5 @@
 from django import forms
+from app.models.app_user import AppUser
 
 
 class CreateUserForm(forms.Form):
@@ -50,16 +51,12 @@ class CreateUserForm(forms.Form):
             raise forms.ValidationError("ユーザー名とパスワードを入力してください。")
 
         if name:
-            from app.models import AppUser
-
             if AppUser.objects.filter(username=name).exists():
                 raise forms.ValidationError("そのユーザー名は既に使われています。")
 
         return cleaned_data
 
     def save(self):
-        from app.models import AppUser
-
         user = AppUser.objects.create_user(
             self.cleaned_data["name"], self.cleaned_data["password"]
         )
