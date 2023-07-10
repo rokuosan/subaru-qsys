@@ -18,7 +18,7 @@ def manager_user(request: HttpRequest):
         ctx = {}
         ctx["form"] = CreateUserForm()
 
-        return render(request, "app/manager.html", ctx)
+        return render(request, "app/manager_user.html", ctx)
 
     elif request.method == "POST":
         usernames = request.POST.get("usernames")
