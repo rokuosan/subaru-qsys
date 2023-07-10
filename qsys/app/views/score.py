@@ -72,8 +72,6 @@ def score(request: HttpRequest):
                 user_score += score.point
         player_scores.append(user_score)
 
-    print(player_scores)
-
     # ユーザーごとのスコアを降順にソート
     player_score_set = []
     for i, u in enumerate(users):
