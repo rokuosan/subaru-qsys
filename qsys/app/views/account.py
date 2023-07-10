@@ -1,5 +1,6 @@
 from app.models.history import CtfAnswerHistory
 from app.models.ctf_information import CtfInformation
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import render
@@ -8,11 +9,17 @@ from django.shortcuts import render
 @login_required
 def account(request: HttpRequest):
     ctx = {}
+    ctx["display"] = {
+        "username": request.user.username,
+        "answers": [],
+        "point": 0,
+        "ratio": 0,
+    }
 
     # Get CTF
     ctfs = CtfInformation.objects.filter(is_active=True)
     if not ctfs:
-        ctx["message"] = "CTFが開催されていません"
+        messages.warning(request, "CTFが開催されていません")
         return render(request, "app/account.html", ctx)
     for c in ctfs:
         if request.user in c.participants.all():
@@ -20,7 +27,7 @@ def account(request: HttpRequest):
             break
 
     if ctf is None:
-        ctx["message"] = "CTFに参加していません"
+        messages.warning(request, "CTFに参加していません")
         return render(request, "app/account.html", ctx)
 
     # Get Answers
