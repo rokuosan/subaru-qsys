@@ -1,5 +1,4 @@
 from django.http import HttpRequest
-from django.db import models
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
@@ -21,7 +20,7 @@ def score(request: HttpRequest):
     # CTFを取得
     if not ctfs.filter(is_active=True):
         messages.warning(request, "開催中のCTFがありません")
-        return render(request, "app/account.html", ctx)
+        return render(request, "app/score.html", ctx)
     for c in ctfs:
         if request.user in c.participants.all():
             ctf = c
@@ -29,7 +28,7 @@ def score(request: HttpRequest):
 
     if ctf is None:
         messages.warning(request, "CTFに参加していません")
-        return render(request, "app/account.html", ctx)
+        return render(request, "app/score.html", ctx)
 
     # CTF参加者のチームを取得
     users = ctf.participants.all()
