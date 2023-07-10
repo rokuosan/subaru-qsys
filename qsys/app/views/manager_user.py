@@ -22,7 +22,8 @@ def manager_user(request: HttpRequest):
         # Set session message to messages
         if "message" in request.session:
             messages.add_message(
-                request, request.session["level"], request.session["message"])
+                request, request.session["level"], request.session["message"]
+            )
             del request.session["message"]
             del request.session["level"]
 
