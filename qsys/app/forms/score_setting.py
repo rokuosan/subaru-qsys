@@ -5,12 +5,14 @@ from app.models.ctf_information import CtfInformation
 
 class ScoreSettingForm(forms.Form):
     show_team_rankinng = forms.BooleanField(
-        label="チームランキング(Team Ranking)を公開する", required=False,
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input"})
+        label="チームランキング(Team Ranking)を公開する",
+        required=False,
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
     )
     show_player_ranking = forms.BooleanField(
-        label="プレイヤーランキング(Player Ranking)を公開する", required=False,
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input"})
+        label="プレイヤーランキング(Player Ranking)を公開する",
+        required=False,
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
     )
 
     def __init__(self, ctf: CtfInformation, *args, **kwargs):

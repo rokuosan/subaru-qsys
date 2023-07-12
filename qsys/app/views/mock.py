@@ -51,11 +51,11 @@ def create_mock_user(request: HttpRequest):
         return HttpResponseForbidden()
 
     # /static/dummy/usernames.csvから名前を読み取る
-    with open('static/dummy/usernames.csv', 'r') as f:
+    with open("static/dummy/usernames.csv", "r") as f:
         lines = f.readlines()
         for line in lines:
             # 末尾の改行とカンマを削除
-            username = line.rstrip('\n').rstrip(',')
+            username = line.rstrip("\n").rstrip(",")
 
             # 既に存在するユーザー名はスキップ
             if AppUser.objects.filter(username=username).exists():
@@ -63,7 +63,7 @@ def create_mock_user(request: HttpRequest):
 
             user = AppUser.objects.create_user(
                 username=username,
-                password=AppUser.objects.make_random_password()
+                password=AppUser.objects.make_random_password(),
             )
             user.save()
 
