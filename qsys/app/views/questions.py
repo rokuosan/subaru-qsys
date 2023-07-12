@@ -99,6 +99,17 @@ def question_detail(request: HttpRequest, question_id: int):
     question = get_object_or_404(CtfQuestion, pk=question_id)
     ctx["question"] = question
 
+    # Get previous url
+    prev_url = request.META.get("HTTP_REFERER")
+    current_url = request.build_absolute_uri()
+    if prev_url is None:
+        prev_url = current_url
+
+    if prev_url != current_url:
+        ctx["prev_url"] = prev_url
+    else:
+        pass
+
     if request.method == "POST":
         answer = request.POST.get("answer")
 
