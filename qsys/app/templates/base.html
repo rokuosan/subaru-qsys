@@ -11,7 +11,10 @@
   {% bootstrap_css %}
 </head>
 
-<body class="bg-light">
+<body class="bg-light position-relative" style="min-height: 100dvh;">
+  <div class="position-absolute bottom-0 end-0 px-4">
+    {% include 'django_bootstrap5/messages.html' %}
+  </div>
   {% block content %}{% endblock content %}
   {% bootstrap_javascript %}
   <script src="/static/chartjs/script.min.js"></script>
