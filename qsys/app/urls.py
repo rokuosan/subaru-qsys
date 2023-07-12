@@ -3,7 +3,7 @@ from django.urls import path
 
 from .views.sample import sample_view
 from .views.mock import create_mock_questions, create_mock_user
-from .views.score import score
+from .views.ranking import ranking
 from .views.account import account
 from .views.index import index
 from .views.manager import manager
@@ -33,7 +33,7 @@ urlpatterns = [
     path("manager/", manager, name="manager"),
     path("manager/user/", manager_user, name="manager_user"),
     path("manager/ctf/", manager_ctf, name="manager_ctf"),
-    path("score/", score, name="score"),
+    path("ranking/", ranking, name="ranking"),
     # Debug
     path(
         "mock/create/questions/<int:count>/",
