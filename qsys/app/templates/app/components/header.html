@@ -11,6 +11,7 @@
         {% if request.user.is_active %}
         <li class="nav-item"><a class="nav-link active" href="{% url 'questions' %}">Questions</a></li>
         <li class="nav-item"><a class="nav-link active" href="{% url 'account' %}">Account</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{% url 'ranking' %}">Ranking</a></li>
         {% endif %}
         {% if request.user.is_admin %}
         <li class="nav-item dropdown">
