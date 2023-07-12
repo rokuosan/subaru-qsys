@@ -29,7 +29,8 @@ def ranking(request: HttpRequest):
         messages.warning(request, "CTFに参加していません")
         return render(request, "app/ranking.html", ctx)
 
-    ctx["form"] = ScoreSettingForm(ctf=ctf)
+    if user.is_admin:
+        ctx["form"] = ScoreSettingForm(ctf=ctf)
 
     if request.method == "POST":
         show_team = request.POST.get("show_team_rankinng")
@@ -99,8 +100,10 @@ def ranking(request: HttpRequest):
     )
     for i, p in enumerate(player_score_set):
         p["rank"] = i + 1
+    player_score_set = player_score_set[:10]
 
     # ランキングを表示
+    user = request.user
     if ctf.show_team_ranking or user.is_admin:
         ctx["team_score_rank"] = team_score_set
         if not ctf.show_team_ranking:
