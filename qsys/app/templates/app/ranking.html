@@ -38,13 +38,14 @@
     </div>
   </section>
   {% endif %}
-
+  {% if is_active %}
   <section id="team_ranking" class="pt-4">
     <div class="container">
       <div class="p-lg-4">
         <div>
           <h3 class="bg-black px-3 text-white" style="width: fit-content;">Team Ranking</h3>
         </div>
+        {% if team_score_rank %}
         <table class="table table-striped table-hover">
           <caption></caption>
           <thead>
@@ -64,6 +65,11 @@
             {% endfor %}
           </tbody>
         </table>
+        {% else %}
+        <div class="alert alert-warning" role="alert">
+          チームランキングは非表示に設定されています
+        </div>
+        {% endif %}
       </div>
     </div>
   </section>
@@ -74,6 +80,7 @@
         <div>
           <h3 class="bg-black px-3 text-white" style="width: fit-content;">Player Ranking</h3>
         </div>
+        {% if player_score_rank %}
         <table class="table table-striped table-hover">
           <caption></caption>
           <thead>
@@ -93,8 +100,20 @@
             {% endfor %}
           </tbody>
         </table>
+        {% else %}
+        <div class="alert alert-warning" role="alert">
+          プレイヤーランキングは非表示に設定されています
+        </div>
+        {% endif %}
       </div>
     </div>
   </section>
+  {% else %}
+  <div class="container">
+    <div class="alert alert-warning" role="alert">
+      CTFが開催中ではないため、ランキングを表示できません
+    </div>
+  </div>
+  {% endif %}
 </body>
 {% endblock content %}

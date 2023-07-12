@@ -100,7 +100,14 @@ def ranking(request: HttpRequest):
         p["rank"] = i + 1
 
     # ランキングを表示
-    ctx["player_score_rank"] = player_score_set
-    ctx["team_score_rank"] = team_score_set
+    if ctf.show_team_ranking or user.is_admin:
+        ctx["team_score_rank"] = team_score_set
+        if not ctf.show_team_ranking:
+            messages.info(request, "チームランキングは現在非公開です。管理者のみ表示されます。")
+    if ctf.show_player_ranking or user.is_admin:
+        ctx["player_score_rank"] = player_score_set
+        if not ctf.show_player_ranking:
+            messages.info(request, "プレイヤーランキングは現在非公開です。管理者のみ表示されます。")
 
+    ctx["is_active"] = True
     return render(request, "app/ranking.html", ctx)
