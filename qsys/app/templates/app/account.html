@@ -32,7 +32,7 @@
     <div class="container">
       <div class="p-lg-4">
         <div>
-          <h3 class="bg-black px-3 text-white" style="width: fit-content;">Score Status</h3>
+          <h3 class="bg-black px-3 text-white" style="width: fit-content;">Your Score</h3>
         </div>
         <div class="row shadow-sm py-3 px-3 bg-white">
 
@@ -63,6 +63,44 @@
         </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section id="team_score" class="pt-4">
+    <div class="container">
+      <div class="p-lg-4">
+        <div>
+          <h3 class="bg-black px-3 text-white" style="width: fit-content;">Team Score</h3>
+        </div>
+        <div class="row shadow-sm py-3 px-3 bg-white">
+
+          <div class="col">
+            <div class="row">
+              <div class="p-3 py-1 align-self-center" style="width: fit-content;">
+                {% include 'app/icons/chevron_double_up.svg' %}
+              </div>
+              <div class="col align-self-center">
+                <small class="text-muted">Point</small>
+                <h2 class="fw-bold">{{ display.team_point }} pts</h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="col border-start">
+            <div class="row">
+              <div class="p-3 py-1 align-self-center" style="width: fit-content;">
+                {% include 'app/icons/check.svg' %}
+              </div>
+              <div class="col align-self-center">
+                <small class="text-muted">Ratio</small>
+                <h2 class="fw-bold">{{ display.team_ratio }} %</h2>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
     </div>
   </section>
 

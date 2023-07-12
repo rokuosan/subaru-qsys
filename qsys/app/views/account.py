@@ -1,9 +1,11 @@
 from app.models.history import CtfAnswerHistory
 from app.models.ctf_information import CtfInformation
+from app.models.score import CtfScore
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import render
+
 
 
 @login_required
@@ -58,6 +60,28 @@ def account(request: HttpRequest):
         "answers": answers,
         "point": point,
         "ratio": ratio,
+        "team_ratio": "-",
+        "team_point": "-",
     }
+
+    if request.user.team:
+        teammate = ctf.participants.filter(team=request.user.team)
+        scores = CtfScore.objects.filter(user__in=teammate, ctf=ctf)
+        team_point = sum([score.point for score in scores])
+
+        all_answers = CtfAnswerHistory.objects.filter(
+            user__in=teammate, ctf=ctf
+        )
+        all_correct_answers = all_answers.filter(is_correct=True)
+
+        all = len(all_answers)
+        corrects = len(all_correct_answers)
+        if all == 0:
+            ratio = 0
+        else:
+            ratio = round(corrects / all * 100, 2)
+
+        ctx["display"]["team_ratio"] = ratio
+        ctx["display"]["team_point"] = team_point
 
     return render(request, "app/account.html", ctx)
