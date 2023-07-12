@@ -1,6 +1,7 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
+from .views.mock import create_mock_questions
 from .views.score import score
 from .views.account import account
 from .views.index import index
@@ -32,4 +33,7 @@ urlpatterns = [
     path("manager/user/", manager_user, name="manager_user"),
     path("manager/ctf/", manager_ctf, name="manager_ctf"),
     path("score/", score, name="score"),
+
+    # Debug
+    path("mock/create/questions/<int:count>/", create_mock_questions, name="mock"),
 ]
