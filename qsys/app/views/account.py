@@ -7,7 +7,6 @@ from django.http import HttpRequest
 from django.shortcuts import render
 
 
-
 @login_required
 def account(request: HttpRequest):
     ctx = {}

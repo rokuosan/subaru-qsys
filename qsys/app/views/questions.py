@@ -52,7 +52,8 @@ def questions(request: HttpRequest):
         ).values_list("question_id", flat=True)
         team_scores = team_scores.exclude(user=request.user)
         answered_ids_by_team = team_scores.values_list(
-            "question_id", flat=True)
+            "question_id", flat=True
+        )
 
     # Create questions list to display
     ctx["list"] = []
