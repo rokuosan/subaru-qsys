@@ -17,6 +17,7 @@ def account(request: HttpRequest):
     }
 
     # Get CTF
+    ctf = None
     ctfs = CtfInformation.objects.filter(is_active=True)
     if not ctfs:
         messages.warning(request, "CTFが開催されていません")
