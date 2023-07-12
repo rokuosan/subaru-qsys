@@ -34,60 +34,52 @@ def questions(request: HttpRequest):
         ctx["message"] = "CTFに参加していません"
         return render(request, "app/questions.html", ctx)
 
-    # Questionから全データを取得して、辞書型に変換
+    # Get all data and transform to dict
     questions = ctf.questions.all().values()
     categories = CtfQuestionCategory.objects.all().values()
     diffs = CtfQuestionDifficulty.objects.all().values()
-    history = CtfAnswerHistory.objects.filter(
-        user=request.user, is_correct=True, ctf=ctf
-    )
+    dif_names = [d["name"] for d in diffs]
 
-    # 回答済みの問題番号を取得
-    answered_ids = history.values_list("question_id", flat=True)
-    # ユーザがチームに所属している場合、チームの回答済み問題番号を取得
+    # Get answered questions
+    answered_ids = CtfScore.objects.filter(
+        user=request.user, ctf=ctf
+    ).values_list("question_id", flat=True)
+
+    # Get answered questions by team
     if request.user.team:
-        team_history = CtfAnswerHistory.objects.filter(
-            team=request.user.team, is_correct=True, ctf=ctf
-        )
-        answered_ids_by_team = team_history.values_list(
-            "question_id", flat=True
-        )
+        team_scores = CtfScore.objects.filter(
+            team=request.user.team, ctf=ctf
+        ).values_list("question_id", flat=True)
+        team_scores = team_scores.exclude(user=request.user)
+        answered_ids_by_team = team_scores.values_list(
+            "question_id", flat=True)
 
-    # カテゴリ名を持った辞書を作成し、ctx['list']に追加
+    # Create questions list to display
+    ctx["list"] = []
+    pub_questions = questions.filter(is_published=True)
     for c in categories:
-        info = {}
-        info["category"] = c["name"]
-        ctx["list"].append(info)
-
-    # 問題データに難易度名を追加し、カテゴリが対応するctx['list']に追加
-    for q in questions:
-        cn = categories.get(pk=q["category_id"])["name"]
-        dn = diffs.get(difficulty_id=q["difficulty_id"])["name"]
-
-        for li in ctx["list"]:
-            if li["category"] == cn:
-                if "questions" not in li.keys():
-                    li["questions"] = []
-
-                # この問題に公開フラグが立っているか
-                if not q["is_published"]:
-                    continue
-
-                # すでに回答済みか
-                if q["question_id"] in answered_ids:
+        cat_id = c["category_id"]
+        q_list = []
+        for q in pub_questions.filter(category_id=cat_id):
+            # Check if answered
+            if q["question_id"] in answered_ids:
+                q["is_answered"] = True
+            # Check if answered by team
+            elif request.user.team:
+                if q["question_id"] in answered_ids_by_team:
                     q["is_answered"] = True
-                elif request.user.team:
-                    if q["question_id"] in answered_ids_by_team:
-                        q["is_answered"] = True
-                        q["is_answered_by_team"] = True
+                    q["is_answered_by_team"] = True
 
-                q["difficulty_name"] = dn
-                li["questions"].append(q)
-                break
+            # Add difficulty name
+            q["difficulty_name"] = dif_names[q["difficulty_id"] - 1]
 
-    # カテゴリ名をcapitalize
-    for li in ctx["list"]:
-        li["category"] = li["category"].replace("_", " ").capitalize()
+            # Append this question to list
+            q_list.append(q)
+        ctx["list"].append({"category": c["name"], "questions": q_list})
+
+    # Capitalize category name
+    for item in ctx["list"]:
+        item["category"] = item["category"].replace("_", " ").capitalize()
 
     return render(request, "app/questions.html", ctx)
 
