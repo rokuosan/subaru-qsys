@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponseForbidden
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 from app.models.ctf_information import CtfInformation
 from app.models.question import CtfQuestion
 from app.models.category import CtfQuestionCategory
@@ -8,6 +9,7 @@ from app.models.difficulty import CtfQuestionDifficulty
 from app.models.app_user import AppUser
 
 
+@login_required
 def create_mock_questions(request: HttpRequest, count: int):
     """Create Mock Questions."""
     user = request.user
@@ -42,6 +44,7 @@ def create_mock_questions(request: HttpRequest, count: int):
     return redirect("index")
 
 
+@login_required
 def create_mock_user(request: HttpRequest):
     user = request.user
     if not user.is_admin:
