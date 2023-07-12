@@ -16,6 +16,7 @@ def ranking(request: HttpRequest):
     scores = CtfScore.objects.all()
 
     # CTFを取得
+    ctf = None
     if not ctfs.filter(is_active=True):
         messages.warning(request, "開催中のCTFがありません")
         return render(request, "app/ranking.html", ctx)
