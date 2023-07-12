@@ -32,7 +32,7 @@ def questions(request: HttpRequest):
 
     if ctf is None:
         ctx["message"] = "CTFに参加していません"
-        render(request, "app/questions.html", ctx)
+        return render(request, "app/questions.html", ctx)
 
     # Questionから全データを取得して、辞書型に変換
     questions = ctf.questions.all().values()
