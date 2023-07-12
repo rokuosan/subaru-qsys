@@ -40,5 +40,5 @@ urlpatterns = [
         create_mock_questions,
         name="mock",
     ),
-    path("sample/", sample_view, name="sample")
+    path("sample/", sample_view, name="sample"),
 ]
