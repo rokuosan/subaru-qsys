@@ -54,6 +54,7 @@ def account(request: HttpRequest):
 
     ctx["display"] = {
         "username": request.user.username,
+        "team": request.user.team,
         "answers": answers,
         "point": point,
         "ratio": ratio,
