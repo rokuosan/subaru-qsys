@@ -27,7 +27,7 @@ def ranking(request: HttpRequest):
 
     if ctf is None:
         messages.warning(request, "CTFに参加していません")
-        return render(request, "app/score.html", ctx)
+        return render(request, "app/ranking.html", ctx)
 
     ctx["form"] = ScoreSettingForm(ctf=ctf)
 
