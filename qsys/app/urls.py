@@ -33,7 +33,10 @@ urlpatterns = [
     path("manager/user/", manager_user, name="manager_user"),
     path("manager/ctf/", manager_ctf, name="manager_ctf"),
     path("score/", score, name="score"),
-
     # Debug
-    path("mock/create/questions/<int:count>/", create_mock_questions, name="mock"),
+    path(
+        "mock/create/questions/<int:count>/",
+        create_mock_questions,
+        name="mock",
+    ),
 ]
