@@ -2,7 +2,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
 from .views.sample import sample_view
-from .views.mock import create_mock_questions
+from .views.mock import create_mock_questions, create_mock_user
 from .views.score import score
 from .views.account import account
 from .views.index import index
@@ -40,5 +40,6 @@ urlpatterns = [
         create_mock_questions,
         name="mock",
     ),
+    path("mock/create/users/", create_mock_user, name="mock_user"),
     path("sample/", sample_view, name="sample"),
 ]
