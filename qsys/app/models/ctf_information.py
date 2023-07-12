@@ -21,6 +21,14 @@ class CtfInformation(
 
     is_active = models.BooleanField(default=False, help_text="CTF実施状況")
 
+    show_team_ranking = models.BooleanField(
+        default=True, help_text="チームランキング(Team Ranking)を公開する"
+    )
+
+    show_player_ranking = models.BooleanField(
+        default=True, help_text="プレイヤーランキング(Player Ranking)を公開する"
+    )
+
     # CTFが開始しているかどうか
     @property
     def is_started(self):
