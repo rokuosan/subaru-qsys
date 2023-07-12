@@ -4,14 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from app.models.ctf_information import CtfInformation
 from app.models.score import CtfScore
-from .index import index
+from app.forms.score_setting import ScoreSettingForm
 
 
 @login_required
-def score(request: HttpRequest):
+def ranking(request: HttpRequest):
     user = request.user
-    if not user.is_admin:
-        return redirect(index)
 
     ctx = {}
     ctfs = CtfInformation.objects.all()
@@ -20,7 +18,7 @@ def score(request: HttpRequest):
     # CTFを取得
     if not ctfs.filter(is_active=True):
         messages.warning(request, "開催中のCTFがありません")
-        return render(request, "app/score.html", ctx)
+        return render(request, "app/ranking.html", ctx)
     for c in ctfs:
         if request.user in c.participants.all():
             ctf = c
@@ -29,6 +27,19 @@ def score(request: HttpRequest):
     if ctf is None:
         messages.warning(request, "CTFに参加していません")
         return render(request, "app/score.html", ctx)
+
+    ctx["form"] = ScoreSettingForm(ctf=ctf)
+
+    if request.method == "POST":
+        show_team = request.POST.get("show_team_rankinng")
+        show_player = request.POST.get("show_player_ranking")
+
+        ctf.show_team_ranking = show_team == "on"
+        ctf.show_player_ranking = show_player == "on"
+
+        ctf.save()
+
+        return redirect("ranking")
 
     # CTF参加者のチームを取得
     users = ctf.participants.all()
@@ -92,4 +103,4 @@ def score(request: HttpRequest):
     ctx["player_score_rank"] = player_score_set
     ctx["team_score_rank"] = team_score_set
 
-    return render(request, "app/score.html", ctx)
+    return render(request, "app/ranking.html", ctx)

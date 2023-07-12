@@ -2,8 +2,43 @@
 {% block title%} Score | Subaru CTF {% endblock title %}
 {% block content %}
 
+<!-- {% load django_bootstrap5 %} -->
 <body>
   {% include "app/components/header.html" %}
+
+  {% if user.is_admin %}
+  <section id="display_setting" class="pt-4">
+    <div class="container">
+      <div class="p-lg-4">
+        <div class="accordion" id="settingAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+                Display Setting
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+              data-bs-parent="#settingAccordion">
+              <div class="accordion-body">
+                {% if form %}
+                <form action="{% url 'ranking' %}" method="post" class="pt-3 form-check form-switch">
+                  {% csrf_token %}
+                  {% bootstrap_form form %}
+                  {% bootstrap_button "更新" button_type="submit" button_class="btn-outline-primary" size="sm" extra_classes="px-3" %}
+                </form>
+                {% else %}
+                {% bootstrap_alert "CTFが開催中ではないため、設定を表示できません" alert_type="warning" dismissible=False %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
   <section id="team_ranking" class="pt-4">
     <div class="container">
       <div class="p-lg-4">
