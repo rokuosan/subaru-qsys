@@ -63,7 +63,8 @@ def create_mock_user(request: HttpRequest):
 
             user = AppUser.objects.create_user(
                 username=username,
-                password=AppUser.objects.make_random_password(),
+                # password=AppUser.objects.make_random_password(),
+                password=username,
             )
             user.save()
 
