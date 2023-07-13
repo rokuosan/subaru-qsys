@@ -18,15 +18,25 @@ def answer_history(request: HttpRequest):
     ctf = None
     default_ctf = None
     ctfs = CtfInformation.objects.all()
-    if not ctfs.filter(is_active=True):
-        messages.warning(request, "開催中のCTFがありません")
-        return render(request, "app/answer-history.html")
-    for c in ctfs:
-        if request.user in c.participants.all():
-            ctf = c
-            break
 
-    ctfs = ctfs.filter(is_active=True).order_by("-pk")
+    param_ctf_id = request.GET.get("ctf_id")
+    if param_ctf_id:
+        try:
+            ctf = ctfs.get(ctf_id=param_ctf_id)
+        except CtfInformation.DoesNotExist:
+            messages.warning(request, "CTFがありません")
+            ctx["ctfs"] = ctfs.order_by("-pk")
+            return render(request, "app/answer-history.html", ctx)
+    else:
+        if not ctfs:
+            messages.warning(request, "CTFがありません")
+            return render(request, "app/answer-history.html")
+        for c in ctfs.filter(is_active=True):
+            if request.user in c.participants.all():
+                ctf = c
+                break
+
+    ctfs = ctfs.order_by("-pk")
 
     if ctf is None:
         default_ctf = ctfs.filter(is_active=True).first()
