@@ -12,9 +12,12 @@ def account(request: HttpRequest):
     ctx = {}
     ctx["display"] = {
         "username": request.user.username,
+        "team": '-',
         "answers": [],
         "point": 0,
         "ratio": 0,
+        "team_ratio": "-",
+        "team_point": "-",
     }
 
     # Get CTF
