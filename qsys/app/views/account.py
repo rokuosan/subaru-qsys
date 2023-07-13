@@ -12,7 +12,7 @@ def account(request: HttpRequest):
     ctx = {}
     ctx["display"] = {
         "username": request.user.username,
-        "team": '-',
+        "team": "-",
         "answers": [],
         "point": 0,
         "ratio": 0,
