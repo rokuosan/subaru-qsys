@@ -10,25 +10,46 @@
         <div>
           <h3 class="bg-black px-3 text-white" style="width: fit-content;">Answer History</h3>
         </div>
-        <form class="row" action="{% url 'answer_history' %}">
-          <div class="col-6">
-            <div class="input-group input-group-sm">
-              <div class="input-group-text">CTF</div>
-              <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="ctf_id">
-                {% for ctf in ctfs %}
-                {% if ctf.ctf_id == selected_ctf_id %}
-                <option value="{{ ctf.ctf_id }}" selected>{{ ctf.name }}</option>
-                {% else %}
-                <option value="{{ ctf.ctf_id }}">{{ ctf.name }}</option>
-                {% endif %}
-                {% endfor %}
-              </select>
+        <div class="forms row gap-2 flex-column py-3">
+          <form class="row col" action="{% url 'answer_history' %}">
+            <div class="col-6">
+              <div class="input-group input-group-sm">
+                <div class="input-group-text">CTF</div>
+                <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="ctf_id">
+                  {% for ctf in ctfs %}
+                  {% if ctf.ctf_id == selected_ctf_id %}
+                  <option value="{{ ctf.ctf_id }}" selected>{{ ctf.name }}</option>
+                  {% else %}
+                  <option value="{{ ctf.ctf_id }}">{{ ctf.name }}</option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="col-4">
-            <button type="submit" class="btn btn-outline-dark btn-sm">Show</button>
-          </div>
-        </form>
+            <div class="col-4">
+              <button type="submit" class="btn btn-outline-dark btn-sm">Show</button>
+            </div>
+          </form>
+          <form class="row col" action="{% url 'answer_history' %}">
+            <div class="col-6">
+              <div class="input-group input-group-sm">
+                <div class="input-group-text">Player</div>
+                <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="user_id">
+                  {% for ctf in ctfs %}
+                  {% if ctf.ctf_id == selected_ctf_id %}
+                  <option value="{{ ctf.ctf_id }}" selected>{{ ctf.name }}</option>
+                  {% else %}
+                  <option value="{{ ctf.ctf_id }}">{{ ctf.name }}</option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-4">
+              <button type="submit" class="btn btn-outline-dark btn-sm">Show</button>
+            </div>
+          </form>
+        </div>
         <table class="table table-striped table-hover">
           <thead>
             <tr>
