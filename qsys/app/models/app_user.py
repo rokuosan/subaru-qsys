@@ -1,6 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
-from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
@@ -41,12 +40,6 @@ class AppUser(
     username = models.CharField(
         max_length=255,
         unique=True,
-        validators=[
-            MinLengthValidator(
-                3,
-            ),
-            RegexValidator(r"^[a-zA-Z0-9 ]+$"),
-        ],
     )
     team = models.ForeignKey(CtfTeam, models.CASCADE, null=True, blank=True)
 
