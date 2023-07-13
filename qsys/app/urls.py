@@ -1,6 +1,7 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
+from .views.answer_history import answer_history
 from .views.sample import sample_view
 from .views.mock import create_mock_questions, create_mock_user
 from .views.ranking import ranking
@@ -29,11 +30,13 @@ urlpatterns = [
     ),
     # Account
     path("account/", account, name="account"),
+    # Ranking
+    path("ranking/", ranking, name="ranking"),
     # For admin
     path("manager/", manager, name="manager"),
     path("manager/user/", manager_user, name="manager_user"),
     path("manager/ctf/", manager_ctf, name="manager_ctf"),
-    path("ranking/", ranking, name="ranking"),
+    path("answer-history/", answer_history, name="answer_history"),
     # Debug
     path(
         "mock/create/questions/<int:count>/",

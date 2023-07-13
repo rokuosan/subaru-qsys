@@ -18,10 +18,23 @@
           <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button"
             aria-expanded="false">For admin</a>
           <ul class="dropdown-menu">
+            <li>
+              <h6 class="dropdown-header">Information</h6>
+            </li>
+            <li><a class="dropdown-item" href="{% url 'answer_history' %}">Answer History</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <h6 class="dropdown-header">Managers</h6>
+            </li>
             <li><a class="dropdown-item" href="{% url 'manager_ctf' %}">CTF Manager</a></li>
             <li><a class="dropdown-item" href="{% url 'manager_user' %}">User Manager</a></li>
             <li>
               <hr class="dropdown-divider">
+            </li>
+            <li>
+              <h6 class="dropdown-header">Django Server Settings</h6>
             </li>
             <li><a class="dropdown-item" href="/admin">Django Admin Panel</a></li>
           </ul>

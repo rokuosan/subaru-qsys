@@ -1,0 +1,65 @@
+{% extends "base.html"%}
+{% block title%} Answer History | Subaru CTF {% endblock title %}
+{% block content %}
+
+<body>
+  {% include "app/components/header.html" %}
+  <section id="answer_history" class="pt-4">
+    <div class="container">
+      <div class="p-lg-4">
+        <div>
+          <h3 class="bg-black px-3 text-white" style="width: fit-content;">Answer History</h3>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="input-group input-group-sm">
+              <div class="input-group-text">CTF</div>
+              <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example">
+                {% for ctf in ctfs %}
+                {% if ctf.ctf_id == selected_ctf_id %}
+                <option value="{{ ctf.ctf_id }}" selected>{{ ctf.name }}</option>
+                {% else %}
+                <option value="{{ ctf.ctf_id }}">{{ ctf.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="col-4">
+            <button type="button" class="btn btn-outline-dark btn-sm">Show</button>
+          </div>
+        </div>
+        <table class="table table-striped table-hover">
+          <caption>Show last 10 answers</caption>
+          <thead>
+            <tr>
+              <th scope="col">DateTime</th>
+              <th scope="col">CTF</th>
+              <th scope="col">Player</th>
+              <th scope="col">Question</th>
+              <th scope="col">Answer</th>
+              <th scope="col">Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for h in history %}
+            <tr>
+              <th scope="row"> {{ h.answered_at | date:"Y/m/d H:i:s" }} </th>
+              <td>{{ h.ctf }}</td>
+              <td>{{ h.player }}</td>
+              <td>{{ h.question }}</td>
+              <td>{{ h.content }}</td>
+              {% if h.is_correct %}
+              <td><span class="badge bg-success">Correct</span></td>
+              {% else %}
+              <td><span class="badge bg-secondary">Incorrect</span></td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</body>
+{% endblock content %}
