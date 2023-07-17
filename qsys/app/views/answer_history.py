@@ -46,9 +46,34 @@ def answer_history(request: HttpRequest):
     ctx["ctfs"] = ctfs
     ctx["selected_ctf_id"] = default_ctf.ctf_id
 
-    histories = CtfAnswerHistory.objects.filter(ctf=default_ctf).order_by(
-        "-answered_at"
-    )
+    selected_player = None
+    param_user_id = request.GET.get("user_id")
+    if param_user_id and param_user_id != "0":
+        try:
+            selected_player = default_ctf.participants.get(pk=param_user_id)
+        except CtfAnswerHistory.DoesNotExist:
+            messages.warning(request, "ユーザーが存在しません")
+            return render(request, "app/answer-history.html", ctx)
+
+    ctx["selected_player_id"] = selected_player.id if selected_player else None
+    players = []
+    players.append({"username": "All", "user_id": 0})
+    for p in default_ctf.participants.all():
+        players.append({
+            "username": p.username,
+            "user_id": p.id,
+        })
+
+    ctx["players"] = players
+
+    if selected_player:
+        histories = CtfAnswerHistory.objects.filter(
+            ctf=default_ctf, user=selected_player
+        ).order_by("-answered_at")
+    else:
+        histories = CtfAnswerHistory.objects.filter(ctf=default_ctf).order_by(
+            "-answered_at"
+        )
 
     history = []
     for h in histories:

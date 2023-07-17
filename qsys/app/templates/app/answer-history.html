@@ -12,7 +12,7 @@
         </div>
         <div class="forms row gap-2 flex-column py-3">
           <form class="row col" action="{% url 'answer_history' %}">
-            <div class="col-6">
+            <div class="col-5">
               <div class="input-group input-group-sm">
                 <div class="input-group-text">CTF</div>
                 <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="ctf_id">
@@ -26,26 +26,21 @@
                 </select>
               </div>
             </div>
-            <div class="col-4">
-              <button type="submit" class="btn btn-outline-dark btn-sm">Show</button>
-            </div>
-          </form>
-          <form class="row col" action="{% url 'answer_history' %}">
-            <div class="col-6">
+            <div class="col-5">
               <div class="input-group input-group-sm">
                 <div class="input-group-text">Player</div>
                 <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="user_id">
-                  {% for ctf in ctfs %}
-                  {% if ctf.ctf_id == selected_ctf_id %}
-                  <option value="{{ ctf.ctf_id }}" selected>{{ ctf.name }}</option>
+                  {% for player in players %}
+                  {% if player.user_id == selected_player_id %}
+                  <option value="{{ ctf.ctf_id }}" selected>{{ player.username }}</option>
                   {% else %}
-                  <option value="{{ ctf.ctf_id }}">{{ ctf.name }}</option>
+                  <option value="{{ player.user_id }}">{{ player.username }}</option>
                   {% endif %}
                   {% endfor %}
                 </select>
               </div>
             </div>
-            <div class="col-4">
+            <div class="col-2">
               <button type="submit" class="btn btn-outline-dark btn-sm">Show</button>
             </div>
           </form>
