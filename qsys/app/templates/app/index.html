@@ -2,33 +2,33 @@
 {% block title%} Dashboard | Subaru CTF {% endblock title %}
 {% block content %}
 
-<body>
+<body class="h-100">
   {% include "app/components/header.html" %}
-  <section class="py-4 py-xl-5">
-    <div class="container">
-      <div class="text-center p-4 p-lg-5">
-        <p class="fw-bold text-primary mb-2">Proud to introduce</p>
-        <h1 class="fw-bold mb-4">Subaru CTF</h1>
+  <div class="d-flex flex-column justify-content-between h-100">
+    <div class="container flex-shrink-0">
+      </section>
+      <div class="px-4 py-5 my-5 text-center">
+        <div class="mb-4">
+          {% include 'app/icons/chat.svg' %}
+        </div>
+        {% if not request.user.is_anonymous %}
+        <h1 class="display-5 fw-bold">Welcome, {{ request.user.username }}</h1>
+        {% else %}
+        <h1 class="display-5 fw-bold">Subaru CTF</h1>
+        {% endif %}
+        <div class="col-lg-6 mx-auto">
+          <p class="lead mb-4">
+
+          </p>
+          <div class="d-grid d-sm-flex justify-content-sm-center">
+            {% if request.user.is_anonymous %}
+            <a href="{% url 'login' %}" type="button" class="btn btn-primary btn-lg px-4" >Login</a>
+            {% endif %}
+          </div>
+        </div>
       </div>
     </div>
-  </section>
-  <div class="container">
-    <!-- <div>
-            <div>
-                <canvas data-bss-chart="{&quot;type&quot;:&quot;bar&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;January&quot;,&quot;February&quot;,&quot;March&quot;,&quot;April&quot;,&quot;May&quot;,&quot;June&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Revenue&quot;,&quot;backgroundColor&quot;:&quot;#4e73df&quot;,&quot;borderColor&quot;:&quot;#4e73df&quot;,&quot;data&quot;:[&quot;4500&quot;,&quot;5300&quot;,&quot;6250&quot;,&quot;7800&quot;,&quot;9800&quot;,&quot;15000&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:true,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;bold&quot;},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}}],&quot;yAxes&quot;:[{&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}}]}}}">
-                </canvas>
-            </div>
-        </div> -->
   </div>
-  <footer>
-    <div class="container py-4 py-lg-5">
-      <div class="row justify-content-center"></div>
-      <hr>
-      <div class="d-flex justify-content-between align-items-center pt-3">
-        <p class="text-muted mb-0">Subaru CTF</p>
-      </div>
-    </div>
-  </footer>
 </body>
 
 </html>
