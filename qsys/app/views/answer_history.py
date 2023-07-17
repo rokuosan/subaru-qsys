@@ -59,10 +59,12 @@ def answer_history(request: HttpRequest):
     players = []
     players.append({"username": "All", "user_id": 0})
     for p in default_ctf.participants.all():
-        players.append({
-            "username": p.username,
-            "user_id": p.id,
-        })
+        players.append(
+            {
+                "username": p.username,
+                "user_id": p.id,
+            }
+        )
 
     ctx["players"] = players
 
