@@ -20,6 +20,7 @@ class CtfInformation(
     participants = models.ManyToManyField(AppUser, help_text="参加者", blank=True)
 
     is_active = models.BooleanField(default=False, help_text="CTF実施状況")
+    is_paused = models.BooleanField(default=False, help_text="CTF一時停止状況")
 
     show_team_ranking = models.BooleanField(
         default=True, help_text="チームランキング(Team Ranking)を公開する"
