@@ -7,36 +7,63 @@
     </button>
     <div class="collapse navbar-collapse" id="navcol-3">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="{% url 'index' %}">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{% url 'index' %}">
+          {% include 'app/icons/home.svg' %}
+          <span class="ms-1 align-middle">Dashboard</span>
+        </a></li>
         {% if request.user.is_active %}
-        <li class="nav-item"><a class="nav-link active" href="{% url 'questions' %}">Questions</a></li>
-        <li class="nav-item"><a class="nav-link active" href="{% url 'account' %}">Account</a></li>
-        <li class="nav-item"><a class="nav-link active" href="{% url 'ranking' %}">Ranking</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{% url 'questions' %}">
+          {% include 'app/icons/light.svg' %}
+          <span class="ms-1 align-middle">Questions</span>
+        </a></li>
+        <li class="nav-item"><a class="nav-link active" href="{% url 'account' %}">
+          {% include 'app/icons/person.svg' %}
+          <span class="ms-1 align-middle">Account</span>
+        </a></li>
+        <li class="nav-item"><a class="nav-link active" href="{% url 'ranking' %}">
+          {% include 'app/icons/trophy.svg' %}
+          <span class="ms-1 align-middle">Ranking</span>
+        </a></li>
         {% endif %}
         {% if request.user.is_admin %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button"
-            aria-expanded="false">For admin</a>
+            aria-expanded="false">
+            {% include 'app/icons/grid.svg' %}
+            <span class="ms-1 align-middle">Control</span>
+          </a>
           <ul class="dropdown-menu">
             <li>
-              <h6 class="dropdown-header">Information</h6>
+              <h6 class="dropdown-header lead">Information</h6>
             </li>
-            <li><a class="dropdown-item" href="{% url 'answer_history' %}">Answer History</a></li>
+            <li><a class="dropdown-item" href="{% url 'answer_history' %}">
+              {% include 'app/icons/clock.svg' %}
+              <span class="ms-1">Answer History</span>
+            </a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
             <li>
-              <h6 class="dropdown-header">Managers</h6>
+              <h6 class="dropdown-header lead">Managers</h6>
             </li>
-            <li><a class="dropdown-item" href="{% url 'manager_ctf' %}">CTF Manager</a></li>
-            <li><a class="dropdown-item" href="{% url 'manager_user' %}">User Manager</a></li>
+            <li><a class="dropdown-item" href="{% url 'manager_ctf' %}">
+              {% include 'app/icons/flag.svg' %}
+              <span class="ms-1">CTF Manager</span>
+            </a></li>
+            <li><a class="dropdown-item" href="{% url 'manager_user' %}">
+              {% include 'app/icons/people.svg' %}
+              <span class="ms-1">User Manager</span>
+            </a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
             <li>
-              <h6 class="dropdown-header">Django Server Settings</h6>
+              <h6 class="dropdown-header lead">Django Server Settings</h6>
             </li>
-            <li><a class="dropdown-item" href="/admin">Django Admin Panel</a></li>
+            <li><a class="dropdown-item" href="/admin">
+              {% include 'app/icons/gear.svg' %}
+              <span class="ms-1">Django Admin Panel</span>
+              </a></li>
           </ul>
         </li>
         {% endif %}
