@@ -67,19 +67,23 @@ def manager_ctf(request: HttpRequest):
                 ctf.is_active = False
                 ctf.save()
 
-        ctx["ctfs"].append({
-            "type": "running",
-            "category": "開催中のCTF",
-            "ctfs": running_ctfs,
-        })
+        ctx["ctfs"].append(
+            {
+                "type": "running",
+                "category": "開催中のCTF",
+                "ctfs": running_ctfs,
+            }
+        )
 
         # 停止中のCTFを取得
         stopped_ctfs = ctfs.filter(is_active=False)
-        ctx["ctfs"].append({
-            "type": "stopped",
-            "category": "開催前・開催後のCTF",
-            "ctfs": stopped_ctfs,
-        })
+        ctx["ctfs"].append(
+            {
+                "type": "stopped",
+                "category": "開催前・開催後のCTF",
+                "ctfs": stopped_ctfs,
+            }
+        )
 
         return render(request, "app/manager_ctf.html", ctx)
 
