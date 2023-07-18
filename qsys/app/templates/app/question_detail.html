@@ -6,6 +6,12 @@
   {% include "app/components/header.html" %}
   <div class="container" style="padding: 16px;">
     <div class="row flex-column g-3">
+      <div class="col">
+        <a href="{% url 'questions' %}" class="text-decoration-none">
+          {% include 'app/icons/left-short.svg' %}
+          <span>Go back</span>
+        </a>
+      </div>
       <div class="col border-bottom my-4">
         <h2>{{ question.title }}</h2>
       </div>
