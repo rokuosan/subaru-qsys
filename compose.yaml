@@ -2,6 +2,13 @@ volumes:
   prometheus-data:
 
 services:
+  server:
+    build: ./qsys/
+    volumes:
+      - ./qsys/:/app
+    ports:
+      - "8000:8000"
+
   prometheus:
     image: prom/prometheus
     ports:
