@@ -4,25 +4,25 @@
 
 <body>
   <!-- Modals must be placed in a top-level position. ref https://getbootstrap.jp/docs/5.0/components/modal/ -->
-  {% for c in ctfs %}
-  <!-- Start Modal -->
-  <div class="modal fade" id="modalStart{{ c.ctf_id }}" tabindex="-1" aria-labelledby="{{ c.ctf_id }}-modal-label"
+  {% for c in all %}
+  <!-- Resume Modal -->
+  <div class="modal fade" id="modalResume{{ c.ctf_id }}" tabindex="-1" aria-labelledby="{{ c.ctf_id }}-modal-label"
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="{{ c.ctf_id }}-modal-label">Start Confirm</h5>
+          <h5 class="modal-title" id="{{ c.ctf_id }}-modal-label">Resume Confirm</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          {{ c.name }} を開始します。よろしいですか？
+          {{ c.name }} を再開します。よろしいですか？
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
           <form action="{% url 'manager_ctf' %}" method="post">
             {% csrf_token %}
             <input type="hidden" name="id" value="{{ c.ctf_id }}">
-            <button type="submit" class="btn btn-primary" name="start">開始する</button>
+            <button type="submit" class="btn btn-primary" name="resume">再開する</button>
           </form>
         </div>
       </div>
@@ -86,7 +86,8 @@
         </div>
         <div class="modal-body">
           <p>
-            {{ c.name }} の開始時刻を現在にして再開します。終了時刻は2時間後に設定します。詳細変更はDjango Admin Panelから行ってください。
+            {{ c.name }} の開始時刻を現在にして再開します。終了時刻は2時間後に設定します。詳細変更はDjango Admin Panelから行ってください。<br>
+            安全のために、一時停止した状態で再開します。
           </p>
         </div>
         <div class="modal-footer">
@@ -98,106 +99,88 @@
   </div>
   {% endfor %}
 
-  <div class="position-absolute bottom-0 end-0 px-4">
-    {% include 'django_bootstrap5/messages.html' %}
-  </div>
-
   {% include "app/components/header.html" %}
   <div class="container">
-    <section id="">
-      <div class="py-3">
-        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">開催中のCTF</h2>
+
+    {% for ctf in ctfs %}
+    <section id="{{ ctf.type }}" class="mb-5 mt-3">
+      <div class="container py-2 px-5 h2 bg-black text-white mx-auto fw-bolder mb-2"
+        style="width: fit-content; transform: skewX(-25deg);">
+        <div style="transform: skewX(25deg);">
+          {% if ctf.type == "running" %}
+            {% include 'app/icons/spark.svg' %}
+          {% else %}
+            {% include 'app/icons/pause.svg' %}
+          {% endif %}
+
+          {{ ctf.category }}
+        </div>
       </div>
-      {% if current %}
-        <div class="row justify-content-center">
-          {% for ctf in current %}
-          <div class="col-md-auto">
-            <div class="card px-2 mx-auto" style="width: fit-content;">
-              <div class="card-body">
-                <h5> {{ ctf.name }} </h4>
-                {% if ctf.is_active %}
-                <span class="badge bg-success">開催中</span>
-                <button class="btn btn-primary btn-sm" disabled>開始</button>
-                <button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalPause{{ ctf.ctf_id }}">
-                  一時停止
-                </button>
+      <div class="row justify-content-evenly mt-3 ">
+        {% if not ctf.ctfs %}
+        <div class="col-xl-4 col-lg-6 col-md-8 col-12">
+          <div class="alert alert-danger" role="alert">
+            {{ ctf.category }}はありません。
+          </div>
+        </div>
+        {% endif %}
+        {% for c in ctf.ctfs %}
+        <div class="col-xl-4 col-lg-6 col-md-8 col-12 my-2">
+          <div class="card">
+            <div class="card-body py-3 px-4">
+              <div class="d-flex justify-content-between">
+                <p class="mb-0 text-muted">name</p>
+                {% if c.is_paused and c.is_active %}
+                <span class="badge bg-danger" style="width: fit-content; height: fit-content;">一時停止中</span>
+                {% elif c.is_active %}
+                <span class="badge bg-success" style="width: fit-content; height: fit-content;">実施中</span>
                 {% else %}
-                <span class="badge bg-secondary" >一時停止中</span>
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalStart{{ ctf.ctf_id }}">開始</button>
-                <button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalStop{{ ctf.ctf_id }}">
-                  終了
-                </button>
+                <span class="badge bg-secondary" style="width: fit-content; height: fit-content;">終了済み</span>
+                {% endif %}
+              </div>
+              <h3 class="mb-2">{{ c.name }}</h3>
+              <div class="d-flex justify-content-between small">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 text-muted">Start</p>
+                  <p class="mb-0">{{ c.start_at }}</p>
+                </div>
+                <div class="d-flex flex-column">
+                  <p class="mb-0 text-muted">End</p>
+                  <p class="mb-0">{{ c.end_at }}</p>
+                </div>
+              </div>
+              <hr class="mb-2">
+              <div class="d-flex justify-content-around">
+                {% if c.is_active %}
+                  {% if c.is_paused %}
+                  <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#modalResume{{ c.ctf_id }}">
+                    再開
+                  </button>
+                  {% else %}
+                  <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="modal"
+                    data-bs-target="#modalPause{{ c.ctf_id }}">
+                    一時停止
+                  </button>
+                  {% endif %}
+                  <button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="modal"
+                    data-bs-target="#modalStop{{ c.ctf_id }}">
+                    終了
+                  </button>
+                {% else %}
+                  <button class="btn btn-outline-success btn-sm" type="button" data-bs-toggle="modal"
+                    data-bs-target="#modalRestart{{ c.ctf_id }}">
+                    再実施する
+                  </button>
                 {% endif %}
               </div>
             </div>
           </div>
-          {% endfor %}
-        </div>
-      {% else %}
-      <div class="w-75 container">
-        <div class="alert alert-warning text-center" role="alert">
-          No current CTFs.
-        </div>
-      </div>
-      {% endif %}
-    </section>
-
-    <section>
-      <div class="py-3">
-        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">開催予定のCTF</h2>
-      </div>
-      {% if upcoming %}
-        <div class="row justify-content-center">
-          {% for ctf in upcoming %}
-          <div class="col-md-auto ">
-            <div class="card px-2 " style="width: fit-content;">
-              <div class="card-body">
-                <h5> {{ ctf.name }} </h4>
-                  <span class="badge bg-secondary">開催予定: {{ ctf.start_at }}</span>
-                  <button type="button" class="btn btn-outline-success btn-sm" name="start" data-bs-toggle="modal" data-bs-target="#modalRestart{{ ctf.ctf_id }}">
-                    開始
-                  </button>
-                </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      {% else %}
-      <div class="w-75 container">
-        <div class="alert alert-warning text-center" role="alert">
-          No upcoming CTFs.
-        </div>
-      </div>
-      {% endif %}
-    </section>
-    <section>
-      <div class="py-3">
-        <h2 class="border-bottom border-3 border-dark px-5 mx-auto fw-bold" style="width: fit-content;">開催済みのCTF</h2>
-      </div>
-      {% if past %}
-      <div class="row justify-content-center">
-        {% for ctf in past %}
-        <div class="col-md-auto">
-          <div class="card px-2 " style="width: fit-content;">
-            <div class="card-body" >
-              <h5> {{ ctf.name }} </h4>
-                <span class="badge bg-secondary">終了</span>
-                <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalRestart{{ ctf.ctf_id }}">
-                  開催時刻を現在にして開始
-                </button>
-              </div>
-          </div>
         </div>
         {% endfor %}
       </div>
-      {% else %}
-      <div class="w-75 container">
-        <div class="alert alert-warning text-center" role="alert">
-          No past CTFs.
-        </div>
-      </div>
-      {% endif %}
     </section>
+    {% endfor %}
   </div>
 </body>
 
