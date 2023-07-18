@@ -38,8 +38,14 @@ def answer_history(request: HttpRequest):
 
     ctfs = ctfs.order_by("-pk")
 
+    if ctfs is None:
+        messages.warning(request, "CTFがありません")
+        return render(request, "app/answer-history.html", ctx)
+
     if ctf is None:
         default_ctf = ctfs.filter(is_active=True).first()
+        if default_ctf is None:
+            default_ctf = ctfs.first()
     else:
         default_ctf = ctf
 
