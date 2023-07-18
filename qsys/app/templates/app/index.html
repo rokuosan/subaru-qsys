@@ -4,9 +4,8 @@
 
 <body class="h-100">
   {% include "app/components/header.html" %}
-  <div class="d-flex flex-column justify-content-between h-100">
-    <div class="container flex-shrink-0">
-      </section>
+  <div class="h-100">
+    <div class="container">
       <div class="px-4 py-5 my-5 text-center">
         <div class="mb-4">
           {% include 'app/icons/chat.svg' %}
@@ -28,6 +27,38 @@
         </div>
       </div>
     </div>
+
+    <section class="container">
+      <div class="container py-2 px-5 h2 bg-black text-white mx-auto fw-bolder mb-2" style="width: fit-content; transform: skewX(-25deg);">
+        <div style="transform: skewX(25deg);">
+          開催中のCTF
+        </div>
+      </div>
+
+      <div class="row justify-content-evenly mt-3">
+        <div class="col-xl-4 col-lg-6 col-md-8 col-12">
+          {% if ctf %}
+          <div class="card">
+            <div class="card-body py-3 px-4">
+              <p class="mb-0 text-muted">name</p>
+              <h2 class="mb-2">{{ ctf.name }}</h2>
+              <p class="lead mb-1">{{ ctf.description }}</p>
+              <hr>
+              <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 text-muted">Start</p>
+                  <p class="mb-0">{{ ctf.start_at }}</p>
+                </div>
+                <div class="d-flex flex-column">
+                  <p class="mb-0 text-muted">End</p>
+                  <p class="mb-0">{{ ctf.end_at }}</p>
+                </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
   </div>
 </body>
 
