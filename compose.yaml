@@ -7,7 +7,7 @@ services:
     volumes:
       - ./qsys/:/app
     ports:
-      - "8000:8000"
+      - "80:8000"
 
   prometheus:
     image: prom/prometheus
