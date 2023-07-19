@@ -1,5 +1,5 @@
 asgiref==3.7.2
-Django==4.2.2
+Django==4.2.3
 django-bootstrap5==23.3
 django-prometheus==2.3.1
 prometheus-client==0.17.0
