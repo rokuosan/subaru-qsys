@@ -4,6 +4,7 @@ from app.models.history import CtfAnswerHistory
 from app.models.question import CtfQuestion
 from app.models.score import CtfScore
 from app.models.ctf_information import CtfInformation
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
@@ -91,6 +92,13 @@ def question_detail(request: HttpRequest, question_id: int):
     ctx = {}
     question = get_object_or_404(CtfQuestion, pk=question_id)
     ctx["question"] = question
+
+    if not question.is_published:
+        messages.error(request, "この問題は公開されていません")
+        if not request.user.is_admin:
+            return redirect("questions")
+        else:
+            messages.info(request, "管理者のため、問題を閲覧できます")
 
     # Get previous url
     prev_url = request.META.get("HTTP_REFERER")
