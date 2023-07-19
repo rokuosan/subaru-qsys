@@ -8,4 +8,6 @@ __pycache__
 services/grafana/*
 !grafana/.gitkeep
 
+*.sqlite3
+
 venv/
