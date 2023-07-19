@@ -1,0 +1,66 @@
+{% extends "base.html"%}
+{% block title%} Manager | Subaru CTF {% endblock title %}
+{% block content %}
+
+<body>
+  {% include "app/components/header.html" %}
+  <div class="container">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab"
+          href="#tab-1">ユーザーを追加</a></li>
+      <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-2">
+          複数のユーザーを一括追加</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div id="tab-1" class="tab-pane active fade show" role="tabpanel">
+        <div class="row pt-5 gy-4 justify-content-center">
+          <form method="post" action="{% url 'manager_user' %}" class="col-md-6 ">
+            <h2 class="pb-3">
+              ユーザーを追加
+            </h2>
+            <div class="container px-3">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <div class="form-check form-switch">
+                <label class="form-check-label" for="switchAdmin">管理者権限を与える</label>
+                <input class="form-check-input" type="checkbox" id="switchAdmin" name="is_admin">
+              </div>
+              <div class="col">
+                <input type="submit" class="mt-3 btn btn-primary"></input>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="tab-2" class="tab-pane fade" role="tabpanel">
+        <div class="row pt-5 gy-4 justify-content-center">
+          <form method="post" action="{% url 'manager_user' %}" class="col-md-6 ">
+            <div class="pb-3">
+              <h2>
+                複数のユーザーを一括追加
+              </h2>
+              <p class="">
+                ユーザー名を改行区切りで入力してください。<br>
+                パスワードはランダムで作成され、作成完了後にCSV形式でダウンロードできます。
+              </p>
+            </div>
+            <div class="container px-3">
+              {% csrf_token %}
+              <div class="form-floating">
+                <textarea class="form-control" placeholder="Taro Yamada" id="usernames" name="usernames"
+                  style="height: 100px"></textarea>
+                <label for="usernames">Usernames</label>
+              </div>
+              <input type="submit" class="mt-3 btn btn-primary"></input>
+              <button type="reset" class="btn btn-outline-secondary mt-3">Clear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+{% endblock content %}

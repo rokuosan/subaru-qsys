@@ -1,1 +1,13 @@
 __pycache__
+
+*.css
+*.css.map
+*.js
+*.js.map
+
+services/grafana/*
+!grafana/.gitkeep
+
+*.sqlite3
+
+venv/

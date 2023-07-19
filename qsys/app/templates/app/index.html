@@ -1,0 +1,73 @@
+{% extends "base.html"%}
+{% block title%} Dashboard | Subaru CTF {% endblock title %}
+{% block content %}
+
+<body class="h-100">
+  {% include "app/components/header.html" %}
+  <div class="h-100">
+    <div class="container">
+      <div class="px-4 py-5 my-5 text-center">
+        <div class="mb-4">
+          {% include 'app/icons/chat.svg' %}
+        </div>
+        {% if not request.user.is_anonymous %}
+        <h1 class="display-5 fw-bold">Welcome, {{ request.user.username }}</h1>
+        {% else %}
+        <h1 class="display-5 fw-bold">Subaru CTF</h1>
+        {% endif %}
+        <div class="col-lg-6 mx-auto">
+          <p class="lead mb-4">
+
+          </p>
+          <div class="d-grid d-sm-flex justify-content-sm-center">
+            {% if request.user.is_anonymous %}
+            <a href="{% url 'login' %}" type="button" class="btn btn-primary btn-lg px-4" >Login</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="container">
+      <div class="container py-2 px-5 h2 bg-black text-white mx-auto fw-bolder mb-2" style="width: fit-content; transform: skewX(-25deg);">
+        <div style="transform: skewX(25deg);">
+          開催中のCTF
+        </div>
+      </div>
+
+      <div class="row justify-content-evenly mt-3">
+        <div class="col-xl-4 col-lg-6 col-md-8 col-12">
+          {% if ctf %}
+          <div class="card">
+            <div class="card-body py-3 px-4">
+              <p class="mb-0 text-muted">name</p>
+              <h2 class="mb-2">{{ ctf.name }}</h2>
+              <p class="lead mb-1">{{ ctf.description }}</p>
+              <hr>
+              <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 text-muted">Start</p>
+                  <p class="mb-0">{{ ctf.start_at }}</p>
+                </div>
+                <div class="d-flex flex-column">
+                  <p class="mb-0 text-muted">End</p>
+                  <p class="mb-0">{{ ctf.end_at }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <div class="alert">
+            <div class="alert alert-warning" role="alert">
+              <strong>CTFが開催されていません</strong>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+
+</html>
+{% endblock content %}
