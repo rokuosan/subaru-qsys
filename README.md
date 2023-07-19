@@ -49,6 +49,7 @@ Password (again): パスワードを再入力(表示されません)
 サーバーとその他サービスを起動します。
 
 ```bash
+$ cd ..
 $ docker compose up -d
 ```
 
