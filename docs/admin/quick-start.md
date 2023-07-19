@@ -219,4 +219,49 @@ Django管理サイトからCTF問題の欄にある「+追加」ボタンを押�
 
 ## 9. CTF開催情報を作成する
 
+Django管理サイトからCTF情報の欄にある「+追加」ボタンを押します。
+
+太字になっているフィールドをすべて埋めて、ページ下部にある保存ボタンを押して作成します。
+
+QuestionsとParticipantsは複数選択が可能です。Shiftとクリックで範囲選択、Ctrlとクリックで選択追加することができます。
+
+is_activeは、そのCTFが開催中であるかを管理します。チェックは外したままにしておいてください。
+
+is_pausedは、開催中のCTFを一時停止するときに利用するフラグのため、無視してください。
+
+Show team/player ranking についてはお好みで選択してください。
+
 ## 10. CTFを開催中にする
+
+スーパーユーザーでログイン後、ナビゲーションバーのControlから[CTF Manager](http://localhost/manager/ctf/)を選択します。
+
+9の手順でCTF情報を1つ追加している場合、このような表示になります。
+
+![image](https://github.com/rokuosan/subaru-qsys/assets/85651386/281cb960-bbf0-42fb-a768-5aae71e804cb)
+
+
+> もし、CTF情報を登録する際に``is_active``にチェックを入れている場合は、以下のような表示になります。
+>
+> ![image](https://github.com/rokuosan/subaru-qsys/assets/85651386/a187b2d9-f71d-4d20-b643-ae73a6af4b08)
+
+
+「再実施する」ボタンを押すとモーダルが表示されます。注意事項をよく読んだ上で「再開する」ボタンを押してください。
+
+![image](https://github.com/rokuosan/subaru-qsys/assets/85651386/6495bf45-48b5-47ce-8d15-30f6cec1be78)
+
+CTFが正常に再開されると、以下のような表示になります。
+
+![image](https://github.com/rokuosan/subaru-qsys/assets/85651386/bbd8e635-09ac-4cc3-8e35-71e5b4c17e92)
+
+これで、CTFが実施していることになりました。
+
+ただし、このままだと表示にもあるようにこのCTFは「一時停止中」です。
+
+再開する場合は「再開」ボタンを押してください。
+
+モーダルが表示されますが、ここも「再開する」ボタンを押すことで再開することができます。
+
+正常に再開できれば、右上の表示が実施中に変わっています。
+
+![image](https://github.com/rokuosan/subaru-qsys/assets/85651386/621fc981-7217-4c66-8d05-28e7be3d227d)
+
