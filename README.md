@@ -2,6 +2,10 @@
 
 これは校内CTFを実施するためのDjangoアプリケーションです。
 
+## Attention
+
+このプロジェクトは現在開発中です。バグや要望などあればぜひ教えてください！
+
 ## Installation
 
 ### Requirements
@@ -52,6 +56,10 @@ Password (again): パスワードを再入力(表示されません)
 $ cd ..
 $ docker compose up -d
 ```
+
+以下のURLからダッシュボードに接続します。
+
+- [http://localhost/](http://localhost/)
 
 ## Libraries
 
