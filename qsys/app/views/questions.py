@@ -133,6 +133,14 @@ def question_detail(request: HttpRequest, question_id: int):
             }
             return redirect(question_detail, question_id=question_id)
 
+        # CTFが一時中止なら回答不可
+        if ctf.is_paused:
+            request.session["result"] = {
+                "message": "CTFは一時中止されています",
+                "is_correct": False,
+            }
+            return redirect(question_detail, question_id=question_id)
+
         # この問題について自分が提出した回答一覧を取得
         ans_list = CtfAnswerHistory.objects.filter(
             question=question, user=request.user, ctf=ctf
