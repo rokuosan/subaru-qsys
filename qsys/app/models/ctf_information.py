@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
@@ -33,12 +34,14 @@ class CtfInformation(
     # CTFが開始しているかどうか
     @property
     def is_started(self):
-        return self.start_at <= self.now
+        now = datetime.now(tz=self.start_at.tzinfo)
+        return self.start_at <= now
 
     # CTFが終了しているかどうか
     @property
     def is_ended(self):
-        return self.end_at <= self.now
+        now = datetime.now(tz=self.start_at.tzinfo)
+        return self.end_at <= now
 
     class Meta:
         app_label = "app"
