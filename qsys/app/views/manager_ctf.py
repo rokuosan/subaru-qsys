@@ -71,10 +71,7 @@ def manager_ctf(request: HttpRequest):
         status = None
         for ctf in running_ctfs:
             if ctf.is_ended:
-                status = {
-                    "type": "danger",
-                    "msg": "開催期間終了"
-                }
+                status = {"type": "danger", "msg": "開催期間終了"}
 
         ctx["ctfs"].append(
             {
