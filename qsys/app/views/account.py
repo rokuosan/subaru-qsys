@@ -35,55 +35,32 @@ def account(request: HttpRequest):
         messages.warning(request, "CTFに参加していません")
         return render(request, "app/account.html", ctx)
 
-    # Get Answers
-    answers_original = CtfAnswerHistory.objects.filter(
+    # Get last newest 10 Answers
+    answers = CtfAnswerHistory.objects.filter(
         user=request.user, ctf=ctf
-    )
-    answers_original = answers_original.order_by("-answered_at")
-    # Last newest 10 answers
-    answers = answers_original[:10]
+    ).order_by("-answered_at")[:10]
 
     # Your point
-    point = 0
-    correct_answers = answers_original.filter(is_correct=True)
-    point = sum([answer.question.point for answer in correct_answers])
+    point = CtfAnswerHistory.get_user_point(request.user, ctf)
 
     # Answer ratio
-    max = len(answers_original)
-    corrects = len(correct_answers)
-    if max == 0:
-        ratio = 0
-    else:
-        ratio = round(corrects / max * 100, 2)
+    ac = CtfAnswerHistory.get_user_accuracy(request.user, ctf) * 100
 
     ctx["display"] = {
         "username": request.user.username,
         "team": request.user.team,
         "answers": answers,
         "point": point,
-        "ratio": ratio,
+        "ratio": round(ac, 2),
         "team_ratio": "-",
         "team_point": "-",
     }
 
     if request.user.team:
-        teammate = ctf.participants.filter(team=request.user.team)
-        scores = CtfScore.objects.filter(user__in=teammate, ctf=ctf)
-        team_point = sum([score.point for score in scores])
+        tac = CtfAnswerHistory.get_team_accuracy(request.user.team, ctf) * 100
+        tpt = CtfAnswerHistory.get_team_point(request.user.team, ctf)
 
-        all_answers = CtfAnswerHistory.objects.filter(
-            user__in=teammate, ctf=ctf
-        )
-        all_correct_answers = all_answers.filter(is_correct=True)
-
-        all = len(all_answers)
-        corrects = len(all_correct_answers)
-        if all == 0:
-            ratio = 0
-        else:
-            ratio = round(corrects / all * 100, 2)
-
-        ctx["display"]["team_ratio"] = ratio
-        ctx["display"]["team_point"] = team_point
+        ctx["display"]["team_ratio"] = round(tac, 2)
+        ctx["display"]["team_point"] = tpt
 
     return render(request, "app/account.html", ctx)
