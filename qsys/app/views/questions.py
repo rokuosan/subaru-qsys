@@ -35,6 +35,10 @@ def questions(request: HttpRequest):
         ctx["message"] = "CTFに参加していません"
         return render(request, "app/questions.html", ctx)
 
+    if ctf.is_ended:
+        messages.error(request, "開催期間が過ぎているため、問題を閲覧できません")
+        return redirect("index")
+
     # Get all data and transform to dict
     questions = ctf.questions.all().values()
     categories = CtfQuestionCategory.objects.all().values()
@@ -130,6 +134,13 @@ def question_detail(request: HttpRequest, question_id: int):
         if ctf is None:
             request.session["result"] = {
                 "message": "CTFに参加していません",
+                "is_correct": False,
+            }
+            return redirect(question_detail, question_id=question_id)
+
+        if ctf.is_ended:
+            request.session["result"] = {
+                "message": "開催期間が切れています",
                 "is_correct": False,
             }
             return redirect(question_detail, question_id=question_id)
