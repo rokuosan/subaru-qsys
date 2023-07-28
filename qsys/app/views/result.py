@@ -65,10 +65,9 @@ def result(request: HttpRequest):
         prev_score = team_score[1]
 
     # 辞書型に変換
-    team_scores = [{
-        "rank": t[0],
-        "name": t[1],
-        "score": t[2]} for t in team_scores]
+    team_scores = [
+        {"rank": t[0], "name": t[1], "score": t[2]} for t in team_scores
+    ]
 
     ctx["team_score_rank"] = team_scores
 
@@ -94,10 +93,9 @@ def result(request: HttpRequest):
         prev_score = user_score[1]
 
     # 辞書型に変換
-    user_scores = [{
-        "rank": t[0],
-        "name": t[1],
-        "score": t[2]} for t in user_scores]
+    user_scores = [
+        {"rank": t[0], "name": t[1], "score": t[2]} for t in user_scores
+    ]
 
     ctx["player_score_rank"] = user_scores
 
