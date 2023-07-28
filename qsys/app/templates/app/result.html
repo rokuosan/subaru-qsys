@@ -4,61 +4,99 @@
 
 <body>
   {% include "app/components/header.html" %}
-
-  <section id="team_ranking" class="pt-4">
+  <section id="query-option">
     <div class="container">
       <div class="p-lg-4">
-        <div>
-          <h3 class="bg-black px-3 text-white" style="width: fit-content;">Team Ranking</h3>
+        <div class="container py-2 px-5 h2 bg-black text-white mx-auto fw-bolder mb-2"
+          style="width: fit-content; transform: skewX(-25deg);">
+          <div style="transform: skewX(25deg);">
+            CTF Result
+          </div>
         </div>
-        <table class="table table-striped table-hover">
-          <caption></caption>
-          <thead>
-            <tr>
-              <th scope="col" class="col-1 text-center">#</th>
-              <th scope="col">Team name</th>
-              <th scope="col">Point</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for team in team_score_rank %}
-            <tr>
-              <th scope="row" class="text-center"> {{ team.rank }} </th>
-              <td>{{ team.name }}</td>
-              <td>{{ team.score }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
 
-  <section id="player_ranking" class="pt-4">
-    <div class="container">
-      <div class="p-lg-4">
-        <div>
-          <h3 class="bg-black px-3 text-white" style="width: fit-content;">Player Ranking</h3>
+        <div class="forms row gap-2 flex-column py-3">
+          <form action="{% url 'result' %}" class="row col justify-content-center">
+            <div class="col-5">
+              <div class="input-group input-group-sm">
+                <div class="input-group-text">CTF</div>
+                <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="ctf_id">
+                  {% for ctf in ctfs %}
+                  {% if ctf.ctf_id == selected_ctf_id %}
+                  <option value="{{ ctf.ctf_id }}" selected>{{ ctf.name }}</option>
+                  {% else %}
+                  <option value="{{ ctf.ctf_id }}">{{ ctf.name }}</option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-2">
+              <button type="submit" class="btn btn-outline-dark btn-sm">Show</button>
+            </div>
+          </form>
         </div>
-        <table class="table table-striped table-hover">
-          <caption>Show top 10 players</caption>
-          <thead>
-            <tr>
-              <th scope="col" class="col-1 text-center">#</th>
-              <th scope="col">Player name</th>
-              <th scope="col">Point</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for player in player_score_rank %}
-            <tr>
-              <th scope="row" class="text-center"> {{ player.rank }} </th>
-              <td>{{ player.name }}</td>
-              <td>{{ player.score }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+
+        <div id="ranking-tables" class="row justify-content-around">
+          <section id="team-ranking" class="pt-4 col-md-6">
+            <div class="container">
+              <div class="p-lg-4">
+                <div>
+                  <h3 class="bg-black px-3 text-white" style="width: fit-content;">Team Ranking</h3>
+                </div>
+                <div class="table-responsive" style="max-height: 40dvh; overflow-y: scroll;">
+                  <table class="table table-striped table-hover">
+                    <thead class="sticky-top bg-light" style="z-index: 100;">
+                      <tr>
+                        <th scope="col" class="col-1 text-center">#</th>
+                        <th scope="col">Team name</th>
+                        <th scope="col">Point</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for team in team_score_rank %}
+                      <tr>
+                        <th scope="row" class="text-center"> {{ team.rank }} </th>
+                        <td>{{ team.name }}</td>
+                        <td>{{ team.score }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="player-ranking" class="pt-4 col-md-6">
+            <div class="container">
+              <div class="p-lg-4">
+                <div>
+                  <h3 class="bg-black px-3 text-white" style="width: fit-content;">Player Ranking</h3>
+                </div>
+                <div class="table-responsive" style="max-height: 40dvh; overflow-y: scroll;">
+                  <table class="table table-striped table-hover overflow-scroll" style="max-height: 5rem;">
+                    <thead class="sticky-top bg-light" style="z-index: 100;">
+                      <tr>
+                        <th scope="col" class="col-1 text-center">#</th>
+                        <th scope="col">Player name</th>
+                        <th scope="col">Point</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for player in player_score_rank %}
+                      <tr>
+                        <th scope="row" class="text-center"> {{ player.rank }} </th>
+                        <td>{{ player.name }}</td>
+                        <td>{{ player.score }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   </section>
