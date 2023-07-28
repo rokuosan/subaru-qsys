@@ -14,6 +14,7 @@ from .views.questions import question_detail, questions
 
 urlpatterns = [
     path("", index, name="index"),
+
     # Login/Logout
     path("logout/", LogoutView.as_view(), name="logout"),
     path(
@@ -23,20 +24,26 @@ urlpatterns = [
         ),
         name="login",
     ),
+
     # Questions
     path("questions/", questions, name="questions"),
     path(
         "questions/<int:question_id>/", question_detail, name="question_detail"
     ),
+
     # Account
     path("account/", account, name="account"),
+
     # Ranking
     path("ranking/", ranking, name="ranking"),
+
     # For admin
     path("manager/", manager, name="manager"),
     path("manager/user/", manager_user, name="manager_user"),
     path("manager/ctf/", manager_ctf, name="manager_ctf"),
     path("answer-history/", answer_history, name="answer_history"),
+
+
     # Debug
     path(
         "mock/create/questions/<int:count>/",
