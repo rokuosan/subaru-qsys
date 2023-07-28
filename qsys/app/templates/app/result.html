@@ -96,6 +96,34 @@
               </div>
             </div>
           </section>
+
+          <section id="team-accuracy-ranking" class="pt-4 col-md-6">
+            <div class="container p-lg-4">
+              <h3 class="bg-black px-3 text-white" style="width: fit-content;">Team Accuracy Ranking</h3>
+              {% if team_accuracy_ranking %}
+              {% else %}
+              {% endif %}
+            </div>
+          </section>
+
+          <section id="player-accuracy-ranking" class="pt-4 col-md-6">
+            <div class="container p-lg-4">
+              <h3 class="bg-black px-3 text-white" style="width: fit-content;">Player Accuracy Ranking</h3>
+              {% if player_accuracy_ranking %}
+              {% else %}
+              <div>
+                <form action="{% url 'result' %}" method="get">
+                  <input type="hidden" name="player_accuracy_ranking" value="1">
+                  <button type="submit" class="btn btn-outline-dark btn-sm">Claim the data</button>
+                </form>
+              </div>
+              {% endif %}
+            </div>
+          </section>
+
+          <section id="">
+
+          </section>
         </div>
       </div>
     </div>
