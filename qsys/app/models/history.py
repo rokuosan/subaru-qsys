@@ -34,3 +34,73 @@ class CtfAnswerHistory(
 
     def __str__(self):
         return f"{self.answered_at}, {self.user}, {self.question}"
+
+    @staticmethod
+    def get_user_accuracy(user: AppUser, ctf: CtfInformation) -> float:
+        """プレイヤーの正答率を取得
+
+        Args:
+            user (AppUser): 正答率を計算したいユーザー\n
+            ctf (CtfInformation): 計算対象のCTF
+
+        Returns:
+            float: 正答率(0.0 ~ 1.0)
+        """
+        answered = CtfAnswerHistory.objects.filter(user=user, ctf=ctf).count()
+        correct = CtfAnswerHistory.objects.filter(
+            user=user, ctf=ctf, is_correct=True
+        ).count()
+        if answered == 0:
+            return 0
+        return correct / answered
+
+    @staticmethod
+    def get_team_accuracy(team: CtfTeam, ctf: CtfInformation) -> float:
+        """チームの正答率を取得
+
+        Args:
+            team (CtfTeam): 正答率を計算したいチーム\n
+            ctf (CtfInformation): 計算対象のCTF
+
+        Returns:
+            float: 正答率(0.0 ~ 1.0)
+        """
+        answered = CtfAnswerHistory.objects.filter(team=team, ctf=ctf).count()
+        correct = CtfAnswerHistory.objects.filter(
+            team=team, ctf=ctf, is_correct=True
+        ).count()
+        if answered == 0:
+            return 0
+        return correct / answered
+
+    @staticmethod
+    def get_user_point(user: AppUser, ctf: CtfInformation) -> int:
+        """プレイヤーの獲得ポイントを取得
+
+        Args:
+            user (AppUser): 獲得ポイントを計算したいユーザー\n
+            ctf (CtfInformation): 計算対象のCTF
+
+        Returns:
+            int: 獲得ポイント
+        """
+        answers = CtfAnswerHistory.objects.filter(user=user, ctf=ctf)
+        point = 0
+        point = sum([a.question.point for a in answers if a.is_correct])
+        return point
+
+    @staticmethod
+    def get_team_point(team: CtfTeam, ctf: CtfInformation) -> int:
+        """チームの獲得ポイントを取得
+
+        Args:
+            team (CtfTeam): 獲得ポイントを計算したいチーム\n
+            ctf (CtfInformation): 計算対象のCTF
+
+        Returns:
+            int: 獲得ポイント
+        """
+        answers = CtfAnswerHistory.objects.filter(team=team, ctf=ctf)
+        point = 0
+        point = sum([a.question.point for a in answers if a.is_correct])
+        return point
