@@ -1,5 +1,5 @@
 {% extends "base.html"%}
-{% block title%} Score | Subaru CTF {% endblock title %}
+{% block title%} Result | Subaru CTF {% endblock title %}
 {% block content %}
 
 <body>
@@ -98,31 +98,105 @@
           </section>
 
           <section id="team-accuracy-ranking" class="pt-4 col-md-6">
-            <div class="container p-lg-4">
-              <h3 class="bg-black px-3 text-white" style="width: fit-content;">Team Accuracy Ranking</h3>
-              {% if team_accuracy_ranking %}
-              {% else %}
-              {% endif %}
+            <div class="container">
+              <div class="p-lg-4">
+                <div>
+                  <h3 class="bg-black px-3 text-white" style="width: fit-content;">Team Accuracy Ranking</h3>
+                </div>
+                <div class="table-responsive" style="max-height: 40dvh; overflow-y: scroll;">
+                  <table class="table table-striped table-hover overflow-scroll" style="max-height: 5rem;">
+                    <thead class="sticky-top bg-light" style="z-index: 100;">
+                      <tr>
+                        <th scope="col" class="col-1 text-center">#</th>
+                        <th scope="col">Team name</th>
+                        <th scope="col">Accuracy</th>
+                        <th scope="col">Submit</th>
+                        <th scope="col">Correct</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for team in team_rate_rank %}
+                      <tr>
+                        <th scope="row" class="text-center"> {{ team.rank }} </th>
+                        <td>{{ team.name }}</td>
+                        <td>{{ team.score }}</td>
+                        <td>{{ team.answered }}</td>
+                        <td>{{ team.correct }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </section>
 
           <section id="player-accuracy-ranking" class="pt-4 col-md-6">
-            <div class="container p-lg-4">
-              <h3 class="bg-black px-3 text-white" style="width: fit-content;">Player Accuracy Ranking</h3>
-              {% if player_accuracy_ranking %}
-              {% else %}
-              <div>
-                <form action="{% url 'result' %}" method="get">
-                  <input type="hidden" name="player_accuracy_ranking" value="1">
-                  <button type="submit" class="btn btn-outline-dark btn-sm">Claim the data</button>
-                </form>
+            <div class="container">
+              <div class="p-lg-4">
+                <div>
+                  <h3 class="bg-black px-3 text-white" style="width: fit-content;">Player Accuracy Ranking</h3>
+                </div>
+                <div class="table-responsive" style="max-height: 40dvh; overflow-y: scroll;">
+                  <table class="table table-striped table-hover overflow-scroll" style="max-height: 5rem;">
+                    <thead class="sticky-top bg-light" style="z-index: 100;">
+                      <tr>
+                        <th scope="col" class="col-1 text-center">#</th>
+                        <th scope="col">Player name</th>
+                        <th scope="col">Accuracy</th>
+                        <th scope="col">Submit</th>
+                        <th scope="col">Correct</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for player in player_rate_rank %}
+                      <tr>
+                        <th scope="row" class="text-center"> {{ player.rank }} </th>
+                        <td>{{ player.name }}</td>
+                        <td>{{ player.score }}</td>
+                        <td>{{ player.answered }}</td>
+                        <td>{{ player.correct }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              {% endif %}
             </div>
           </section>
 
-          <section id="">
-
+          <section id="frequently-solved-ranking" class="pt-4 col-md-6">
+            <div class="container">
+              <div class="p-lg-4">
+                <div>
+                  <h3 class="bg-black px-3 text-white" style="width: fit-content;">Frequently Solved Ranking</h3>
+                </div>
+                <div class="table-responsive" style="max-height: 40dvh; overflow-y: scroll;">
+                  <table class="table table-striped table-hover overflow-scroll" style="max-height: 5rem;">
+                    <thead class="sticky-top bg-light" style="z-index: 100;">
+                      <tr>
+                        <th scope="col" class="col-1 text-center">#</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Point</th>
+                        <th scope="col">Count</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for q in frequently_solved %}
+                      <tr>
+                        <th scope="row" class="text-center"> {{ q.rank }} </th>
+                        <td>{{ q.question.category }}</td>
+                        <td>{{ q.question.title }}</td>
+                        <td>{{ q.question.point }}</td>
+                        <td>{{ q.count }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </section>
         </div>
       </div>
