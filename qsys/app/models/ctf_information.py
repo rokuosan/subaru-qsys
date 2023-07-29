@@ -2,6 +2,7 @@ from datetime import datetime
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
+from .team import CtfTeam
 from .app_user import AppUser
 from .question import CtfQuestion
 
@@ -49,3 +50,22 @@ class CtfInformation(
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def get_teams(ctf_id: int) -> list[CtfTeam]:
+        """CTF参加者のチームを取得
+
+        Args:
+            ctf_id (int): CTF ID
+
+        Returns:
+            List[CtfTeam]: チームのリスト
+        """
+        teams = []
+        users = CtfInformation.objects.get(ctf_id=ctf_id).participants.all()
+        for user in users:
+            if not user.team:
+                continue
+            if user.team not in teams:
+                teams.append(user.team)
+        return teams
