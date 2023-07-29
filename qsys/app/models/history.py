@@ -123,9 +123,11 @@ class CtfAnswerHistory(
             hist = hist.exclude(question__is_practice=True)
 
         # 正解数の多い問題を取得
-        freq = hist.values("question").annotate(
-            count=models.Count("question")
-        ).order_by("-count")
+        freq = (
+            hist.values("question")
+            .annotate(count=models.Count("question"))
+            .order_by("-count")
+        )
 
         # 問題に正解数をつけて返却
         freq = [

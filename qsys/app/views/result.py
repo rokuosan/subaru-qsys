@@ -16,9 +16,7 @@ def ranked_dict_list(scores):
         scores[i] = (rank, score[0], score[1])
         prev_score = score[1]
 
-    return [
-        {"rank": t[0], "name": t[1], "score": t[2]} for t in scores
-    ]
+    return [{"rank": t[0], "name": t[1], "score": t[2]} for t in scores]
 
 
 @login_required
