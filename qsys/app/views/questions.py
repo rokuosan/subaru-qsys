@@ -45,9 +45,13 @@ def questions(request: HttpRequest):
     ).values_list("question_id")
     solved_ids_team = None
     if request.user.team:
-        solved_ids_team = CtfAnswerHistory.objects.filter(
-            team=request.user.team, is_correct=True
-        ).exclude(user=request.user).values_list("question_id")
+        solved_ids_team = (
+            CtfAnswerHistory.objects.filter(
+                team=request.user.team, is_correct=True
+            )
+            .exclude(user=request.user)
+            .values_list("question_id")
+        )
 
     # カテゴリごとに問題を分類し、リストに追加
     lst = []
