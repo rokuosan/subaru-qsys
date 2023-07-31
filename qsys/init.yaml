@@ -1,0 +1,36 @@
+qsys:
+  difficulty:
+    - Tutorial
+    - Easy
+    - Normal
+    - Hard
+  category:
+    - Practice
+    - Network
+    - Pwn
+    - Binary
+    - Web
+    - Crypto
+    - Reverse
+    - Misc
+  team:
+    - Team A
+    - Team B
+    - Team C
+    - Team D
+    - Team E
+  question:
+    - title: 'Prac 1'
+      difficulty: Tutorial
+      category: Practice
+      flag: 'flag{test}'
+      content: 'lll'
+      point: 100
+
+    - title: 'Prac 2'
+      difficulty: Tutorial
+      category: Practice
+
+    - title: 'Prac 3'
+      difficulty: Tutorial
+      category: Practice
