@@ -19,6 +19,25 @@ qsys:
     - Team C
     - Team D
     - Team E
+  user:
+    # ユーザを簡易に追加する場合は以下のように記述する
+    # パスワードはランダムに生成される
+    roughed:
+      - 'Sample User 1'
+      - 'Sample User 2'
+      - 'Sample User 3'
+      - 'Sample User 4'
+
+    # ユーザを詳細に設定する場合は以下のように記述する
+    # username以外は省略可能
+    detailed:
+      - username: 'Yamada Taro'
+        team: 'Team A'
+        is_admin: false
+      - username: 'Suzuki Hanako'
+        team: 'Team B'
+        is_admin: false
+
   question:
     - title: 'Prac 1'
       difficulty: Tutorial
