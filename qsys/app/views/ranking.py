@@ -56,7 +56,9 @@ def ranking(request: HttpRequest):
         prev_score = score["score"]
 
     # チームごとのスコアを降順にソート
-    team_score_set = sorted(team_scores, key=lambda x: (x["score"], x["name"]))
+    team_score_set = sorted(
+        team_scores, key=lambda x: (x["score"], x["name"]), reverse=True
+    )
 
     # ユーザーごとのスコアを算出
     player_scores = []
@@ -82,7 +84,7 @@ def ranking(request: HttpRequest):
 
     # ユーザーごとのスコアを降順にソート
     player_score_set = sorted(
-        player_scores, key=lambda x: (x["score"], x["name"])
+        player_scores, key=lambda x: (x["score"], x["name"]), reverse=True
     )
 
     # ランキングを表示
