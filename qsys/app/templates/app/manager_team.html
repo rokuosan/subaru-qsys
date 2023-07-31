@@ -104,6 +104,17 @@
       const ctfId = ctfSelect.value;
       window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
     });
+
+    // window.onload = () => {
+    //   const teamId = teamSelect.value;
+    //   const ctfId = ctfSelect.value;
+    //   window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
+    // }
+    // window.onpageshow = () => {
+    //   const teamId = teamSelect.value;
+    //   const ctfId = ctfSelect.value;
+    //   window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
+    // }
   </script>
 </body>
 {% endblock content %}

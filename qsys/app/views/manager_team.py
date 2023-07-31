@@ -31,6 +31,7 @@ def manager_team(request):
         ctx["all_teams"] = teams
         ctx["all_ctfs"] = ctfs
         ctx["active_ctf"] = active
+        ctx["active_team"] = teams.first()
 
         if request.GET.get("ctf_id"):
             try:
