@@ -4,6 +4,93 @@
 
 <body>
   {% include "app/components/header.html" %}
+  <div class="container p-md-5">
+    <h3>Team Manager</h3>
 
+    <div>
+      <form class="row justify-content-center" action="{% url 'manager_team' %}" method="get">
+        <div class="col-4">
+          <div class="input-group">
+            <span class="input-group-text">CTF</span>
+            <select id="ctf-select" class="form-select" aria-label="CTF-Select" name="ctf_id">
+              {% for ctf in all_ctfs %}
+              {% if ctf.ctf_id == active_ctf.ctf_id %}
+              <option value="{{ctf.ctf_id}}" selected>{{ctf.name}}</option>
+              {% else %}
+              <option value="{{ctf.ctf_id}}">{{ctf.name}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="input-group">
+            <span class="input-group-text">Team</span>
+            <select id="team-select" class="form-select" aria-label="Team-Select" name="team_id">
+              {% for team in all_teams %}
+              {% if team.team_id == active_team.team_id %}
+              <option value="{{team.team_id}}" selected>{{team.name}}</option>
+              {% else %}
+              <option value="{{team.team_id}}">{{team.name}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="col-2">
+          <button class="btn btn-outline-primary" type="submit">取得</button>
+        </div>
+      </form>
+
+      <div class="row justify-content-center mt-3">
+        <div class="col-5">
+          <h4>User List</h4>
+          {% for user in users %}
+          <form class="input-group mb-2" action="{% url 'manager_team' %}?ctf_id={{active_ctf.ctf_id}}&team_id={{active_team.team_id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="add">
+            <input type="hidden" name="user_id" value="{{user.id}}">
+            <div type="text" class="form-control" readonly>{{user.username}}</div>
+            <div type="text" class="form-control" readonly>{{user.team}}</div>
+            <button class="btn btn-outline-success" type="submit">追加</button>
+          </form>
+          {% endfor %}
+          {% if users|length == 0 %}
+          <div class="alert alert-info">
+            {% if team_members|length != 0 %}
+            チーム無所属のユーザーはいません
+            {% else %}
+            CTFとTeamを選択するとここに表示されます
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+        <div class="col-5">
+          <h4>Team Member List</h4>
+
+          {% for member in team_members %}
+          <form class="input-group mb-2" action="{% url 'manager_team' %}?ctf_id={{active_ctf.ctf_id}}&team_id={{active_team.team_id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="remove">
+            <input type="hidden" name="user_id" value="{{member.id}}">
+            <div type="text" class="form-control" readonly>{{member.username}}</div>
+            <div type="text" class="form-control" readonly>{{member.team}}</div>
+            <button class="btn btn-outline-danger" type="submit">削除</button>
+          </form>
+          {% endfor %}
+          {% if team_members|length == 0 %}
+          <div class="alert alert-info">
+            {% if users|length != 0 %}
+            このチームにメンバーはいません
+            {% else %}
+            CTFとTeamを選択するとここに表示されます
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
 </body>
 {% endblock content %}
