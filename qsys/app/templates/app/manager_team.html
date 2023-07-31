@@ -8,7 +8,7 @@
     <h3>Team Manager</h3>
 
     <div>
-      <form class="row justify-content-center" action="{% url 'manager_team' %}" method="get">
+      <div class="row justify-content-center">
         <div class="col-4">
           <div class="input-group">
             <span class="input-group-text">CTF</span>
@@ -37,10 +37,7 @@
             </select>
           </div>
         </div>
-        <div class="col-2">
-          <button class="btn btn-outline-primary" type="submit">取得</button>
-        </div>
-      </form>
+      </div>
 
       <div class="row justify-content-center mt-3">
         <div class="col-5">
@@ -92,5 +89,21 @@
 
     </div>
   </div>
+  <script>
+    const teamSelect = document.getElementById('team-select');
+    const ctfSelect = document.getElementById('ctf-select');
+
+    teamSelect.addEventListener('change', () => {
+      const teamId = teamSelect.value;
+      const ctfId = ctfSelect.value;
+      window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
+    });
+
+    ctfSelect.addEventListener('change', () => {
+      const teamId = teamSelect.value;
+      const ctfId = ctfSelect.value;
+      window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
+    });
+  </script>
 </body>
 {% endblock content %}
