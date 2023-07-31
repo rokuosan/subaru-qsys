@@ -1,5 +1,4 @@
 from app.models.category import CtfQuestionCategory
-from app.models.difficulty import CtfQuestionDifficulty
 from app.models.history import CtfAnswerHistory
 from app.models.question import CtfQuestion
 from app.models.score import CtfScore
@@ -13,13 +12,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 @login_required
 def questions(request: HttpRequest):
     """問題一覧を表示するView"""
-    ctx = {
-        # 'list': [{
-        #     'category': 'category_name',
-        #     'questions': [],
-        # }]
-        "list": []
-    }
+    ctx = {}
 
     ctf = None
     ctfs = CtfInformation.objects.filter(is_active=True)
@@ -39,53 +32,44 @@ def questions(request: HttpRequest):
         messages.error(request, "開催期間が過ぎているため、問題を閲覧できません")
         return redirect("index")
 
-    # Get all data and transform to dict
-    questions = ctf.questions.all().values()
-    categories = CtfQuestionCategory.objects.all().values()
-    diffs = CtfQuestionDifficulty.objects.all().values()
-    dif_names = [d["name"] for d in diffs]
+    if ctf.is_paused:
+        messages.error(request, "CTFは一時中止されています")
+        return redirect("index")
 
-    # Get answered questions
-    answered_ids = CtfScore.objects.filter(
-        user=request.user, ctf=ctf
-    ).values_list("question_id", flat=True)
+    # 公開中の問題を取得
+    all_questions = CtfQuestion.objects.filter(is_published=True)
 
-    # Get answered questions by team
+    # 回答済みの問題を取得
+    solved_ids = CtfAnswerHistory.objects.filter(
+        user=request.user, is_correct=True
+    ).values_list("question_id")
+    solved_ids_team = None
     if request.user.team:
-        team_scores = CtfScore.objects.filter(
-            team=request.user.team, ctf=ctf
-        ).values_list("question_id", flat=True)
-        team_scores = team_scores.exclude(user=request.user)
-        answered_ids_by_team = team_scores.values_list(
-            "question_id", flat=True
-        )
+        solved_ids_team = CtfAnswerHistory.objects.filter(
+            team=request.user.team, is_correct=True
+        ).exclude(user=request.user).values_list("question_id")
 
-    # Create questions list to display
-    ctx["list"] = []
-    pub_questions = questions.filter(is_published=True)
-    for c in categories:
-        cat_id = c["category_id"]
-        q_list = []
-        for q in pub_questions.filter(category_id=cat_id):
-            # Check if answered
-            if q["question_id"] in answered_ids:
-                q["is_answered"] = True
-            # Check if answered by team
-            elif request.user.team:
-                if q["question_id"] in answered_ids_by_team:
-                    q["is_answered"] = True
-                    q["is_answered_by_team"] = True
-
-            # Add difficulty name
-            q["difficulty_name"] = dif_names[q["difficulty_id"] - 1]
-
-            # Append this question to list
-            q_list.append(q)
-        ctx["list"].append({"category": c["name"], "questions": q_list})
+    # カテゴリごとに問題を分類し、リストに追加
+    lst = []
+    categories = CtfQuestionCategory.objects.all()
+    for cat in categories:
+        questions = []
+        cat_questions = all_questions.filter(category=cat)
+        cat_questions = cat_questions.order_by("difficulty")
+        for question in cat_questions:
+            if question.question_id in solved_ids:
+                question["is_answered"] = True
+            elif request.user.team and question.id in solved_ids_team:
+                question["is_answered"] = True
+                question["is_answered_by_team"] = True
+            questions.append(question)
+        lst.append({"category": cat.name, "questions": questions})
 
     # Capitalize category name
-    for item in ctx["list"]:
+    for item in lst:
         item["category"] = item["category"].replace("_", " ").capitalize()
+
+    ctx["list"] = lst
 
     return render(request, "app/questions.html", ctx)
 
