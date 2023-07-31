@@ -5,11 +5,11 @@
 <body>
   {% include "app/components/header.html" %}
   <div class="container p-md-5">
-    <h3>Team Manager</h3>
+    <h3 class="text-center px-4 bg-black text-white mx-auto mb-4 fw-bolder" style="width: fit-content;">Team Manager</h3>
 
     <div>
       <div class="row justify-content-center">
-        <div class="col-4">
+        <div class="col-md-4 mb-2">
           <div class="input-group">
             <span class="input-group-text">CTF</span>
             <select id="ctf-select" class="form-select" aria-label="CTF-Select" name="ctf_id">
@@ -23,7 +23,7 @@
             </select>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-md-6">
           <div class="input-group">
             <span class="input-group-text">Team</span>
             <select id="team-select" class="form-select" aria-label="Team-Select" name="team_id">
@@ -40,7 +40,7 @@
       </div>
 
       <div class="row justify-content-center mt-3">
-        <div class="col-5">
+        <div class="col-lg-5">
           <h4>User List</h4>
           {% for user in users %}
           <form class="input-group mb-2" action="{% url 'manager_team' %}?ctf_id={{active_ctf.ctf_id}}&team_id={{active_team.team_id}}" method="post">
@@ -62,7 +62,7 @@
           </div>
           {% endif %}
         </div>
-        <div class="col-5">
+        <div class="col-lg-5">
           <h4>Team Member List</h4>
 
           {% for member in team_members %}
