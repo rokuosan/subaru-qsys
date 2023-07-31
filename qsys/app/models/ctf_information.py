@@ -68,4 +68,5 @@ class CtfInformation(
                 continue
             if user.team not in teams:
                 teams.append(user.team)
+        teams = sorted(teams, key=lambda x: (x.name, x.team_id))
         return teams
