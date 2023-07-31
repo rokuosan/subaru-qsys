@@ -32,16 +32,10 @@
             <input type="text" class="form-control" id="answer" name="answer" placeholder="Enter the flag">
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
-          {% if is_correct %}
+          {% if msg %}
           <div class="container py-2">
-            <div class="alert alert-success" role="alert">
-              {{ message }} <a href="{% url 'questions' %}">問題一覧へ戻る</a>
-            </div>
-          </div>
-          {% elif is_correct == False %}
-          <div class="container py-2">
-            <div class="alert alert-danger" role="alert">
-              {{ message }}
+            <div class="alert alert-{{msg.type}}" role="alert">
+              {{ msg.text }} <a href="{% url 'questions' %}">問題一覧へ戻る</a>
             </div>
           </div>
           {% endif %}
