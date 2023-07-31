@@ -199,10 +199,10 @@ class Command(BaseCommand):
             return
         qsys = data["qsys"]
 
-        # self.simple_setup(qsys, "difficulty", CtfQuestionDifficulty)
-        # self.simple_setup(qsys, "category", CtfQuestionCategory)
-        # self.simple_setup(qsys, "team", CtfTeam)
-        # self.setup_questions(qsys)
+        self.simple_setup(qsys, "difficulty", CtfQuestionDifficulty)
+        self.simple_setup(qsys, "category", CtfQuestionCategory)
+        self.simple_setup(qsys, "team", CtfTeam)
+        self.setup_questions(qsys)
         self.setup_users(qsys)
 
         print("All Setup Completed.")
