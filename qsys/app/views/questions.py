@@ -56,8 +56,7 @@ def questions(request: HttpRequest):
         solved_team = (
             history.objects.filter(
                 team=request.user.team, is_correct=True
-            )
-            .exclude(user=request.user)
+            ).exclude(user=request.user)
         ).values_list("question", flat=True)
 
     # カテゴリごとに問題を分類し、リストに追加
@@ -147,9 +146,12 @@ def question_detail(request: HttpRequest, question_id: int):
             return redirect("question_detail", question_id=question_id)
 
         # 回答済み（チーム）
-        if request.user.team and history.objects.filter(
-            question=question, team=request.user.team, is_correct=True
-        ).exists():
+        if (
+            request.user.team
+            and history.objects.filter(
+                question=question, team=request.user.team, is_correct=True
+            ).exists()
+        ):
             messages.error(request, "既にチームで回答済みです")
             return redirect("question_detail", question_id=question_id)
 
