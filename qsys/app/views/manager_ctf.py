@@ -67,9 +67,16 @@ def manager_ctf(request: HttpRequest):
                 ctf.is_active = False
                 ctf.save()
 
+        running_ctfs = ctfs.filter(is_active=True)
+        status = None
+        for ctf in running_ctfs:
+            if ctf.is_ended:
+                status = {"type": "danger", "msg": "開催期間終了"}
+
         ctx["ctfs"].append(
             {
                 "type": "running",
+                "status": status,
                 "category": "開催中のCTF",
                 "ctfs": running_ctfs,
             }

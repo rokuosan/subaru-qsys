@@ -6,6 +6,9 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['localhost:9090']
-  - job_name: 'ctf'
+  - job_name: 'ctf-dev'
     static_configs:
       - targets: ['172.19.0.1:8000']
+  - job_name: 'ctf-prod'
+    static_configs:
+      - targets: ['server:8000']

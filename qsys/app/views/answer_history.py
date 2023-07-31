@@ -89,6 +89,7 @@ def answer_history(request: HttpRequest):
             {
                 "player": h.user.username,
                 "ctf": h.ctf.name,
+                "team": h.team if h.team else None,
                 "question": h.question.title,
                 "content": h.content,
                 "is_correct": h.is_correct,

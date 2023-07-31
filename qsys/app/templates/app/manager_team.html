@@ -1,0 +1,120 @@
+{% extends "base.html"%}
+{% block title%} Team Manager | Subaru CTF {% endblock title %}
+{% block content %}
+
+<body>
+  {% include "app/components/header.html" %}
+  <div class="container p-md-5">
+    <h3 class="text-center px-4 bg-black text-white mx-auto mb-4 fw-bolder" style="width: fit-content;">Team Manager</h3>
+
+    <div>
+      <div class="row justify-content-center">
+        <div class="col-md-4 mb-2">
+          <div class="input-group">
+            <span class="input-group-text">CTF</span>
+            <select id="ctf-select" class="form-select" aria-label="CTF-Select" name="ctf_id">
+              {% for ctf in all_ctfs %}
+              {% if ctf.ctf_id == active_ctf.ctf_id %}
+              <option value="{{ctf.ctf_id}}" selected>{{ctf.name}}</option>
+              {% else %}
+              <option value="{{ctf.ctf_id}}">{{ctf.name}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">Team</span>
+            <select id="team-select" class="form-select" aria-label="Team-Select" name="team_id">
+              {% for team in all_teams %}
+              {% if team.team_id == active_team.team_id %}
+              <option value="{{team.team_id}}" selected>{{team.name}}</option>
+              {% else %}
+              <option value="{{team.team_id}}">{{team.name}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-3">
+        <div class="col-lg-5">
+          <h4>User List</h4>
+          {% for user in users %}
+          <form class="input-group mb-2" action="{% url 'manager_team' %}?ctf_id={{active_ctf.ctf_id}}&team_id={{active_team.team_id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="add">
+            <input type="hidden" name="user_id" value="{{user.id}}">
+            <div type="text" class="form-control" readonly>{{user.username}}</div>
+            <div type="text" class="form-control" readonly>{{user.team}}</div>
+            <button class="btn btn-outline-success" type="submit">追加</button>
+          </form>
+          {% endfor %}
+          {% if users|length == 0 %}
+          <div class="alert alert-info">
+            {% if team_members|length != 0 %}
+            チーム無所属のユーザーはいません
+            {% else %}
+            CTFとTeamを選択するとここに表示されます
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+        <div class="col-lg-5">
+          <h4>Team Member List</h4>
+
+          {% for member in team_members %}
+          <form class="input-group mb-2" action="{% url 'manager_team' %}?ctf_id={{active_ctf.ctf_id}}&team_id={{active_team.team_id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="remove">
+            <input type="hidden" name="user_id" value="{{member.id}}">
+            <div type="text" class="form-control" readonly>{{member.username}}</div>
+            <div type="text" class="form-control" readonly>{{member.team}}</div>
+            <button class="btn btn-outline-danger" type="submit">削除</button>
+          </form>
+          {% endfor %}
+          {% if team_members|length == 0 %}
+          <div class="alert alert-info">
+            {% if users|length != 0 %}
+            このチームにメンバーはいません
+            {% else %}
+            CTFとTeamを選択するとここに表示されます
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    const teamSelect = document.getElementById('team-select');
+    const ctfSelect = document.getElementById('ctf-select');
+
+    teamSelect.addEventListener('change', () => {
+      const teamId = teamSelect.value;
+      const ctfId = ctfSelect.value;
+      window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
+    });
+
+    ctfSelect.addEventListener('change', () => {
+      const teamId = teamSelect.value;
+      const ctfId = ctfSelect.value;
+      window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
+    });
+
+    // window.onload = () => {
+    //   const teamId = teamSelect.value;
+    //   const ctfId = ctfSelect.value;
+    //   window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
+    // }
+    // window.onpageshow = () => {
+    //   const teamId = teamSelect.value;
+    //   const ctfId = ctfSelect.value;
+    //   window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
+    // }
+  </script>
+</body>
+{% endblock content %}

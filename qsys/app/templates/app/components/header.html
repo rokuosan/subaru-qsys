@@ -36,6 +36,10 @@
             <li>
               <h6 class="dropdown-header lead">Information</h6>
             </li>
+            <li><a class="dropdown-item" href="{% url 'result' %}">
+              {% include 'app/icons/chart.svg' %}
+              <span class="ms-1">Result</span>
+            </a></li>
             <li><a class="dropdown-item" href="{% url 'answer_history' %}">
               {% include 'app/icons/clock.svg' %}
               <span class="ms-1">Answer History</span>
@@ -54,7 +58,7 @@
               {% include 'app/icons/person-add.svg' %}
               <span class="ms-1">User Manager</span>
             </a></li>
-            <li><a class="dropdown-item" href="#">
+            <li><a class="dropdown-item" href="{% url 'manager_team' %}">
                 {% include 'app/icons/people.svg' %}
                 <span class="ms-1">Team Manager</span>
               </a></li>

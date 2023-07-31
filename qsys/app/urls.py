@@ -1,6 +1,9 @@
+from django.conf import settings
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
+from .views.manager_team import manager_team
+from .views.result import result
 from .views.answer_history import answer_history
 from .views.sample import sample_view
 from .views.mock import create_mock_questions, create_mock_user
@@ -32,17 +35,23 @@ urlpatterns = [
     path("account/", account, name="account"),
     # Ranking
     path("ranking/", ranking, name="ranking"),
+    # Result
+    path("result/", result, name="result"),
     # For admin
     path("manager/", manager, name="manager"),
     path("manager/user/", manager_user, name="manager_user"),
     path("manager/ctf/", manager_ctf, name="manager_ctf"),
+    path("manager/team/", manager_team, name="manager_team"),
     path("answer-history/", answer_history, name="answer_history"),
-    # Debug
-    path(
-        "mock/create/questions/<int:count>/",
-        create_mock_questions,
-        name="mock",
-    ),
-    path("mock/create/users/", create_mock_user, name="mock_user"),
-    path("sample/", sample_view, name="sample"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += [
+        path("sample/", sample_view, name="sample"),
+        path("mock/user/", create_mock_user, name="create_mock_user"),
+        path(
+            "mock/questions/",
+            create_mock_questions,
+            name="create_mock_questions",
+        ),
+    ]

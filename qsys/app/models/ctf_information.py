@@ -1,6 +1,8 @@
+from datetime import datetime
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
+from .team import CtfTeam
 from .app_user import AppUser
 from .question import CtfQuestion
 
@@ -33,12 +35,14 @@ class CtfInformation(
     # CTFが開始しているかどうか
     @property
     def is_started(self):
-        return self.start_at <= self.now
+        now = datetime.now(tz=self.start_at.tzinfo)
+        return self.start_at <= now
 
     # CTFが終了しているかどうか
     @property
     def is_ended(self):
-        return self.end_at <= self.now
+        now = datetime.now(tz=self.start_at.tzinfo)
+        return self.end_at <= now
 
     class Meta:
         app_label = "app"
@@ -46,3 +50,23 @@ class CtfInformation(
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def get_teams(ctf_id: int) -> list[CtfTeam]:
+        """CTF参加者のチームを取得
+
+        Args:
+            ctf_id (int): CTF ID
+
+        Returns:
+            List[CtfTeam]: チームのリスト
+        """
+        teams = []
+        users = CtfInformation.objects.get(ctf_id=ctf_id).participants.all()
+        for user in users:
+            if not user.team:
+                continue
+            if user.team not in teams:
+                teams.append(user.team)
+        teams = sorted(teams, key=lambda x: (x.name, x.team_id))
+        return teams
