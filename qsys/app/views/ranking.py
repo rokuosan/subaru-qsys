@@ -42,9 +42,8 @@ def ranking(request: HttpRequest):
 
     # チームごとのスコアを算出
     team_scores = [
-        {
-            "name": t.name, "score": history.get_team_point(t, ctf)
-        } for t in teams
+        {"name": t.name, "score": history.get_team_point(t, ctf)}
+        for t in teams
     ]
 
     # チームのスコアをもとにランキングを算出し、同値の場合は次の順位を飛ばす
@@ -57,9 +56,7 @@ def ranking(request: HttpRequest):
         prev_score = score["score"]
 
     # チームごとのスコアを降順にソート
-    team_score_set = sorted(
-        team_scores, key=lambda x: (x["score"], x["name"])
-    )
+    team_score_set = sorted(team_scores, key=lambda x: (x["score"], x["name"]))
 
     # ユーザーごとのスコアを算出
     player_scores = []
@@ -70,9 +67,8 @@ def ranking(request: HttpRequest):
                 user_score += score.point
         player_scores.append(user_score)
     player_scores = [
-        {
-            "name": u.username, "score": history.get_user_point(u, ctf)
-        } for u in users
+        {"name": u.username, "score": history.get_user_point(u, ctf)}
+        for u in users
     ]
 
     # ランキング処理

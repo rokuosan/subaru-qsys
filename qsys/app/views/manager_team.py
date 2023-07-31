@@ -10,12 +10,11 @@ from app.models.team import CtfTeam
 
 @login_required
 def manager_team(request):
-
     if request.method == "GET":
         ctfs = CtfInformation.objects.all()
         if ctfs.count() == 0:
             messages.info(request, "CTFが開催されていません")
-            return render(request, 'app/manager_team.html')
+            return render(request, "app/manager_team.html")
 
         actives = ctfs.filter(is_active=True)
         if actives.count() > 1:
@@ -60,7 +59,7 @@ def manager_team(request):
         ctx["team_members"] = team_members
         ctx["users"] = users
 
-        return render(request, 'app/manager_team.html', ctx)
+        return render(request, "app/manager_team.html", ctx)
 
     elif request.method == "POST":
         ctf_id = request.GET.get("ctf_id")
@@ -78,7 +77,7 @@ def manager_team(request):
             user.team = None
             user.save()
 
-        return_params = '?ctf_id=' + ctf_id + '&team_id=' + team_id
+        return_params = "?ctf_id=" + ctf_id + "&team_id=" + team_id
         return redirect(reverse("manager_team") + return_params)
 
-    return defaults.server_error(request, template_name='http/500.html')
+    return defaults.server_error(request, template_name="http/500.html")
