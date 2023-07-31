@@ -8,11 +8,11 @@ from app.models.history import CtfAnswerHistory as history
 
 
 def ranked_dict_list(scores):
-    rank = 1
+    rank = 0
     prev_score = -1
     for i, score in enumerate(scores):
         if score[1] != prev_score:
-            rank = i + 1
+            rank += 1
         scores[i] = (rank, score[0], score[1])
         prev_score = score[1]
 
