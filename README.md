@@ -4,7 +4,11 @@
 
 ## Attention
 
-このプロジェクトは現在開発中です。バグや要望などあればぜひ教えてください！
+このプロジェクトは現在開発中です。バグや要望などあればIssueやPRなどよろしくお願いします。
+
+## Documentation
+
+詳細なドキュメントは[docs/README.md](docs/README.md)を参照してください。
 
 ## Installation
 
@@ -18,7 +22,6 @@
 
 > **Note**
 > Q-Sysを起動して、ダッシュボードを起動するまでの方法をここに記載します。
-> CTFの開催などは[docs/README.md](docs/README.md)を確認してください。
 
 このアプリケーションをダウンロードします。
 
@@ -67,11 +70,8 @@ $ docker compose up -d
 
 | Name | Version |
 | :-: | :-: |
-| Django | 4.2.2 |
+| Django | 4.2.3 |
 | Bootstrap | 5.2.3 |
 | django-bootstrap5 | 23.3 |
 | django-prometheus | 2.3.1 |
 
-## Documentation
-
-詳細なドキュメントは[docs/README.md](docs/README.md)を参照してください。
