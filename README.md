@@ -69,7 +69,7 @@ $ docker compose up -d
 使用したライブラリは以下の通りです。
 
 | Name | Version |
-| :-: | :-: |
+| :- | :-: |
 | Django | 4.2.3 |
 | Bootstrap | 5.2.3 |
 | django-bootstrap5 | 23.3 |
