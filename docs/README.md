@@ -11,4 +11,5 @@
   - [クイックスタートガイド](./admin/quick-start.md)
   - [autosetup による自動セットアップについて](./admin/autosetup-by-command.md)
 - 開発者向けドキュメント
+  - [autosetup について](./developer/about-autosetup.md)
   - [init.yaml について](./developer/syntax-of-init-yaml.md)
