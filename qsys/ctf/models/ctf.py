@@ -26,7 +26,7 @@ class CTF(models.Model, ExportModelOperationsMixin("ctf")):
     - is_started_on_time -> bool: 開催期間を基準にCTFが開催しているかどうかを返す\n
     """
 
-    name = models.CharField(max_length=255, help_text="CTF名")
+    name = models.CharField(max_length=255, help_text="CTF名", unique=True)
     description = models.TextField(help_text="紹介文", blank=True, default="")
 
     start_at = models.DateTimeField(

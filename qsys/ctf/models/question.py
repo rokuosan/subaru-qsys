@@ -33,7 +33,7 @@ class Question(models.Model, ExportModelOperationsMixin("question")):
 
 class Category(models.Model, ExportModelOperationsMixin("category")):
     """CTF 問題カテゴリ"""
-    name = models.CharField(max_length=255, help_text="カテゴリ名")
+    name = models.CharField(max_length=255, help_text="カテゴリ名", unique=True)
 
     def __str__(self):
         return self.name
