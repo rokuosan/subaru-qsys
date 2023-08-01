@@ -36,6 +36,7 @@ if DEBUG:
 
 INSTALLED_APPS = [
     "app",
+    "ctf.apps.CtfConfig",
     "django_bootstrap5",
     "django_prometheus",
     "django.contrib.admin",

@@ -2,13 +2,16 @@ from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
 
+from app.models.app_user import AppUser
+
+
 class History(models.Model, ExportModelOperationsMixin("history")):
     """CTF 回答履歴"""
     question = models.ForeignKey(
         "Question", on_delete=models.CASCADE, help_text="問題"
     )
     user = models.ForeignKey(
-        "AppUser", on_delete=models.CASCADE, help_text="回答者"
+        AppUser, on_delete=models.CASCADE, help_text="回答者"
     )
     team = models.ForeignKey(
         "Team", on_delete=models.CASCADE, help_text="チーム"
