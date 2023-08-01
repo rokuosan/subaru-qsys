@@ -11,3 +11,4 @@ services/grafana/*
 *.sqlite3
 
 venv/
+.venv/
