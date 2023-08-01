@@ -50,7 +50,6 @@ def questions(request: HttpRequest):
     solved = history.objects.filter(
         user=request.user, is_correct=True, ctf=ctf
     ).values_list("question", flat=True)
-    print(solved)
     solved_team = None
     if request.user.team:
         solved_team = (
