@@ -60,7 +60,7 @@ class CTF(models.Model, ExportModelOperationsMixin("ctf")):
         return self.name
 
     class Meta:
-        db_table = "ctf"
+        app_label = "ctf"
         verbose_name = "CTF大会情報"
         verbose_name_plural = "CTF大会情報"
         ordering = ["-start_at"]
