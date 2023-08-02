@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from ctf.models.history import History
 from ctf.models.contest import Contest
 from ctf.models.player import Player
+from app.forms.score_setting import ScoreSettingForm
 
 
 @login_required
@@ -28,19 +29,19 @@ def ranking(request: HttpRequest):
         return render(request, "app/ranking.html", ctx)
 
     if request.user.is_admin:
-        # ctx["form"] = ScoreSettingForm(ctf=ctf)
+        ctx["form"] = ScoreSettingForm(contest=contest)
         pass
 
-    # if request.method == "POST":
-    #     show_team = request.POST.get("show_team_rankinng")
-    #     show_player = request.POST.get("show_player_ranking")
+    if request.method == "POST":
+        show_team = request.POST.get("show_team_rankinng")
+        show_player = request.POST.get("show_player_ranking")
 
-    #     ctf.show_team_ranking = show_team == "on"
-    #     ctf.show_player_ranking = show_player == "on"
+        contest.is_team_ranking_public = show_team == "on"
+        contest.is_player_ranking_public = show_player == "on"
 
-    #     ctf.save()
+        contest.save()
 
-    #     return redirect("ranking")
+        return redirect("ranking")
 
     # CTF参加者のチームを取得
     players = contest.get_joined_players()

@@ -6,7 +6,7 @@
 <body>
   {% include "app/components/header.html" %}
 
-  <!-- {% if request.user.is_admin %}
+  {% if request.user.is_admin %}
   <section id="display_setting" class="pt-4">
     <div class="container">
       <div class="p-lg-4">
@@ -37,7 +37,7 @@
       </div>
     </div>
   </section>
-  {% endif %} -->
+  {% endif %}
   {% if is_active %}
   <section id="team_ranking" class="pt-4">
     <div class="container">
