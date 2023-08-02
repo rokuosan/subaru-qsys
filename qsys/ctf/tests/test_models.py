@@ -18,3 +18,10 @@ class CtfModelTests(TestCase):
         )
         print(ctf.start_at, ctf.end_at)
         self.assertLessEqual(ctf.start_at, ctf.end_at)
+
+    def test_status(self):
+        ctf = CTF.objects.create(
+            name="test",
+        )
+        ctf.set_status(CTF.Status.RUNNING)
+        self.assertEqual(ctf.status, CTF.Status.RUNNING)
