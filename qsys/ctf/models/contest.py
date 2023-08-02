@@ -91,6 +91,13 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
         self.save()
 
     @property
+    def name(self):
+        """コンテスト名を返す"""
+        if self.display_name:
+            return self.display_name
+        return self.id
+
+    @property
     def is_running(self):
         """コンテストが開催中かどうかを返す"""
         return self.status == "running"
@@ -111,7 +118,7 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
         return self.status == "preparing"
 
     @property
-    def is_open(self):
+    def is_active(self):
         """コンテストが実施中かどうかを返す"""
         return self.is_running() or self.is_paused()
 
