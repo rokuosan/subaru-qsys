@@ -3,8 +3,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from app.models.ctf_information import CtfInformation
-from app.models.history import CtfAnswerHistory
 from ctf.models.contest import Contest
 from ctf.models.player import Player
 from ctf.models.history import History
@@ -48,6 +46,7 @@ def answer_history(request: HttpRequest):
     else:
         default_contest = contest
 
+    print(contests)
     ctx["contests"] = contests
     ctx["selected_contest_id"] = (
         default_contest.id if default_contest else None
@@ -59,15 +58,10 @@ def answer_history(request: HttpRequest):
         selected_player = get_object_or_404(
             Player, pk=param_player_id, user__is_active=True
         )
-        # try:
-        #     selected_player = default_ctf.participants.get(pk=param_player_id)
-        # except CtfAnswerHistory.DoesNotExist:
-        #     messages.warning(request, "ユーザーが存在しません")
-        #     return render(request, "app/answer-history.html", ctx)
 
     ctx["selected_player_id"] = selected_player.id if selected_player else None
     players = []
-    players.append({"username": "All", "user_id": 0})
+    players.append({"username": "All", "player_id": 0})
     for p in Contest.get_joined_players(default_contest):
         players.append(
             {

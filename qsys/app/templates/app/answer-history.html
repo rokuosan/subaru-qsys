@@ -16,7 +16,7 @@
               <div class="input-group input-group-sm">
                 <div class="input-group-text">Contest</div>
                 <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="contest_id">
-                  {% for c in contest %}
+                  {% for c in contests %}
                   {% if c.id == selected_contest_id %}
                   <option value="{{ c.id }}" selected>{{ c.name }}</option>
                   {% else %}
@@ -31,10 +31,10 @@
                 <div class="input-group-text">Player</div>
                 <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="player_id">
                   {% for player in players %}
-                  {% if player.id == selected_player_id %}
-                  <option value="{{ ctf.ctf_id }}" selected>{{ player.name }}</option>
+                  {% if player.player_id == selected_player_id %}
+                  <option value="{{ player.player_id }}" selected>{{ player.username }}</option>
                   {% else %}
-                  <option value="{{ player.user_id }}">{{ player.name }}</option>
+                  <option value="{{ player.player_id }}">{{ player.username }}</option>
                   {% endif %}
                   {% endfor %}
                 </select>
@@ -60,12 +60,12 @@
           <tbody>
             {% for h in history %}
             <tr>
-              <th scope="row"> {{ h.created_at | date:"Y/m/d H:i:s" }} </th>
+              <th scope="row"> {{ h.answered_at | date:"Y/m/d H:i:s" }} </th>
               <td>{{ h.contest }}</td>
               <td>{{ h.player }}</td>
               <td>{{ h.team }}</td>
               <td>{{ h.question }}</td>
-              <td>{{ h.answer }}</td>
+              <td>{{ h.content }}</td>
               {% if h.is_correct %}
               <td><span class="badge bg-success">Correct</span></td>
               {% else %}

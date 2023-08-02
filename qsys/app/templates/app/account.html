@@ -123,9 +123,9 @@
           <tbody>
             {% for answer in display.answers %}
             <tr>
-              <th scope="row" > {{ answer.answered_at | date:"Y/m/d H:i:s" }} </th>
+              <th scope="row" > {{ answer.created_at | date:"Y/m/d H:i:s" }} </th>
               <td>{{ answer.question.title }}</td>
-              <td>{{ answer.content }}</td>
+              <td>{{ answer.answer }}</td>
               {% if answer.is_correct %}
               <td><span class="badge bg-success">Correct</span></td>
               {% else %}
