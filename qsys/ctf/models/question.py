@@ -16,15 +16,13 @@ class Question(models.Model, ExportModelOperationsMixin("question")):
     point = models.PositiveIntegerField(help_text="点数")
     category = models.ForeignKey(
         "Category",
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         help_text="カテゴリ",
-        default="Uncategorized",
     )
     difficulty = models.ForeignKey(
         "Difficulty",
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         help_text="難易度",
-        default="Easy",
     )
     is_open = models.BooleanField(help_text="公開中かどうか", default=True)
     created_at = models.DateTimeField(auto_now_add=True, help_text="作成日時")
@@ -53,12 +51,10 @@ class Category(models.Model, ExportModelOperationsMixin("category")):
 
 class Difficulty(models.Model, ExportModelOperationsMixin("difficulty")):
     """CTF 問題難易度"""
-
-    level = models.PositiveSmallIntegerField(help_text="難易度レベル", unique=True)
     name = models.CharField(max_length=255, help_text="難易度名", unique=True)
 
     def __str__(self):
-        return f"{self.level} - {self.name}"
+        return self.name
 
     class Meta:
         app_label = "ctf"
