@@ -90,30 +90,37 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
         self.status = status
         self.save()
 
+    @property
     def is_running(self):
         """コンテストが開催中かどうかを返す"""
         return self.status == "running"
 
+    @property
     def is_paused(self):
         """コンテストが一時停止中かどうかを返す"""
         return self.status == "paused"
 
+    @property
     def is_finished(self):
         """コンテストが終了しているかどうかを返す"""
         return self.status == "finished"
 
+    @property
     def is_preparing(self):
         """コンテストが準備中かどうかを返す"""
         return self.status == "preparing"
 
+    @property
     def is_open(self):
         """コンテストが実施中かどうかを返す"""
         return self.is_running() or self.is_paused()
 
+    @property
     def is_over(self):
         """コンテストが開催期間を過ぎているかどうかを返す"""
         return self.end_at < timezone.now()
 
+    @property
     def is_started_on_time(self):
         """開催期間を基準にコンテストが開催しているかどうかを返す"""
         return self.start_at < timezone.now()
