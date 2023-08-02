@@ -1,10 +1,13 @@
 from django.http import HttpRequest
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from app.models.ctf_information import CtfInformation
 from app.models.history import CtfAnswerHistory
+from ctf.models.contest import Contest
+from ctf.models.player import Player
+from ctf.models.history import History
 
 
 @login_required
@@ -15,85 +18,86 @@ def answer_history(request: HttpRequest):
 
     ctx = {}
 
-    ctf = None
-    default_ctf = None
-    ctfs = CtfInformation.objects.all()
+    contest = None
+    default_contest = None
+    contests = Contest.objects.all()
+    player = Player.get_player(request.user)
 
-    param_ctf_id = request.GET.get("ctf_id")
-    if param_ctf_id:
-        try:
-            ctf = ctfs.get(ctf_id=param_ctf_id)
-        except CtfInformation.DoesNotExist:
-            messages.warning(request, "CTFがありません")
-            ctx["ctfs"] = ctfs.order_by("-pk")
-            return render(request, "app/answer-history.html", ctx)
+    param_contest_id = request.GET.get("contest_id")
+    if param_contest_id:
+        contest = get_object_or_404(contests, pk=param_contest_id)
     else:
-        if not ctfs:
-            messages.warning(request, "CTFがありません")
+        if not contests:
+            messages.warning(request, "コンテストが登録されていません")
             return render(request, "app/answer-history.html")
-        for c in ctfs.filter(is_active=True):
-            if request.user in c.participants.all():
-                ctf = c
+        for c in Contest.get_active_contests():
+            if player in c.get_joined_players():
+                contest = c
                 break
 
-    ctfs = ctfs.order_by("-pk")
+    contests = contests.order_by("-pk")
 
-    if ctfs is None:
-        messages.warning(request, "CTFがありません")
+    if contests is None:
+        messages.warning(request, "コンテストがありません")
         return render(request, "app/answer-history.html", ctx)
 
-    if ctf is None:
-        default_ctf = ctfs.filter(is_active=True).first()
-        if default_ctf is None:
-            default_ctf = ctfs.first()
+    if contest is None:
+        default_contest = Contest.get_active_contests().first()
+        if default_contest is None:
+            default_contest = contests.first()
     else:
-        default_ctf = ctf
+        default_contest = contest
 
-    ctx["ctfs"] = ctfs
-    ctx["selected_ctf_id"] = default_ctf.ctf_id
+    ctx["contests"] = contests
+    ctx["selected_contest_id"] = (
+        default_contest.id if default_contest else None
+    )
 
     selected_player = None
-    param_user_id = request.GET.get("user_id")
-    if param_user_id and param_user_id != "0":
-        try:
-            selected_player = default_ctf.participants.get(pk=param_user_id)
-        except CtfAnswerHistory.DoesNotExist:
-            messages.warning(request, "ユーザーが存在しません")
-            return render(request, "app/answer-history.html", ctx)
+    param_player_id = request.GET.get("player_id")
+    if param_player_id and param_player_id != "0":
+        selected_player = get_object_or_404(
+            Player, pk=param_player_id, user__is_active=True
+        )
+        # try:
+        #     selected_player = default_ctf.participants.get(pk=param_player_id)
+        # except CtfAnswerHistory.DoesNotExist:
+        #     messages.warning(request, "ユーザーが存在しません")
+        #     return render(request, "app/answer-history.html", ctx)
 
     ctx["selected_player_id"] = selected_player.id if selected_player else None
     players = []
     players.append({"username": "All", "user_id": 0})
-    for p in default_ctf.participants.all():
+    for p in Contest.get_joined_players(default_contest):
         players.append(
             {
-                "username": p.username,
-                "user_id": p.id,
+                "username": p.name,
+                "player_id": p.id,
             }
         )
 
     ctx["players"] = players
 
     if selected_player:
-        histories = CtfAnswerHistory.objects.filter(
-            ctf=default_ctf, user=selected_player
-        ).order_by("-answered_at")
+        histories = History.objects.filter(
+            contest=default_contest, player=selected_player
+        ).order_by("-created_at")
     else:
-        histories = CtfAnswerHistory.objects.filter(ctf=default_ctf).order_by(
-            "-answered_at"
+        histories = History.objects.filter(contest=default_contest).order_by(
+            "-created_at"
         )
 
     history = []
     for h in histories:
         history.append(
             {
-                "player": h.user.username,
-                "ctf": h.ctf.name,
+                "player": h.player.name,
+                "contest": h.contest.name,
                 "team": h.team if h.team else None,
                 "question": h.question.title,
-                "content": h.content,
+                "content": h.answer,
                 "is_correct": h.is_correct,
-                "answered_at": h.answered_at,
+                "answered_at": h.created_at,
             }
         )
 
