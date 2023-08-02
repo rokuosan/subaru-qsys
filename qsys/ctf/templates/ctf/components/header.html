@@ -7,20 +7,20 @@
     </button>
     <div class="collapse navbar-collapse" id="navcol-3">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="#">
+        <li class="nav-item"><a class="nav-link active" id="a-dashboard">
             {% include 'icons/home.svg' %}
             <span class="ms-1 align-middle">Dashboard</span>
           </a></li>
         {% if request.user.is_active %}
-        <li class="nav-item"><a class="nav-link active" href="#">
+        <li class="nav-item"><a class="nav-link active" id="a-questions">
             {% include 'icons/light.svg' %}
             <span class="ms-1 align-middle">Questions</span>
           </a></li>
-        <li class="nav-item"><a class="nav-link active" href="#">
+        <li class="nav-item"><a class="nav-link active" id="a-account">
             {% include 'icons/person.svg' %}
             <span class="ms-1 align-middle">Account</span>
           </a></li>
-        <li class="nav-item"><a class="nav-link active" href="#">
+        <li class="nav-item"><a class="nav-link active" id="a-ranking">
             {% include 'icons/trophy.svg' %}
             <span class="ms-1 align-middle">Ranking</span>
           </a></li>
@@ -50,9 +50,9 @@
             <li>
               <h6 class="dropdown-header lead">Managers</h6>
             </li>
-            <li><a class="dropdown-item" href="#">
+            <li><a class="dropdown-item" href="{% url 'ctf:manager_contest' %}">
                 {% include 'icons/flag.svg' %}
-                <span class="ms-1">CTF Manager</span>
+                <span class="ms-1">Contest Manager</span>
               </a></li>
             <li><a class="dropdown-item" href="#">
                 {% include 'icons/person-add.svg' %}
@@ -97,6 +97,38 @@
       navbar.classList.add('rounded-pill');
     }
   }
+
+  const getContestIdByURL = () => {
+    const url = window.location.pathname;
+    const contest_id = url.split('/')[2];
+
+    return contest_id;
+  }
+
+  window.addEventListener('load', () => {
+    const contest_id = getContestIdByURL();
+
+    const dashboard = document.getElementById('a-dashboard');
+    const questions = document.getElementById('a-questions');
+    const account = document.getElementById('a-account');
+    const ranking = document.getElementById('a-ranking');
+
+    if (!contest_id) {
+      dashboard.href = '/ctf/';
+
+      questions.hidden = true;
+      account.hidden = true;
+      ranking.hidden = true;
+
+      return;
+    }
+
+    dashboard.href = `/ctf/${contest_id}/`;
+    questions.href = `/ctf/${contest_id}/questions/`;
+    account.href = `/ctf/${contest_id}/account/`;
+    ranking.href = `/ctf/${contest_id}/ranking/`;
+  })
+
 
   window.addEventListener('resize', toggleNavbarCorner);
   window.addEventListener('load', toggleNavbarCorner);
