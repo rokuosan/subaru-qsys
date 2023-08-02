@@ -42,6 +42,15 @@ class History(models.Model, ExportModelOperationsMixin("history")):
         app_label = "ctf"
         verbose_name = verbose_name_plural = "回答履歴"
 
+    class ResultType:
+        """判定結果の選択肢"""
+        CORRECT = "correct"
+        INCORRECT = "incorrect"
+        PENDING = "pending"
+        FLAG_FORMAT_ERROR = "flag_format_error"
+        TIME_LIMIT_EXCEEDED = "time_limit_exceeded"
+        ALREADY_ANSWERED = "already_answered"
+
     def __str__(self):
         return f"{self.team.name} - {self.question.title}"
 

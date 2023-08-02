@@ -63,6 +63,19 @@ class CTF(models.Model, ExportModelOperationsMixin("ctf")):
         verbose_name_plural = "CTF大会情報"
         ordering = ["-start_at"]
 
+    class Status:
+        """CTFの状態を表す"""
+
+        PREPARING = "preparing"
+        RUNNING = "running"
+        PAUSED = "paused"
+        FINISHED = "finished"
+
+    def set_status(self, status: Status):
+        """CTFの状態を設定する"""
+        self.status = status
+        self.save()
+
     def is_running(self):
         """CTFが開催中かどうかを返す"""
         return self.status == "running"
