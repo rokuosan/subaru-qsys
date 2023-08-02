@@ -4,22 +4,38 @@
 
 <div class="container">
   <div class="p-lg-4">
-    <span class="lead lh-1">{{ contest.name }}</span>
-    <h2 class="fw-bolder">Questions</h2>
+    <div class="d-flex">
+      <div>
+        <span class="lead lh-1">{{ contest.name }}</span>
+        <h2 class="fw-bolder">Questions</h2>
+      </div>
+      <div class="ms-3 mt-3 fst-normal d-flex align-items-center fs-4">
+        <span style="width: fit-content; height: fit-content;" class="badge bg-dark">
+          {{solved}} / {{ total }}
+        </span>
+      </div>
+    </div>
     <div class="container px-md-4 py-md-3 d-flex flex-column gap-4">
       {% for set in sets %}
       <section id="{{ set.category.name }}" class="">
-        <h3 class="fw-bolder fst-italic">{{ set.category.name | capfirst }}</h3>
+        <h3 class="fw-bolder fst-italic">
+          {{ set.category.name | capfirst }}
+        </h3>
         <div class="row pt-2 pb-4 px- d-flex">
           {% for q in set.questions %}
           <div class="position-static col-md-3 q-item">
             <a href="{% url 'ctf:question_detail' contest_id=contest.id question_id=q.id %}" class="text-muted text-decoration-none">
               <div class="bg-white shadow-sm rounded px-3 py-2 mb-2">
                 <div class="d-flex justify-content-between">
-                  <span class="fw-light">{{ q.difficulty }}</span>
+                  <div>
+                    <span class="fw-light">{{ q.difficulty }}</span>
+                    <span class="fw-light">{{ q.point }} pts</span>
+                  </div>
+                  {% if q.solved %}
                   <div>
                     <span class="badge bg-success">Solved</span>
                   </div>
+                  {% endif %}
                 </div>
                 <h4 class="fw-bold text-truncate pt-2">{{ q.title }}</h4>
               </div>

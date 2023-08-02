@@ -2,10 +2,10 @@ from django.http import HttpRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
-from django.shortcuts import render
 
 from ctf.models.contest import Contest
 from ctf.models.question import Category, Question
+from ctf.models.history import History
 
 
 @login_required
@@ -23,14 +23,28 @@ def questions_view(request: HttpRequest, contest_id: str):
         if not request.user.is_admin:
             return redirect("ctf:index")
 
+    try:
+        player = request.user.player
+    except Exception:
+        messages.info(request, "このコンテストに参加していません")
+        return redirect("ctf:index")
+
     sets = []
     cats = Category.objects.all()
     for c in cats:
         qs = c.questions.filter(is_open=True).order_by("point")
         if qs:
+            solved = History.get_player_solved(contest, player)
+            for q in qs:
+                if q in solved:
+                    q.solved = True
+                else:
+                    q.solved = False
             sets.append({"category": c, "questions": qs})
 
     ctx["sets"] = sets
+    ctx["total"] = sum([len(s["questions"]) for s in sets])
+    ctx["solved"] = History.get_player_solved_count(contest, player)
 
     return render(request, "ctf/contest/questions.html", ctx)
 
