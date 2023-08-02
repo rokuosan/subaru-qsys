@@ -1,13 +1,14 @@
 from django.shortcuts import render
 
-from app.models.ctf_information import CtfInformation
+from ctf.models.contest import Contest
 
 
 def index(request):
     ctx = {}
 
-    ctf = CtfInformation.objects.filter(is_active=True).first()
-    if ctf is not None:
-        ctx["ctf"] = ctf
+    contest = Contest.objects.filter(status="running" or "preparing").first()
+    if contest is not None:
+        contest.name = contest.display_name or contest.id
+        ctx["contest"] = contest
 
     return render(request, "app/index.html", ctx)
