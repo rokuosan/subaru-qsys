@@ -4,11 +4,11 @@ from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
 
-class CTF(models.Model, ExportModelOperationsMixin("ctf")):
+class Contest(models.Model, ExportModelOperationsMixin("ctf")):
     """CTF 開催情報\n
     Properties:\n
-    - ctf_id -> : CTF ID\n
-    - name -> str: CTF名\n
+    - id -> : コンテストID\n
+    - name -> str: コンテスト名\n
     - description -> str: 紹介文\n
     - start_at -> datetime: 開始日時\n
     - end_at -> datetime: 終了日時\n
@@ -17,16 +17,16 @@ class CTF(models.Model, ExportModelOperationsMixin("ctf")):
     - is_player_ranking_public -> bool: プレイヤーランキング(Player Ranking)を公開する\n
 
     Methods:\n
-    - is_running -> bool: CTFが開催中かどうかを返す\n
-    - is_paused -> bool: CTFが一時停止中かどうかを返す\n
-    - is_finished -> bool: CTFが終了しているかどうかを返す\n
-    - is_preparing -> bool: CTFが準備中かどうかを返す\n
-    - is_open -> bool: CTFが実施中かどうかを返す\n
-    - is_over -> bool: CTFが開催期間を過ぎているかどうかを返す\n
-    - is_started_on_time -> bool: 開催期間を基準にCTFが開催しているかどうかを返す\n
+    - is_running -> bool: コンテストが開催中かどうかを返す\n
+    - is_paused -> bool: コンテストが一時停止中かどうかを返す\n
+    - is_finished -> bool: コンテストが終了しているかどうかを返す\n
+    - is_preparing -> bool: コンテストが準備中かどうかを返す\n
+    - is_open -> bool: コンテストが実施中かどうかを返す\n
+    - is_over -> bool: コンテストが開催期間を過ぎているかどうかを返す\n
+    - is_started_on_time -> bool: 開催期間を基準にコンテストが開催しているかどうかを返す\n
     """
 
-    name = models.CharField(max_length=255, help_text="CTF名", unique=True)
+    name = models.CharField(max_length=255, help_text="コンテスト名", unique=True)
     description = models.TextField(help_text="紹介文", blank=True, default="")
 
     start_at = models.DateTimeField(help_text="開始日時", default=timezone.now)
@@ -57,12 +57,12 @@ class CTF(models.Model, ExportModelOperationsMixin("ctf")):
 
     class Meta:
         app_label = "ctf"
-        verbose_name = "CTF大会情報"
-        verbose_name_plural = "CTF大会情報"
+        verbose_name = "コンテスト大会情報"
+        verbose_name_plural = "コンテスト大会情報"
         ordering = ["-start_at"]
 
     class Status:
-        """CTFの状態を表す"""
+        """コンテストの状態を表す"""
 
         PREPARING = "preparing"
         RUNNING = "running"
@@ -70,34 +70,34 @@ class CTF(models.Model, ExportModelOperationsMixin("ctf")):
         FINISHED = "finished"
 
     def set_status(self, status: Status):
-        """CTFの状態を設定する"""
+        """コンテストの状態を設定する"""
         self.status = status
         self.save()
 
     def is_running(self):
-        """CTFが開催中かどうかを返す"""
+        """コンテストが開催中かどうかを返す"""
         return self.status == "running"
 
     def is_paused(self):
-        """CTFが一時停止中かどうかを返す"""
+        """コンテストが一時停止中かどうかを返す"""
         return self.status == "paused"
 
     def is_finished(self):
-        """CTFが終了しているかどうかを返す"""
+        """コンテストが終了しているかどうかを返す"""
         return self.status == "finished"
 
     def is_preparing(self):
-        """CTFが準備中かどうかを返す"""
+        """コンテストが準備中かどうかを返す"""
         return self.status == "preparing"
 
     def is_open(self):
-        """CTFが実施中かどうかを返す"""
+        """コンテストが実施中かどうかを返す"""
         return self.is_running() or self.is_paused()
 
     def is_over(self):
-        """CTFが開催期間を過ぎているかどうかを返す"""
+        """コンテストが開催期間を過ぎているかどうかを返す"""
         return self.end_at < timezone.now()
 
     def is_started_on_time(self):
-        """開催期間を基準にCTFが開催しているかどうかを返す"""
+        """開催期間を基準にコンテストが開催しているかどうかを返す"""
         return self.start_at < timezone.now()
