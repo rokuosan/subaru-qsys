@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models.contenst import Contest
+from .models.contest import Contest
 from .models.history import History
 from .models.player import Player
 from .models.question import Category, Difficulty, Question

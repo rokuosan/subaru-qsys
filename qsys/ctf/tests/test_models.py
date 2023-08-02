@@ -1,7 +1,7 @@
 from django.utils import timezone
 from django.test import TestCase
 
-from qsys.ctf.models.contenst import Contest
+from ctf.models.contest import Contest
 
 
 class CtfModelTests(TestCase):

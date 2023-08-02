@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.shortcuts import render
 
-from ctf.models.contenst import Contest
+from ctf.models.contest import Contest
 
 
 @login_required
