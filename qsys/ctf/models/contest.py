@@ -55,7 +55,7 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
         "Question", help_text="問題", related_name="contests", blank=True
     )
 
-    # is_open = models.BooleanField(default=True, help_text="公開中かどうか")
+    is_open = models.BooleanField(default=True, help_text="公開中かどうか")
 
     status = models.CharField(
         max_length=255,
