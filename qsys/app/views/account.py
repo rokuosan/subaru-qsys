@@ -1,5 +1,3 @@
-from app.models.history import CtfAnswerHistory
-from app.models.ctf_information import CtfInformation
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
