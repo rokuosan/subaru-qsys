@@ -86,3 +86,27 @@ class History(models.Model, ExportModelOperationsMixin("history")):
         )
         total = sum([h.point for h in histories])
         return total
+
+    def get_player_accuracy(contest: Contest, player: Player):
+        """プレイヤーの正答率を返す"""
+        histories = History.objects.filter(
+            contest=contest,
+            player=player,
+        )
+        if histories.count() == 0:
+            return 0
+        correct = histories.filter(is_correct=True).count()
+
+        return correct / histories.count() * 100
+
+    def get_team_accuracy(contest: Contest, team: Team):
+        """チームの正答率を返す"""
+        histories = History.objects.filter(
+            contest=contest,
+            team=team,
+        )
+        if histories.count() == 0:
+            return 0
+        correct = histories.filter(is_correct=True).count()
+
+        return correct / histories.count() * 100
