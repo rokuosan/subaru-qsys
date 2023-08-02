@@ -29,7 +29,7 @@ urlpatterns = [
     # Questions
     path("questions/", questions, name="questions"),
     path(
-        "questions/<int:question_id>/", question_detail, name="question_detail"
+        "questions/<str:question_id>/", question_detail, name="question_detail"
     ),
     # Account
     path("account/", account, name="account"),
