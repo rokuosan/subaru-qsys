@@ -30,9 +30,7 @@ class CTF(models.Model, ExportModelOperationsMixin("ctf")):
     description = models.TextField(help_text="紹介文", blank=True, default="")
 
     start_at = models.DateTimeField(help_text="開始日時", default=timezone.now)
-    end_at = models.DateTimeField(
-        help_text="終了日時", default=timezone.now() + timezone.timedelta(hours=2)
-    )
+    end_at = models.DateTimeField(help_text="終了日時", default=timezone.now)
 
     status = models.CharField(
         max_length=255,
