@@ -12,3 +12,5 @@ services/grafana/*
 
 venv/
 .venv/
+
+*.log
