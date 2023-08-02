@@ -1,7 +1,3 @@
-from app.models.category import CtfQuestionCategory
-from app.models.history import CtfAnswerHistory as history
-from app.models.question import CtfQuestion
-from app.models.ctf_information import CtfInformation
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
