@@ -14,13 +14,13 @@
           <form class="row col" action="{% url 'answer_history' %}">
             <div class="col-5">
               <div class="input-group input-group-sm">
-                <div class="input-group-text">CTF</div>
-                <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="ctf_id">
-                  {% for ctf in ctfs %}
-                  {% if ctf.ctf_id == selected_ctf_id %}
-                  <option value="{{ ctf.ctf_id }}" selected>{{ ctf.name }}</option>
+                <div class="input-group-text">Contest</div>
+                <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="contest_id">
+                  {% for c in contests %}
+                  {% if c.id == selected_contest_id %}
+                  <option value="{{ c.id }}" selected>{{ c.name }}</option>
                   {% else %}
-                  <option value="{{ ctf.ctf_id }}">{{ ctf.name }}</option>
+                  <option value="{{ c.id }}">{{ c.name }}</option>
                   {% endif %}
                   {% endfor %}
                 </select>
@@ -29,12 +29,12 @@
             <div class="col-5">
               <div class="input-group input-group-sm">
                 <div class="input-group-text">Player</div>
-                <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="user_id">
+                <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="player_id">
                   {% for player in players %}
-                  {% if player.user_id == selected_player_id %}
-                  <option value="{{ ctf.ctf_id }}" selected>{{ player.username }}</option>
+                  {% if player.player_id == selected_player_id %}
+                  <option value="{{ player.player_id }}" selected>{{ player.username }}</option>
                   {% else %}
-                  <option value="{{ player.user_id }}">{{ player.username }}</option>
+                  <option value="{{ player.player_id }}">{{ player.username }}</option>
                   {% endif %}
                   {% endfor %}
                 </select>
@@ -61,7 +61,7 @@
             {% for h in history %}
             <tr>
               <th scope="row"> {{ h.answered_at | date:"Y/m/d H:i:s" }} </th>
-              <td>{{ h.ctf }}</td>
+              <td>{{ h.contest }}</td>
               <td>{{ h.player }}</td>
               <td>{{ h.team }}</td>
               <td>{{ h.question }}</td>

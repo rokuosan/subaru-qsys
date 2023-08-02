@@ -19,12 +19,12 @@
             <div class="col-5">
               <div class="input-group input-group-sm">
                 <div class="input-group-text">CTF</div>
-                <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="ctf_id">
-                  {% for ctf in ctfs %}
-                  {% if ctf.ctf_id == selected_ctf_id %}
-                  <option value="{{ ctf.ctf_id }}" selected>{{ ctf.name }}</option>
+                <select class="form-select form-select-sm col flex-grow-1 " aria-label="Default select example" name="contest_id">
+                  {% for c in contests %}
+                  {% if c.id == selected_contest_id %}
+                  <option value="{{ c.id }}" selected>{{ c.name }}</option>
                   {% else %}
-                  <option value="{{ ctf.ctf_id }}">{{ ctf.name }}</option>
+                  <option value="{{ c.id }}">{{ c.name }}</option>
                   {% endif %}
                   {% endfor %}
                 </select>

@@ -2,45 +2,54 @@ from django.http import HttpRequest
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from app.models.ctf_information import CtfInformation
-from app.models.history import CtfAnswerHistory as history
+from ctf.models.history import History
+from ctf.models.contest import Contest
+from ctf.models.player import Player
 from app.forms.score_setting import ScoreSettingForm
 
 
 @login_required
 def ranking(request: HttpRequest):
-    user = request.user
 
     ctx = {}
-    ctfs = CtfInformation.objects.filter(is_active=True)
 
-    # CTFを取得
-    if ctfs.count() == 0:
-        messages.error(request, "CTFが作成されていません")
+    contests = Contest.get_active_contests()
+    if not contests:
+        messages.warning(request, "コンテストが開催されていません")
         return render(request, "app/ranking.html", ctx)
-    ctf = ctfs.first()
+    contest = None
+    player = Player.get_player(request.user)
+    for c in contests:
+        if player in c.get_joined_players():
+            contest = c
+            break
 
-    if user.is_admin:
-        ctx["form"] = ScoreSettingForm(ctf=ctf)
+    if contest is None:
+        messages.warning(request, "コンテストに参加していません")
+        return render(request, "app/ranking.html", ctx)
+
+    if request.user.is_admin:
+        ctx["form"] = ScoreSettingForm(contest=contest)
+        pass
 
     if request.method == "POST":
         show_team = request.POST.get("show_team_rankinng")
         show_player = request.POST.get("show_player_ranking")
 
-        ctf.show_team_ranking = show_team == "on"
-        ctf.show_player_ranking = show_player == "on"
+        contest.is_team_ranking_public = show_team == "on"
+        contest.is_player_ranking_public = show_player == "on"
 
-        ctf.save()
+        contest.save()
 
         return redirect("ranking")
 
     # CTF参加者のチームを取得
-    users = ctf.participants.all()
-    teams = ctf.get_teams(ctf_id=ctf.ctf_id)
+    players = contest.get_joined_players()
+    teams = contest.teams.all()
 
     # チームごとのスコアを算出
     team_scores = [
-        {"name": t.name, "score": history.get_team_point(t, ctf)}
+        {"name": t.name, "score": History.get_team_point(contest, t)}
         for t in teams
     ]
 
@@ -58,8 +67,8 @@ def ranking(request: HttpRequest):
 
     # ユーザーごとのスコアを算出
     player_scores = [
-        {"name": u.username, "score": history.get_user_point(u, ctf)}
-        for u in users
+        {"name": u.name, "score": History.get_player_point(contest, u)}
+        for u in players
     ]
     # ソート
     player_scores = sorted(
@@ -75,14 +84,13 @@ def ranking(request: HttpRequest):
         prev_score = score["score"]
 
     # ランキングを表示
-    user = request.user
-    if ctf.show_team_ranking or user.is_admin:
+    if contest.is_team_ranking_public or request.user.is_admin:
         ctx["team_score_rank"] = team_scores
-        if not ctf.show_team_ranking:
+        if not contest.is_team_ranking_public:
             messages.info(request, "チームランキングは現在非公開です。管理者のみ表示されます。")
-    if ctf.show_player_ranking or user.is_admin:
+    if contest.is_player_ranking_public or request.user.is_admin:
         ctx["player_score_rank"] = player_scores
-        if not ctf.show_player_ranking:
+        if not contest.is_player_ranking_public:
             messages.info(request, "プレイヤーランキングは現在非公開です。管理者のみ表示されます。")
 
     ctx["is_active"] = True
