@@ -1,5 +1,5 @@
 from django.utils import timezone
-
+from django.core.validators import RegexValidator
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
@@ -26,7 +26,21 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
     - is_started_on_time -> bool: 開催期間を基準にコンテストが開催しているかどうかを返す\n
     """
 
-    name = models.CharField(max_length=255, help_text="コンテスト名", unique=True)
+    id = models.CharField(
+        max_length=255,
+        help_text="コンテストID",
+        primary_key=True,
+        unique=True,
+        validators=[
+            RegexValidator(
+                regex=r"^[a-zA-Z0-9_-]{4,}$",
+                message="IDは半角英数字とハイフン(-)、アンダースコア(_)のみ使用でき、4文字以上である必要があります。",
+            ),
+        ],
+    )
+    display_name = models.CharField(
+        max_length=255, help_text="コンテスト名", null=True, blank=True
+    )
     description = models.TextField(help_text="紹介文", blank=True, default="")
 
     start_at = models.DateTimeField(help_text="開始日時", default=timezone.now)
@@ -53,12 +67,14 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
     )
 
     def __str__(self):
-        return self.name
+        if self.display_name:
+            return self.display_name
+        return self.id
 
     class Meta:
         app_label = "ctf"
-        verbose_name = "コンテスト大会情報"
-        verbose_name_plural = "コンテスト大会情報"
+        verbose_name = "コンテスト"
+        verbose_name_plural = "コンテスト"
         ordering = ["-start_at"]
 
     class Status:
