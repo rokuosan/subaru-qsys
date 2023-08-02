@@ -1,6 +1,7 @@
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
+from .question import Question
 from .contest import Contest
 from .team import Team
 from .player import Player
@@ -8,6 +9,7 @@ from .player import Player
 
 class History(models.Model, ExportModelOperationsMixin("history")):
     """CTF 回答履歴"""
+
     contest = models.ForeignKey(
         "Contest", on_delete=models.CASCADE, help_text="CTFコンテスト"
     )
@@ -17,20 +19,17 @@ class History(models.Model, ExportModelOperationsMixin("history")):
     player = models.ForeignKey(
         Player, on_delete=models.CASCADE, help_text="プレイヤー"
     )
-    team = models.ForeignKey(
-        "Team", on_delete=models.CASCADE, help_text="チーム"
-    )
-    is_correct = models.BooleanField(
-        help_text="正解したかどうか", default=False
-    )
+    team = models.ForeignKey("Team", on_delete=models.CASCADE, help_text="チーム")
+    is_correct = models.BooleanField(help_text="正解したかどうか", default=False)
     answer = models.CharField(
         max_length=255, help_text="回答内容", blank=True, default=""
     )
-    point = models.PositiveIntegerField(
-        help_text="獲得点数", default=0
-    )
+    point = models.PositiveIntegerField(help_text="獲得点数", default=0)
     result = models.CharField(
-        max_length=255, help_text="判定結果", blank=True, default="",
+        max_length=255,
+        help_text="判定結果",
+        blank=True,
+        default="",
         choices=(
             ("correct", "正解"),
             ("incorrect", "不正解"),
@@ -38,7 +37,7 @@ class History(models.Model, ExportModelOperationsMixin("history")):
             ("flag_format_error", "フラグ形式エラー"),
             ("time_limit_exceeded", "時間切れ"),
             ("already_answered", "回答済み"),
-        )
+        ),
     )
     created_at = models.DateTimeField(auto_now_add=True, help_text="回答日時")
 
@@ -48,6 +47,7 @@ class History(models.Model, ExportModelOperationsMixin("history")):
 
     class ResultType:
         """判定結果の選択肢"""
+
         CORRECT = "correct"
         INCORRECT = "incorrect"
         PENDING = "pending"
@@ -110,3 +110,23 @@ class History(models.Model, ExportModelOperationsMixin("history")):
         correct = histories.filter(is_correct=True).count()
 
         return correct / histories.count() * 100
+
+    def get_frequently_solved(contest: Contest):
+        """よく解かれた問題を返す"""
+        hist = History.objects.filter(contest=contest, is_correct=True)
+
+        freq = (
+            hist.values("question")
+            .annotate(count=models.Count("question"))
+            .order_by("-count")
+        )
+
+        freq = [
+            {
+                "question": Question.objects.get(pk=f["question"]),
+                "count": f["count"],
+            }
+            for f in freq
+        ]
+
+        return freq
