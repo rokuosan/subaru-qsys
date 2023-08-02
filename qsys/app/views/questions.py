@@ -53,8 +53,15 @@ def questions(request: HttpRequest):
         player=player, is_correct=True, contest=contest
     ).values_list("question", flat=True)
 
+    teams = player.teams.all()
+    team = None
+    for t in teams:
+        if t in contest.teams.all():
+            team = t
+            break
+
     solved_team = History.objects.filter(
-        team=request.user.team, is_correct=True, contest=contest
+        team=team, is_correct=True, contest=contest
     ).exclude(player=player).values_list("question", flat=True)
 
     # カテゴリごとに問題を分類し、リストに追加
@@ -67,7 +74,7 @@ def questions(request: HttpRequest):
         for question in cat_questions:
             if question.id in solved:
                 question.is_answered = True
-            elif request.user.team and question.id in solved_team:
+            elif team and question.id in solved_team:
                 question.is_answered = True
                 question.is_answered_by_team = True
             questions.append(question)
