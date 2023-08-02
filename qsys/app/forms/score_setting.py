@@ -1,6 +1,6 @@
 from django import forms
 
-from app.models.ctf_information import CtfInformation
+from ctf.models.contest import Contest
 
 
 class ScoreSettingForm(forms.Form):
@@ -15,11 +15,15 @@ class ScoreSettingForm(forms.Form):
         widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
     )
 
-    def __init__(self, ctf: CtfInformation, *args, **kwargs):
+    def __init__(self, contest: Contest, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields["show_team_rankinng"].initial = ctf.show_team_ranking
-        self.fields["show_player_ranking"].initial = ctf.show_player_ranking
+        self.fields[
+            "show_team_rankinng"
+        ].initial = contest.is_team_ranking_public
+        self.fields[
+            "show_player_ranking"
+        ].initial = contest.is_player_ranking_public
 
     def clean(self):
         cleaned_data = super().clean()
