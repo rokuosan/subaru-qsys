@@ -3,14 +3,23 @@ from app.models.ctf_information import CtfInformation
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+from ctf.models.player import Player
+from ctf.models.contest import Contest
+from ctf.models.history import History
 
 
 @login_required
 def account(request: HttpRequest):
     ctx = {}
+    player = Player.get_player(request.user)
+    if player is None:
+        messages.warning(request, "プレイヤー情報がありません")
+        return redirect("index")
+
     ctx["display"] = {
-        "username": request.user.username,
+        "username": player.name,
         "team": "-",
         "answers": [],
         "point": 0,
@@ -19,35 +28,43 @@ def account(request: HttpRequest):
         "team_point": "-",
     }
 
-    # Get CTF
-    ctf = None
-    ctfs = CtfInformation.objects.filter(is_active=True)
-    if not ctfs:
-        messages.warning(request, "CTFが開催されていません")
+    contest = None
+    contests = Contest.get_active_contests()
+    if not contests:
+        messages.warning(request, "コンテストが開催されていません")
         return render(request, "app/account.html", ctx)
-    for c in ctfs:
-        if request.user in c.participants.all():
-            ctf = c
+    for c in contests:
+        if player in c.get_joined_players():
+            contest = c
             break
 
-    if ctf is None:
-        messages.warning(request, "CTFに参加していません")
+    if contest is None:
+        messages.warning(request, "コンテストに参加していません")
         return render(request, "app/account.html", ctx)
 
     # Get last newest 10 Answers
-    answers = CtfAnswerHistory.objects.filter(
-        user=request.user, ctf=ctf
-    ).order_by("-answered_at")[:10]
+    answers = History.objects.filter(player=player, contest=contest).order_by(
+        "-created_at"
+    )[:10]
 
     # Your point
-    point = CtfAnswerHistory.get_user_point(request.user, ctf)
+    point = History.get_player_point(contest, player)
 
     # Answer ratio
-    ac = CtfAnswerHistory.get_user_accuracy(request.user, ctf) * 100
+    ac = History.get_player_accuracy(contest, player)
+
+    team = None
+    for t in contest.teams.all():
+        if player in t.members.all():
+            team = t
+            break
+    if team is None:
+        messages.warning(request, "チームに所属していません")
+        return render(request, "app/account.html", ctx)
 
     ctx["display"] = {
-        "username": request.user.username,
-        "team": request.user.team,
+        "username": player.name,
+        "team": team,
         "answers": answers,
         "point": point,
         "ratio": round(ac, 2),
@@ -55,11 +72,10 @@ def account(request: HttpRequest):
         "team_point": "-",
     }
 
-    if request.user.team:
-        tac = CtfAnswerHistory.get_team_accuracy(request.user.team, ctf) * 100
-        tpt = CtfAnswerHistory.get_team_point(request.user.team, ctf)
+    tac = History.get_team_accuracy(contest, team)
+    tpt = History.get_team_point(contest, team)
 
-        ctx["display"]["team_ratio"] = round(tac, 2)
-        ctx["display"]["team_point"] = tpt
+    ctx["display"]["team_ratio"] = round(tac, 2)
+    ctx["display"]["team_point"] = tpt
 
     return render(request, "app/account.html", ctx)
