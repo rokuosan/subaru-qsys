@@ -10,7 +10,6 @@ from app.forms.score_setting import ScoreSettingForm
 
 @login_required
 def ranking(request: HttpRequest):
-
     ctx = {}
 
     contests = Contest.get_active_contests()

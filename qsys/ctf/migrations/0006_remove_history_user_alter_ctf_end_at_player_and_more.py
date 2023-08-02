@@ -39,7 +39,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(help_text="プレイヤー名", max_length=255, unique=True),
+                    models.CharField(
+                        help_text="プレイヤー名", max_length=255, unique=True
+                    ),
                 ),
                 (
                     "team",

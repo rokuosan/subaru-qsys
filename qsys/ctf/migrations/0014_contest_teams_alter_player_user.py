@@ -16,7 +16,10 @@ class Migration(migrations.Migration):
             model_name="contest",
             name="teams",
             field=models.ManyToManyField(
-                blank=True, help_text="参加チーム", related_name="contests", to="ctf.team"
+                blank=True,
+                help_text="参加チーム",
+                related_name="contests",
+                to="ctf.team",
             ),
         ),
         migrations.AlterField(

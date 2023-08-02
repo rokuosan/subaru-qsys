@@ -10,8 +10,11 @@ class Player(models.Model, ExportModelOperationsMixin("player")):
     name = models.CharField(max_length=255, help_text="プレイヤー名", unique=True)
 
     user = models.OneToOneField(
-        AppUser, on_delete=models.CASCADE, help_text="ユーザー", unique=True,
-        related_name="player"
+        AppUser,
+        on_delete=models.CASCADE,
+        help_text="ユーザー",
+        unique=True,
+        related_name="player",
     )
 
     def __str__(self):

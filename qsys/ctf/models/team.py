@@ -6,6 +6,7 @@ from .player import Player
 
 class Team(models.Model, ExportModelOperationsMixin("team")):
     """CTF チーム"""
+
     name = models.CharField(max_length=255, help_text="チーム名", unique=True)
 
     members = models.ManyToManyField(

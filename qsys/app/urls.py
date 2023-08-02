@@ -42,7 +42,6 @@ urlpatterns = [
     path("manager/ctf/", manager_ctf, name="manager_ctf"),
     path("manager/team/", manager_team, name="manager_team"),
     path("answer-history/", answer_history, name="answer_history"),
-
     # CTF
     path("ctf/", include("ctf.urls")),
 ]

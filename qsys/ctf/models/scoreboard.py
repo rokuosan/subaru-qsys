@@ -4,4 +4,5 @@ from django_prometheus.models import ExportModelOperationsMixin
 
 class Scoreboard(models.Model, ExportModelOperationsMixin("scoreboard")):
     """CTF スコアボード"""
+
     pass

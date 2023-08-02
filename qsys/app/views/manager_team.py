@@ -49,10 +49,7 @@ def manager_team(request):
         players_team_set = []
         for player in players:
             if player.teams is None:
-                players_team_set.append({
-                    "player": player,
-                    "team": None
-                })
+                players_team_set.append({"player": player, "team": None})
                 continue
 
             teams = ctx["all_teams"]
@@ -62,19 +59,19 @@ def manager_team(request):
                 if t in teams:
                     team = t
                     break
-            players_team_set.append({
-                "id": player.id,
-                "name": player.name,
-                "team": team
-            })
+            players_team_set.append(
+                {"id": player.id, "name": player.name, "team": team}
+            )
 
         members_team_set = []
         for member in members:
-            members_team_set.append({
-                "id": member.id,
-                "name": member.name,
-                "team": ctx["active_team"]
-            })
+            members_team_set.append(
+                {
+                    "id": member.id,
+                    "name": member.name,
+                    "team": ctx["active_team"],
+                }
+            )
 
         ctx["team_members"] = members_team_set
         ctx["players"] = players_team_set

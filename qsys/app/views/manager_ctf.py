@@ -76,9 +76,7 @@ def manager_ctf(request: HttpRequest):
 
             active_contests = Contest.get_active_contests()
             if active_contests.exists():
-                messages.error(
-                    request, "CTFを同時開催することはできません"
-                )
+                messages.error(request, "CTFを同時開催することはできません")
                 return redirect(manager_ctf)
             contest.status = "paused"
             contest.start_at = timezone.now()

@@ -60,9 +60,11 @@ def questions(request: HttpRequest):
             team = t
             break
 
-    solved_team = History.objects.filter(
-        team=team, is_correct=True, contest=contest
-    ).exclude(player=player).values_list("question", flat=True)
+    solved_team = (
+        History.objects.filter(team=team, is_correct=True, contest=contest)
+        .exclude(player=player)
+        .values_list("question", flat=True)
+    )
 
     # カテゴリごとに問題を分類し、リストに追加
     lst = []

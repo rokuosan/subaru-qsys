@@ -13,7 +13,10 @@ class Migration(migrations.Migration):
             model_name="contest",
             name="questions",
             field=models.ManyToManyField(
-                blank=True, help_text="問題", related_name="contests", to="ctf.question"
+                blank=True,
+                help_text="問題",
+                related_name="contests",
+                to="ctf.question",
             ),
         ),
     ]

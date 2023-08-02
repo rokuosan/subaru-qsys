@@ -25,7 +25,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="contest",
             name="display_name",
-            field=models.CharField(help_text="コンテスト名", max_length=255, null=True),
+            field=models.CharField(
+                help_text="コンテスト名", max_length=255, null=True
+            ),
         ),
         migrations.AlterField(
             model_name="contest",

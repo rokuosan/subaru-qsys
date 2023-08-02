@@ -25,7 +25,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(help_text="コンテスト名", max_length=255, unique=True),
+                    models.CharField(
+                        help_text="コンテスト名", max_length=255, unique=True
+                    ),
                 ),
                 (
                     "description",
@@ -66,7 +68,8 @@ class Migration(migrations.Migration):
                 (
                     "is_player_ranking_public",
                     models.BooleanField(
-                        default=False, help_text="プレイヤーランキング(Player Ranking)を公開する"
+                        default=False,
+                        help_text="プレイヤーランキング(Player Ranking)を公開する",
                     ),
                 ),
             ],

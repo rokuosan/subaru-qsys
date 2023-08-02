@@ -30,7 +30,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(help_text="カテゴリ名", max_length=255, unique=True),
+                    models.CharField(
+                        help_text="カテゴリ名", max_length=255, unique=True
+                    ),
                 ),
             ],
             options={
@@ -39,7 +41,9 @@ class Migration(migrations.Migration):
             },
             bases=(
                 models.Model,
-                django_prometheus.models.ExportModelOperationsMixin("category"),
+                django_prometheus.models.ExportModelOperationsMixin(
+                    "category"
+                ),
             ),
         ),
         migrations.CreateModel(
@@ -56,7 +60,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(help_text="CTF名", max_length=255, unique=True),
+                    models.CharField(
+                        help_text="CTF名", max_length=255, unique=True
+                    ),
                 ),
                 (
                     "description",
@@ -75,7 +81,14 @@ class Migration(migrations.Migration):
                     "end_at",
                     models.DateTimeField(
                         default=datetime.datetime(
-                            2023, 8, 2, 3, 0, 30, 858192, tzinfo=datetime.timezone.utc
+                            2023,
+                            8,
+                            2,
+                            3,
+                            0,
+                            30,
+                            858192,
+                            tzinfo=datetime.timezone.utc,
                         ),
                         help_text="終了日時",
                     ),
@@ -103,7 +116,8 @@ class Migration(migrations.Migration):
                 (
                     "is_player_ranking_public",
                     models.BooleanField(
-                        default=False, help_text="プレイヤーランキング(Player Ranking)を公開する"
+                        default=False,
+                        help_text="プレイヤーランキング(Player Ranking)を公開する",
                     ),
                 ),
             ],
@@ -131,11 +145,15 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "level",
-                    models.PositiveSmallIntegerField(help_text="難易度レベル", unique=True),
+                    models.PositiveSmallIntegerField(
+                        help_text="難易度レベル", unique=True
+                    ),
                 ),
                 (
                     "name",
-                    models.CharField(help_text="難易度名", max_length=255, unique=True),
+                    models.CharField(
+                        help_text="難易度名", max_length=255, unique=True
+                    ),
                 ),
             ],
             options={
@@ -144,7 +162,9 @@ class Migration(migrations.Migration):
             },
             bases=(
                 models.Model,
-                django_prometheus.models.ExportModelOperationsMixin("difficulty"),
+                django_prometheus.models.ExportModelOperationsMixin(
+                    "difficulty"
+                ),
             ),
         ),
         migrations.CreateModel(
@@ -161,7 +181,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(help_text="チーム名", max_length=255, unique=True),
+                    models.CharField(
+                        help_text="チーム名", max_length=255, unique=True
+                    ),
                 ),
                 (
                     "members",
@@ -195,19 +217,28 @@ class Migration(migrations.Migration):
                         serialize=False,
                     ),
                 ),
-                ("title", models.CharField(help_text="問題タイトル", max_length=255)),
+                (
+                    "title",
+                    models.CharField(help_text="問題タイトル", max_length=255),
+                ),
                 (
                     "description",
                     models.TextField(blank=True, default="", help_text="問題文"),
                 ),
                 ("flag", models.CharField(help_text="フラグ", max_length=255)),
                 ("point", models.PositiveIntegerField(help_text="点数")),
-                ("is_open", models.BooleanField(default=True, help_text="公開中かどうか")),
+                (
+                    "is_open",
+                    models.BooleanField(default=True, help_text="公開中かどうか"),
+                ),
                 (
                     "created_at",
                     models.DateTimeField(auto_now_add=True, help_text="作成日時"),
                 ),
-                ("updated_at", models.DateTimeField(auto_now=True, help_text="更新日時")),
+                (
+                    "updated_at",
+                    models.DateTimeField(auto_now=True, help_text="更新日時"),
+                ),
                 (
                     "category",
                     models.ForeignKey(
@@ -233,7 +264,9 @@ class Migration(migrations.Migration):
             },
             bases=(
                 models.Model,
-                django_prometheus.models.ExportModelOperationsMixin("question"),
+                django_prometheus.models.ExportModelOperationsMixin(
+                    "question"
+                ),
             ),
         ),
         migrations.CreateModel(
@@ -255,10 +288,16 @@ class Migration(migrations.Migration):
                 (
                     "answer",
                     models.CharField(
-                        blank=True, default="", help_text="回答内容", max_length=255
+                        blank=True,
+                        default="",
+                        help_text="回答内容",
+                        max_length=255,
                     ),
                 ),
-                ("point", models.PositiveIntegerField(default=0, help_text="獲得点数")),
+                (
+                    "point",
+                    models.PositiveIntegerField(default=0, help_text="獲得点数"),
+                ),
                 (
                     "result",
                     models.CharField(

@@ -13,7 +13,10 @@ class Migration(migrations.Migration):
             model_name="team",
             name="members",
             field=models.ManyToManyField(
-                blank=True, help_text="チームメンバー", related_name="teams", to="ctf.player"
+                blank=True,
+                help_text="チームメンバー",
+                related_name="teams",
+                to="ctf.player",
             ),
         ),
     ]

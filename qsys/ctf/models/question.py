@@ -51,6 +51,7 @@ class Category(models.Model, ExportModelOperationsMixin("category")):
 
 class Difficulty(models.Model, ExportModelOperationsMixin("difficulty")):
     """CTF 問題難易度"""
+
     name = models.CharField(max_length=255, help_text="難易度名", unique=True)
 
     def __str__(self):
