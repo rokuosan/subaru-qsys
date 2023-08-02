@@ -1,8 +1,7 @@
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
-
-from app.models.app_user import AppUser
+from .player import Player
 
 
 class History(models.Model, ExportModelOperationsMixin("history")):
@@ -10,8 +9,8 @@ class History(models.Model, ExportModelOperationsMixin("history")):
     question = models.ForeignKey(
         "Question", on_delete=models.CASCADE, help_text="問題"
     )
-    user = models.ForeignKey(
-        AppUser, on_delete=models.CASCADE, help_text="回答者"
+    player = models.ForeignKey(
+        Player, on_delete=models.CASCADE, help_text="プレイヤー"
     )
     team = models.ForeignKey(
         "Team", on_delete=models.CASCADE, help_text="チーム"
