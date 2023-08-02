@@ -6,7 +6,6 @@ from .views.manager_team import manager_team
 from .views.result import result
 from .views.answer_history import answer_history
 from .views.sample import sample_view
-from .views.mock import create_mock_questions, create_mock_user
 from .views.ranking import ranking
 from .views.account import account
 from .views.index import index
@@ -51,10 +50,4 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += [
         path("sample/", sample_view, name="sample"),
-        path("mock/user/", create_mock_user, name="create_mock_user"),
-        path(
-            "mock/questions/",
-            create_mock_questions,
-            name="create_mock_questions",
-        ),
     ]
