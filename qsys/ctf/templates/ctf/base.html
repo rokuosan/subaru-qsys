@@ -1,0 +1,23 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock title %}</title>
+  {% bootstrap_css %}
+</head>
+
+<body class="bg-light position-relative" style="min-height: 100dvh;">
+  {% include 'ctf/components/header.html' %}
+  <div class="position-fixed bottom-0 end-0 px-4" style="z-index: 5000;">
+    {% include 'django_bootstrap5/messages.html' %}
+  </div>
+  {% block content %}{% endblock content %}
+  {% bootstrap_javascript %}
+</body>
+
+</html>

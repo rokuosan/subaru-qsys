@@ -1,0 +1,104 @@
+{% block header %}
+<nav class="navbar navbar-expand-md py-3 ">
+  <div class="container bg-white rounded-pill py-2 px-4 shadow-sm" id="navbar-bg">
+    <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-3">
+      <span class="visually-hidden">Toggle navigation</span>
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navcol-3">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link active" href="#">
+            {% include 'icons/home.svg' %}
+            <span class="ms-1 align-middle">Dashboard</span>
+          </a></li>
+        {% if request.user.is_active %}
+        <li class="nav-item"><a class="nav-link active" href="#">
+            {% include 'icons/light.svg' %}
+            <span class="ms-1 align-middle">Questions</span>
+          </a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">
+            {% include 'icons/person.svg' %}
+            <span class="ms-1 align-middle">Account</span>
+          </a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">
+            {% include 'icons/trophy.svg' %}
+            <span class="ms-1 align-middle">Ranking</span>
+          </a></li>
+        {% endif %}
+        {% if request.user.is_admin %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button"
+            aria-expanded="false">
+            {% include 'icons/grid.svg' %}
+            <span class="ms-1 align-middle">Control</span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <h6 class="dropdown-header lead">Information</h6>
+            </li>
+            <li><a class="dropdown-item" href="#">
+                {% include 'icons/chart.svg' %}
+                <span class="ms-1">Result</span>
+              </a></li>
+            <li><a class="dropdown-item" href="#">
+                {% include 'icons/clock.svg' %}
+                <span class="ms-1">Answer History</span>
+              </a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <h6 class="dropdown-header lead">Managers</h6>
+            </li>
+            <li><a class="dropdown-item" href="#">
+                {% include 'icons/flag.svg' %}
+                <span class="ms-1">CTF Manager</span>
+              </a></li>
+            <li><a class="dropdown-item" href="#">
+                {% include 'icons/person-add.svg' %}
+                <span class="ms-1">User Manager</span>
+              </a></li>
+            <li><a class="dropdown-item" href="#">
+                {% include 'icons/people.svg' %}
+                <span class="ms-1">Team Manager</span>
+              </a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <h6 class="dropdown-header lead">Django Server Settings</h6>
+            </li>
+            <li><a class="dropdown-item" href="/admin">
+                {% include 'icons/gear.svg' %}
+                <span class="ms-1">Django Admin Panel</span>
+              </a></li>
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+      {% if not request.user.is_authenticated %}
+      <a class="btn btn-primary" href="{% url 'login' %}" role="button" type="button">
+        Login
+      </a>
+      {% else %}
+      <a class="btn btn-outline-primary" href="{% url 'logout' %}" role="button" type="button">
+        Logout
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<script>
+  function toggleNavbarCorner() {
+    var navbar = document.getElementById('navbar-bg');
+    if (window.innerWidth < 768) {
+      navbar.classList.remove('rounded-pill');
+    } else {
+      navbar.classList.add('rounded-pill');
+    }
+  }
+
+  window.addEventListener('resize', toggleNavbarCorner);
+  window.addEventListener('load', toggleNavbarCorner);
+</script>
+{% endblock header%}
