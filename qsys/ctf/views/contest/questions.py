@@ -36,12 +36,14 @@ def questions_view(request: HttpRequest, contest_id: str):
         if qs:
             solved = History.get_player_solved(contest, player)
             for q in qs:
-                if q in solved:
+                if q.id in solved.values_list("question", flat=True):
                     q.solved = True
                 else:
                     q.solved = False
             sets.append({"category": c, "questions": qs})
 
+    print(sets)
+    print(solved)
     ctx["sets"] = sets
     ctx["total"] = sum([len(s["questions"]) for s in sets])
     ctx["solved"] = History.get_player_solved_count(contest, player)
