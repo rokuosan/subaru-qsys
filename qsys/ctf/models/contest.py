@@ -51,6 +51,10 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
         "Team", help_text="参加チーム", related_name="contests", blank=True
     )
 
+    questions = models.ManyToManyField(
+        "Question", help_text="問題", related_name="contests", blank=True
+    )
+
     # is_open = models.BooleanField(default=True, help_text="公開中かどうか")
 
     status = models.CharField(
@@ -96,6 +100,16 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
         """コンテストの状態を設定する"""
         self.status = status
         self.save()
+
+    def get_joined_players(self):
+        """コンテストに参加しているプレイヤーを取得する"""
+        teams = self.teams.all()
+
+        players = []
+        for team in teams:
+            players += team.members.all()
+
+        return players
 
     @property
     def name(self):
