@@ -40,45 +40,49 @@ qsys:
         is_admin: false
         password: 'sample'
 
+  player:
+    - 'Yamada Taro'
+    - 'Suzuki Hanako'
+
   question:
     - title: 'Prac 1'
       difficulty: Tutorial
       category: Practice
       flag: 'flag{1}'
-      content: 'flag{1}'
+      description: 'flag{1}'
       point: 100
 
     - title: 'Prac 2'
       difficulty: Tutorial
       category: Practice
       flag: 'flag{2}'
-      content: 'flag{2}'
+      description: 'flag{2}'
       point: 200
 
     - title: 'Prac 3'
       difficulty: Tutorial
       category: Practice
       flag: 'flag{3}'
-      content: 'flag{3}'
+      description: 'flag{3}'
       point: 300
 
     - title: 'Network 1'
       difficulty: Easy
       category: Network
       flag: 'flag{network-1}'
-      content: 'flag{network-1}'
+      description: 'flag{network-1}'
       point: 100
 
     - title: 'Network 2'
       difficulty: Easy
       category: Network
       flag: 'flag{network-2}'
-      content: 'flag{network-2}'
+      description: 'flag{network-2}'
       point: 200
 
     - title: 'Network 3'
       difficulty: Easy
       category: Network
       flag: 'flag{network-3}'
-      content: 'flag{network-3}'
+      description: 'flag{network-3}'
       point: 300

@@ -2,11 +2,10 @@ import random
 from django.core.management.base import BaseCommand
 import yaml
 
-from app.models.difficulty import CtfQuestionDifficulty
-from app.models.category import CtfQuestionCategory
-from app.models.team import CtfTeam
-from app.models.question import CtfQuestion
 from app.models.app_user import AppUser
+from ctf.models.player import Player
+from ctf.models.team import Team
+from ctf.models.question import Question, Category, Difficulty
 
 
 class Command(BaseCommand):
@@ -58,51 +57,34 @@ class Command(BaseCommand):
     def setup_questions(self, yml: dict):
         print("Setting up Questions...")
         questions = yml["question"]
-        for question in questions:
+        for q in questions:
+            print(f"- {q['title']}", end=" ")
             try:
-                title = question["title"]
-                print(f"- {title}", end=" ")
-
-                ql = CtfQuestion.objects.filter(title=title)
-                if ql.exists():
+                title = q["title"]
+                description = q["description"]
+                flag = q["flag"]
+                point = q["point"]
+                category = Category.objects.get(name=q["category"])
+                difficulty = Difficulty.objects.get(name=q["difficulty"])
+                is_open = q.get("is_open", True)
+                if Question.objects.filter(title=title).exists():
                     print("Already exists")
                     continue
-
-                random = AppUser.objects.make_random_password()
-
-                cat_name = question["category"]
-                dif_name = question["difficulty"]
-                category = CtfQuestionCategory.objects.get(name=cat_name)
-                difficulty = CtfQuestionDifficulty.objects.get(name=dif_name)
-                flag = question.get("flag", f"flag{{{random}}}")
-                content = question.get("content", title)
-                point = question.get("point", 0)
-                explanation = question.get("explanation", None)
-                file_path = question.get("file_path", None)
-                is_published = question.get("is_published", True)
-                is_practice = question.get("is_practice", False)
-                note = question.get("note", None)
-
-                CtfQuestion(
-                    category=category,
+                q = Question(
                     title=title,
-                    content=content,
-                    explanation=explanation,
-                    point=point,
+                    description=description,
                     flag=flag,
+                    point=point,
+                    category=category,
                     difficulty=difficulty,
-                    file_path=file_path,
-                    is_published=is_published,
-                    is_practice=is_practice,
-                    note=note,
-                ).save()
-
+                    is_open=is_open,
+                )
+                q.save()
                 print("OK")
-            except (KeyError, TypeError) as e:
+            except Exception as e:
                 print("Failed")
-                print("\nCouldn't get value {}".format(e))
+                print(e)
                 return
-
         print("Questions Done.")
         print()
 
@@ -147,13 +129,12 @@ class Command(BaseCommand):
                     pw = user.get("password", None)
 
                     # Team
-                    team = user.get("team", None)
-                    if team is not None:
-                        try:
-                            team = CtfTeam.objects.get(name=team)
-                        except CtfTeam.DoesNotExist:
-                            print("Team not found")
-                            continue
+                    # team = user.get("team", None)
+                    # if team is not None:
+                    #     try:
+                    #         team = CtfTeam.objects.get(name=team)
+                    #     except CtfTeam.DoesNotExist:
+                    #         print("Team not found")
 
                     # Flags
                     is_admin = user.get("is_admin", False)
@@ -164,7 +145,7 @@ class Command(BaseCommand):
                     # Create
                     u = AppUser(
                         username=user["username"],
-                        team=team,
+                        # team=team,
                         is_admin=is_admin,
                         is_staff=is_staff,
                         is_superuser=is_superuser,
@@ -193,16 +174,38 @@ class Command(BaseCommand):
         print("Users Done.")
         print()
 
+    def setup_player(self, yml: dict):
+        print("Setting up Players...")
+        data = yml["player"]
+        for player in data:
+            print(f"- {player}", end=" ")
+            try:
+                username = player
+                u = AppUser.objects.get(username=username)
+                if Player.get_player(u) is not None:
+                    print("Already exists")
+                    continue
+                p = Player.objects.create(name=username, user=u)
+                p.save()
+                print("OK")
+            except Exception as e:
+                print("Failed")
+                print(e)
+                return
+        print("Players Done.")
+        print()
+
     def handle(self, *args, **options):
         data = self.read_yaml()
         if data is None:
             return
         qsys = data["qsys"]
 
-        self.simple_setup(qsys, "difficulty", CtfQuestionDifficulty)
-        self.simple_setup(qsys, "category", CtfQuestionCategory)
-        self.simple_setup(qsys, "team", CtfTeam)
+        self.simple_setup(qsys, "difficulty", Difficulty)
+        self.simple_setup(qsys, "category", Category)
+        self.simple_setup(qsys, "team", Team)
         self.setup_questions(qsys)
         self.setup_users(qsys)
+        self.setup_player(qsys)
 
         print("All Setup Completed.")
