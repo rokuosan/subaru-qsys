@@ -47,6 +47,12 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
     start_at = models.DateTimeField(help_text="開始日時", default=timezone.now)
     end_at = models.DateTimeField(help_text="終了日時", default=timezone.now)
 
+    teams = models.ManyToManyField(
+        "Team", help_text="参加チーム", related_name="contests", blank=True
+    )
+
+    # is_open = models.BooleanField(default=True, help_text="公開中かどうか")
+
     status = models.CharField(
         max_length=255,
         help_text="CTFの状態",
@@ -97,31 +103,6 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
         if self.display_name:
             return self.display_name
         return self.id
-
-    @property
-    def is_running(self):
-        """コンテストが開催中かどうかを返す"""
-        return self.status == "running"
-
-    @property
-    def is_paused(self):
-        """コンテストが一時停止中かどうかを返す"""
-        return self.status == "paused"
-
-    @property
-    def is_finished(self):
-        """コンテストが終了しているかどうかを返す"""
-        return self.status == "finished"
-
-    @property
-    def is_preparing(self):
-        """コンテストが準備中かどうかを返す"""
-        return self.status == "preparing"
-
-    @property
-    def is_active(self):
-        """コンテストが実施中かどうかを返す"""
-        return self.is_running() or self.is_paused()
 
     @property
     def is_over(self):
