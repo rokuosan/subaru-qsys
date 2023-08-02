@@ -130,3 +130,21 @@ class History(models.Model, ExportModelOperationsMixin("history")):
         ]
 
         return freq
+
+    def get_player_solved_count(contest: Contest, player: Player):
+        """プレイヤーの正解数を返す"""
+        histories = History.objects.filter(
+            contest=contest,
+            player=player,
+            is_correct=True,
+        )
+        return histories.count()
+
+    def get_player_solved(contest: Contest, player: Player):
+        """プレイヤーが解いた問題を返す"""
+        histories = History.objects.filter(
+            contest=contest,
+            player=player,
+            is_correct=True,
+        )
+        return histories
