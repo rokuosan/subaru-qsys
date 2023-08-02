@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.views import LoginView, LogoutView
-from django.urls import path
+from django.urls import include, path
 
 from .views.manager_team import manager_team
 from .views.result import result
@@ -43,6 +43,9 @@ urlpatterns = [
     path("manager/ctf/", manager_ctf, name="manager_ctf"),
     path("manager/team/", manager_team, name="manager_team"),
     path("answer-history/", answer_history, name="answer_history"),
+
+    # CTF
+    path("ctf/", include("ctf.urls")),
 ]
 
 if settings.DEBUG:
