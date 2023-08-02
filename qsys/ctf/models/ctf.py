@@ -29,11 +29,9 @@ class CTF(models.Model, ExportModelOperationsMixin("ctf")):
     name = models.CharField(max_length=255, help_text="CTF名", unique=True)
     description = models.TextField(help_text="紹介文", blank=True, default="")
 
-    start_at = models.DateTimeField(
-        help_text="開始日時", default=timezone.now().replace(microsecond=0)
-    )
+    start_at = models.DateTimeField(help_text="開始日時", default=timezone.now)
     end_at = models.DateTimeField(
-        help_text="終了日時", default=timezone.now()+timezone.timedelta(hours=2)
+        help_text="終了日時", default=timezone.now() + timezone.timedelta(hours=2)
     )
 
     status = models.CharField(
@@ -92,4 +90,3 @@ class CTF(models.Model, ExportModelOperationsMixin("ctf")):
     def is_started_on_time(self):
         """開催期間を基準にCTFが開催しているかどうかを返す"""
         return self.start_at < timezone.now()
-
