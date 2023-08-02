@@ -6,6 +6,9 @@ from .player import Player
 
 class History(models.Model, ExportModelOperationsMixin("history")):
     """CTF 回答履歴"""
+    contest = models.ForeignKey(
+        "Contest", on_delete=models.CASCADE, help_text="CTFコンテスト"
+    )
     question = models.ForeignKey(
         "Question", on_delete=models.CASCADE, help_text="問題"
     )
