@@ -1,4 +1,3 @@
-from django.db.models import Q
 from django.utils import timezone
 from django.http import HttpRequest
 from django.contrib import messages
@@ -75,9 +74,7 @@ def manager_ctf(request: HttpRequest):
             contest_id = request.POST.get("id")
             contest = Contest.objects.get(pk=contest_id)
 
-            active_contests = Contest.objects.filter(
-                Q(status="running") | Q(status="paused")
-            )
+            active_contests = Contest.get_active_contests()
             if active_contests.exists():
                 messages.error(
                     request, "CTFを同時開催することはできません"
