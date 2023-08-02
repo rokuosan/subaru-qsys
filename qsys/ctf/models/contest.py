@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import Q
 from django_prometheus.models import ExportModelOperationsMixin
 
 
@@ -131,3 +132,24 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
     def is_started_on_time(self):
         """開催期間を基準にコンテストが開催しているかどうかを返す"""
         return self.start_at < timezone.now()
+
+    @staticmethod
+    def get_active_contests():
+        """現在開催中(一時停止中)のコンテストを取得する"""
+        try:
+            return Contest.objects.filter(
+                Q(status="running") | Q(status="paused")
+            )
+        except Contest.DoesNotExist:
+            return None
+
+    @staticmethod
+    def get_closed_contests():
+        """終了したコンテストを取得する"""
+        try:
+            return Contest.objects.filter(
+                Q(status=Contest.Status.FINISHED)
+                | Q(status=Contest.Status.PREPARING)
+            )
+        except Contest.DoesNotExist:
+            return None
