@@ -1,0 +1,46 @@
+{% extends "ctf/base.html"%}
+{% block title%} Questions | {{contest.name}} | Q-Sys {% endblock title %}
+{% block content %}
+
+<div class="container">
+  <div class="p-lg-4">
+    <span class="lead lh-1">{{ contest.name }}</span>
+    <h2 class="fw-bolder">Questions</h2>
+    <div class="container px-md-4 py-md-3 d-flex flex-column gap-4">
+      {% for set in sets %}
+      <section id="{{ set.category.name }}" class="">
+        <h3 class="fw-bolder fst-italic">{{ set.category.name | capfirst }}</h3>
+        <div class="row pt-2 pb-4 px- d-flex">
+          {% for q in set.questions %}
+          <div class="position-static col-md-3 q-item">
+            <a href="{% url 'ctf:question_detail' contest_id=contest.id question_id=q.id %}" class="text-muted text-decoration-none">
+              <div class="bg-white shadow-sm rounded px-3 py-2 mb-2">
+                <div class="d-flex justify-content-between">
+                  <span class="fw-light">{{ q.difficulty }}</span>
+                  <div>
+                    <span class="badge bg-success">Solved</span>
+                  </div>
+                </div>
+                <h4 class="fw-bold text-truncate pt-2">{{ q.title }}</h4>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<style>
+.q-item {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.q-item:hover {
+  transform: scale(1.05);
+}
+</style>
+{% endblock content %}
