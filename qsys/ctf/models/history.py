@@ -1,6 +1,8 @@
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
+from .contest import Contest
+from .team import Team
 from .player import Player
 
 
@@ -64,3 +66,23 @@ class History(models.Model, ExportModelOperationsMixin("history")):
             is_correct=True,
         ).count()
         return count == 0
+
+    def get_team_point(contest: Contest, team: Team):
+        """チームの獲得ポイントを返す"""
+        histories = History.objects.filter(
+            contest=contest,
+            team=team,
+            is_correct=True,
+        )
+        total = sum([h.point for h in histories])
+        return total
+
+    def get_player_point(contest: Contest, player: Player):
+        """プレイヤーの獲得ポイントを返す"""
+        histories = History.objects.filter(
+            contest=contest,
+            player=player,
+            is_correct=True,
+        )
+        total = sum([h.point for h in histories])
+        return total
