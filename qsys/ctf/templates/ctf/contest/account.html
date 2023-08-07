@@ -1,0 +1,16 @@
+{% extends "ctf/base.html"%}
+{% block title%} Account | {{contest.name}} | Q-Sys {% endblock title %}
+{% block content %}
+
+<div class="container">
+  <div class="p-lg-4">
+    <div class="d-flex">
+      <div>
+        <span class="lead lh-1">{{ user.username }}</span>
+        <h2 class="fw-bolder">{{ player.name }}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
