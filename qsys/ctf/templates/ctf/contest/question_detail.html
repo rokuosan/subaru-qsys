@@ -37,11 +37,22 @@
     <!-- 回答エリア -->
     <section id="answer" class="pt-3">
       <div class="bg-white rounded p-4 shadow-sm">
-        <h4 class="fw-bolder text-muted">Your Answer</h4>
+        <div class="d-flex pb-2">
+          <h4 class="fw-bolder text-muted align-text-bottom my-auto">Your Answer</h4>
+          {% if result %}
+          <span class="alert alert-{{ result.alert_type }} py-1 ms-3 my-auto align-top" role="alert">
+            {{ result.message }}
+          </span>
+          {% else %}
+          <span class="alert alert-secondary py-1 ms-3 my-auto align-top invisible" role="alert">
+            result here
+          </span>
+          {% endif %}
+        </div>
         <form action="{% url 'ctf:question_detail' contest_id=contest.id question_id=question.id %}" method="post">
           {% csrf_token %}
           <div class="input-group">
-            <input type="text" class="form-control" name="answer" placeholder="Answer" aria-label="Answer"
+            <input type="text" class="form-control" name="answer" placeholder="flag{something}" aria-label="Answer"
               aria-describedby="answer-button">
             <button class="btn btn-outline-primary" type="submit" id="answer-button">Submit</button>
           </div>
