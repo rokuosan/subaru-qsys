@@ -20,13 +20,15 @@
       <div class="accordion accordion-flush p-3" id="accordion-{{ set.category.id }}">
         <div class="accordion-item bg-light">
           <div id="accordion-{{ set.category.id }}-h1" class="w-100 d-flex justify-content-between p-3 pt-2 pb-0">
-            <h3 class="fw-bolder fst-italic" style="border-left-style: solid;padding-left: 12px;padding-bottom: 4px;">
-              {{ set.category.name | capfirst }}
+            <h3 class="fw-bolder fst-italic d-flex align-items-center my-auto py-2" style="border-left-style: solid;padding-left: 12px;">
+              <span>{{ set.category.name | capfirst }}</span>
             </h3>
-            <button class="accordion-button position-relative right-0 rounded shadow-sm" style="width: fit-content;" type="button"
-              data-bs-toggle="collapse" data-bs-target="#accordion-{{ set.category.id }}-collapse" aria-expanded="true"
-              aria-controls="accordion-{{ set.category.id }}-collapse">
-            </button>
+            <div class="d-flex align-items-center">
+              <button class="accordion-button position-relative right-0 rounded shadow-sm" style="width: fit-content;" type="button"
+                data-bs-toggle="collapse" data-bs-target="#accordion-{{ set.category.id }}-collapse" aria-expanded="true"
+                aria-controls="accordion-{{ set.category.id }}-collapse">
+              </button>
+            </div>
           </div>
           <div id="accordion-{{ set.category.id }}-collapse" class="accordion-collapse collapse show"
             aria-labelledby="accordion-{{ set.category.id }}-h1">
