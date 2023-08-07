@@ -5,6 +5,7 @@ from ctf.views.index import index_view
 from ctf.views.manager.contest import manager_contest_view
 from ctf.views.contest.home import contest_home_view
 from ctf.views.contest.account import account_view
+from ctf.views.contest.ranking import ranking_view
 
 
 app_name = "ctf"
@@ -22,6 +23,7 @@ urlpatterns = [
         name="question_detail",
     ),
     path("<str:contest_id>/account/", account_view, name="account"),
+    path("<str:contest_id>/ranking/", ranking_view, name="ranking"),
 
     # Manager
     path("manager/contest/", manager_contest_view, name="manager_contest"),
