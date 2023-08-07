@@ -56,7 +56,7 @@ class History(models.Model, ExportModelOperationsMixin("history")):
         ALREADY_ANSWERED = "already_answered"
 
     def __str__(self):
-        return f"{self.team.name} - {self.question.title}"
+        return f"{self.contest.id}, {self.player.name}, {self.team.name}, {self.question.title}, {self.is_correct}, {self.point}"
 
     def is_first_answer_in_team(self):
         """チーム内での初回回答かどうかを返す"""
@@ -145,6 +145,15 @@ class History(models.Model, ExportModelOperationsMixin("history")):
         histories = History.objects.filter(
             contest=contest,
             player=player,
+            is_correct=True,
+        )
+        return histories
+
+    def get_team_solved(contest: Contest, team: Team):
+        """チームが解いた問題を返す"""
+        histories = History.objects.filter(
+            contest=contest,
+            team=team,
             is_correct=True,
         )
         return histories
