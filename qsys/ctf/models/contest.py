@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models import Q
 from django_prometheus.models import ExportModelOperationsMixin
 
+from .player import Player
+
 
 class Contest(models.Model, ExportModelOperationsMixin("ctf")):
     """CTF 開催情報\n
@@ -147,4 +149,11 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
                 | Q(status=Contest.Status.PREPARING)
             )
         except Contest.DoesNotExist:
+            return None
+
+    def get_team_by_player(self, player: Player):
+        """プレイヤーが所属するチームを返す"""
+        try:
+            return self.teams.get(members__id=player.id)
+        except Exception:
             return None
