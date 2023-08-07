@@ -51,12 +51,20 @@ def questions_view(request: HttpRequest, contest_id: str):
 
 @login_required
 def question_detail_view(
-    request: HttpRequest, contest_id: str, question_id: int
+    request: HttpRequest, contest_id: str, question_id: str
 ):
     """開催しているCTFで公開中の問題を表示するView"""
     contest: Contest = get_object_or_404(Contest, id=contest_id)
     question: Question = get_object_or_404(Question, id=question_id)
     ctx = {"contest": contest, "question": question}
+    try:
+        player = request.user.player
+    except Exception:
+        messages.info(request, "このコンテストに参加していません")
+        return redirect("ctf:index")
+    solved = History.get_player_solved(contest, player)
+    if question.id in solved.values_list("question", flat=True):
+        ctx["solved"] = True
 
     # Checks
     if not contest.is_open:

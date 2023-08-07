@@ -1,0 +1,54 @@
+{% extends "ctf/base.html"%}
+{% block title%} {{question.title}} | {{contest.name}} | Q-Sys {% endblock title %}
+{% block content %}
+
+<div class="container">
+  <div class="p-lg-4">
+    <!-- 問題情報 -->
+    <section id="question_title">
+      <div class="d-flex gap-3">
+        <a href="{% url 'ctf:questions' contest.id %}" class="text-decoration-none">
+          {% include 'app/icons/left-short.svg' %}
+          <span>Questions</span>
+        </a>
+        <span class="lead lh-1">{{ question.category }} / {{ question.difficulty }} / {{ question.point }}pts</span>
+      </div>
+      <div class="d-flex">
+        <h2 class="fw-bolder">
+          {{ question.title }}
+        </h2>
+        {% if solved %}
+        <div class="ms-3 fst-normal d-flex align-items-center fs-4">
+          <span class="badge bg-success ms-3 fs-6" style="width: fit-content; height: fit-content;">
+            Solved
+          </span>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- 問題本文 -->
+    <section id="question_description" class="pt-3">
+      <div class="bg-white rounded p-4 pt-5 shadow-sm">
+        <p class="fs-5">{{ question.description | safe | linebreaksbr }}</p>
+      </div>
+    </section>
+
+    <!-- 回答エリア -->
+    <section id="answer" class="pt-3">
+      <div class="bg-white rounded p-4 shadow-sm">
+        <h4 class="fw-bolder text-muted">Your Answer</h4>
+        <form action="{% url 'ctf:question_detail' contest_id=contest.id question_id=question.id %}" method="post">
+          {% csrf_token %}
+          <div class="input-group">
+            <input type="text" class="form-control" name="answer" placeholder="Answer" aria-label="Answer"
+              aria-describedby="answer-button">
+            <button class="btn btn-outline-primary" type="submit" id="answer-button">Submit</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
+
+{% endblock content %}
