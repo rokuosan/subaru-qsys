@@ -111,7 +111,7 @@ def question_detail_view(
         team = contest.get_team_by_player(player)
 
         question_pts = 0
-        result_type = History.ResultType.PENDING
+        result_type = History.ResultType.INCORRECT
         if re.sub(r"\s", "", question.flag) == answer:
             hist = History.objects.filter(
                 contest=contest, question=question, team=team, is_correct=True
