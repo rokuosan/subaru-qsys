@@ -110,40 +110,32 @@ def question_detail_view(
 
         team = contest.get_team_by_player(player)
 
+        question_pts = 0
+        result_type = History.ResultType.PENDING
         if re.sub(r"\s", "", question.flag) == answer:
-            question_pts = 0
             hist = History.objects.filter(
                 contest=contest, question=question, team=team, is_correct=True
             )
             if hist.count() == 0:
                 question_pts = question.point
                 set_result("success", "正解！")
+                result_type = History.ResultType.CORRECT
             else:
+                result_type = History.ResultType.SOLVED_BY_TEAM
                 set_result("success", "正解！チームが解答済みのため点数は加算されません。")
-
-            # 正解履歴を保存
-            History.objects.create(
-                contest=contest,
-                team=team,
-                player=player,
-                question=question,
-                point=question_pts,
-                is_correct=True,
-            )
-
-            return redirect("ctf:question_detail", contest_id, question_id)
         else:
-            # 正解履歴を保存
-            History.objects.create(
-                contest=contest,
-                team=team,
-                player=player,
-                question=question,
-                point=0,
-                is_correct=False,
-            )
-
             set_result("warning", "不正解...")
-            return redirect("ctf:question_detail", contest_id, question_id)
 
+        History.objects.create(
+            contest=contest,
+            team=team,
+            player=player,
+            question=question,
+            point=question_pts,
+            is_correct=question.flag == answer,
+            answer=answer,
+            result=result_type[0]
+        )
+
+        return redirect("ctf:question_detail", contest_id, question_id)
     return render(request, "ctf/contest/questions.html", ctx)

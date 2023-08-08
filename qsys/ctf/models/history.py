@@ -34,7 +34,7 @@ class History(models.Model, ExportModelOperationsMixin("history")):
             ("pending", "未判定"),
             ("flag_format_error", "フラグ形式エラー"),
             ("time_limit_exceeded", "時間切れ"),
-            ("already_answered", "回答済み"),
+            ("answered_by_team", "チームが解答済み"),
         ),
     )
     created_at = models.DateTimeField(auto_now_add=True, help_text="回答日時")
@@ -46,12 +46,28 @@ class History(models.Model, ExportModelOperationsMixin("history")):
     class ResultType:
         """判定結果の選択肢"""
 
-        CORRECT = "correct"
-        INCORRECT = "incorrect"
-        PENDING = "pending"
-        FLAG_FORMAT_ERROR = "flag_format_error"
-        TIME_LIMIT_EXCEEDED = "time_limit_exceeded"
-        ALREADY_ANSWERED = "already_answered"
+        CORRECT = ("correct", "正解")
+        INCORRECT = ("incorrect", "不正解")
+        PENDING = ("pending", "未判定")
+        FLAG_FORMAT_ERROR = ("flag_format_error", "フラグ形式エラー")
+        TIME_LIMIT_EXCEEDED = ("time_limit_exceeded", "時間切れ")
+        ANSWERED_BY_TEAM = ("answered_by_team", "チームが解答済み")
+
+        __choices__ = (
+            CORRECT,
+            INCORRECT,
+            PENDING,
+            FLAG_FORMAT_ERROR,
+            TIME_LIMIT_EXCEEDED,
+            ANSWERED_BY_TEAM,
+        )
+
+        def get_name(id):
+            """判定結果の名前を返す"""
+            for r in History.ResultType.__choices__:
+                if r[0] == id:
+                    return r[1]
+            return None
 
     def __str__(self):
         return f"{self.contest.id}, {self.player.name}, {self.team.name}, {self.question.title}, {self.is_correct}, {self.point}"
