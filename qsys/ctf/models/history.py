@@ -21,9 +21,7 @@ class History(models.Model, ExportModelOperationsMixin("history")):
     )
     team = models.ForeignKey("Team", on_delete=models.CASCADE, help_text="チーム")
     is_correct = models.BooleanField(help_text="正解したかどうか", default=False)
-    answer = models.CharField(
-        max_length=255, help_text="回答内容", blank=True, default=""
-    )
+    answer = models.CharField(max_length=255, help_text="回答内容")
     point = models.PositiveIntegerField(help_text="獲得点数", default=0)
     result = models.CharField(
         max_length=255,
