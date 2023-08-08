@@ -41,4 +41,15 @@ def account_view(request: HttpRequest, contest_id: str):
         h.reason = History.ResultType.get_name(h.result)
     ctx["history"] = history
 
+    # 点数と正答率の計算
+    p_point = History.get_player_point(contest, player)
+    p_acc = History.get_player_accuracy(contest, player)
+    t_point = History.get_team_point(contest, team)
+    t_acc = History.get_team_accuracy(contest, team)
+
+    ctx["player_point"] = p_point
+    ctx["player_accuracy"] = round(p_acc, 2)
+    ctx["team_point"] = t_point
+    ctx["team_accuracy"] = round(t_acc, 2)
+
     return render(request, "ctf/contest/account.html", ctx)
