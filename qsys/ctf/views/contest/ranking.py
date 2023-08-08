@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 
 from ctf.models.contest import Contest
+from ctf.utils.conutils import ConUtils
 
 
 @login_required
@@ -31,5 +32,11 @@ def ranking_view(request: HttpRequest, contest_id: str):
     ctx["user"] = request.user
     ctx["player"] = player
     ctx["team"] = team
+
+    # ランキング
+    if contest.is_player_ranking_public or request.user.is_admin:
+        ctx["player_ranking"] = ConUtils(contest).make_player_ranking()
+    if contest.is_team_ranking_public or request.user.is_admin:
+        ctx["team_ranking"] = ConUtils(contest).make_team_ranking()
 
     return render(request, "ctf/contest/ranking.html", ctx)

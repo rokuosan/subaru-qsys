@@ -4,11 +4,29 @@
 
 <div class="container" style="margin-top: 100px;">
   <div class="p-lg-4">
+
     <div class="d-flex">
       <div>
         <span class="lead lh-1">{{ contest.name }}</span>
         <h2 class="fw-bolder">Ranking</h2>
       </div>
+    </div>
+
+    <div>
+      <ul>
+        {% for team in team_ranking %}
+        <li>
+          {{ team.rank }}, {{ team.name }}, {{ team.point }}
+        </li>
+        {% endfor %}
+      </ul>
+      <ul>
+        {% for team in player_ranking %}
+        <li>
+          {{ team.rank }}, {{ team.name }}, {{ team.point }}
+        </li>
+        {% endfor %}
+      </ul>
     </div>
   </div>
 </div>
