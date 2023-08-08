@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 
 from ctf.models.contest import Contest
+from ctf.models.history import History
 
 
 @login_required
@@ -31,5 +32,11 @@ def account_view(request: HttpRequest, contest_id: str):
     ctx["user"] = request.user
     ctx["player"] = player
     ctx["team"] = team
+
+    # 回答履歴の取得
+    history = History.objects.filter(player=player, contest=contest).order_by(
+        "-created_at"
+    )
+    ctx["history"] = history
 
     return render(request, "ctf/contest/account.html", ctx)
