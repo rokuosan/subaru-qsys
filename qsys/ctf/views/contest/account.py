@@ -37,6 +37,8 @@ def account_view(request: HttpRequest, contest_id: str):
     history = History.objects.filter(player=player, contest=contest).order_by(
         "-created_at"
     )
+    for h in history:
+        h.reason = History.ResultType.get_name(h.result)
     ctx["history"] = history
 
     return render(request, "ctf/contest/account.html", ctx)
