@@ -145,10 +145,13 @@ class ContestUtils:
         Returns:
             list[History]: 回答履歴
         """
-        return list(History.objects.filter(
+        history =  list(History.objects.filter(
             contest=self.contest,
             player=player,
         ).order_by("-created_at"))
+        for h in history:
+            h.reason = History.ResultType.get_name(h.result)
+        return history
 
     def get_solved_questions(self, target: Player | Team) -> list[Question]:
         """解答した問題を返す
