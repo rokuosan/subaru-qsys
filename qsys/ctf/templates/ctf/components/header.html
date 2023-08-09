@@ -34,11 +34,11 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <h6 class="dropdown-header lead">Information</h6>
+              <h6 class="dropdown-header lead">Monitoring</h6>
             </li>
-            <li><a class="dropdown-item" href="#">
+            <li><a class="dropdown-item" href="#" id="a-monitor-stats">
                 {% include 'icons/chart.svg' %}
-                <span class="ms-1">Result</span>
+                <span class="ms-1">Stats</span>
               </a></li>
             <li><a class="dropdown-item" href="#">
                 {% include 'icons/clock.svg' %}
@@ -113,6 +113,7 @@
     const account = document.getElementById('a-account');
     const ranking = document.getElementById('a-ranking');
     const manager_team = document.getElementById('a-manager-team');
+    const monitor_stats = document.getElementById('a-monitor-stats');
 
     if (!contest_id || contest_id == 'manager') {
       dashboard.href = '/ctf/';
@@ -130,6 +131,7 @@
     account.href = `/ctf/${contest_id}/account/`;
     ranking.href = `/ctf/${contest_id}/ranking/`;
     manager_team.href = `/ctf/${contest_id}/manager/team/`;
+    monitor_stats.href = `/ctf/${contest_id}/monitor/stats/`;
   })
 
 
