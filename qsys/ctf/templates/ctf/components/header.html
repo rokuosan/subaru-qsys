@@ -40,7 +40,7 @@
                 {% include 'icons/chart.svg' %}
                 <span class="ms-1">Stats</span>
               </a></li>
-            <li><a class="dropdown-item" href="#">
+            <li><a class="dropdown-item" href="#" id="a-monitor-answer">
                 {% include 'icons/clock.svg' %}
                 <span class="ms-1">Answer History</span>
               </a></li>
@@ -114,6 +114,7 @@
     const ranking = document.getElementById('a-ranking');
     const manager_team = document.getElementById('a-manager-team');
     const monitor_stats = document.getElementById('a-monitor-stats');
+    const monitor_answer = document.getElementById('a-monitor-answer');
 
     if (!contest_id || contest_id == 'manager') {
       dashboard.href = '/ctf/';
@@ -132,6 +133,7 @@
     ranking.href = `/ctf/${contest_id}/ranking/`;
     manager_team.href = `/ctf/${contest_id}/manager/team/`;
     monitor_stats.href = `/ctf/${contest_id}/monitor/stats/`;
+    monitor_answer.href = `/ctf/${contest_id}/monitor/answer/`;
   })
 
 

@@ -8,6 +8,7 @@ from ctf.views.contest.home import contest_home_view
 from ctf.views.contest.account import account_view
 from ctf.views.contest.ranking import ranking_view
 from ctf.views.contest.monitor.stats import stats_view
+from ctf.views.contest.monitor.answer import answer_view
 
 
 app_name = "ctf"
@@ -39,4 +40,5 @@ urlpatterns = [
         stats_view,
         name="stats",
     ),
+    path("<str:contest_id>/monitor/answer/", answer_view, name="answer")
 ]
