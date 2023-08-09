@@ -64,12 +64,16 @@ class ContestUtils:
         except Exception:
             return None
 
-    def get_players(self) -> list[Player]:
+    def get_players(self, all: bool = False) -> list[Player]:
         """コンテストに参加しているプレイヤーをリストで返す
 
         Returns:
             list[Player]: 参加しているプレイヤー
+            all (bool): Trueの場合は全プレイヤーを返す
         """
+        if all:
+            return Player.objects.all()
+
         teams = self.contest.teams.all()
 
         players = []
