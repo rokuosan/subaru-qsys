@@ -58,7 +58,7 @@
                 {% include 'icons/person-add.svg' %}
                 <span class="ms-1">User Manager</span>
               </a></li>
-            <li><a class="dropdown-item" href="#">
+            <li><a class="dropdown-item" href="{% url 'ctf:manager_team' %}">
                 {% include 'icons/people.svg' %}
                 <span class="ms-1">Team Manager</span>
               </a></li>
@@ -113,7 +113,7 @@
     const account = document.getElementById('a-account');
     const ranking = document.getElementById('a-ranking');
 
-    if (!contest_id) {
+    if (!contest_id || contest_id == 'manager') {
       dashboard.href = '/ctf/';
 
       questions.hidden = true;
