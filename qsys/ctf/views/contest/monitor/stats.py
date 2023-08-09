@@ -1,9 +1,12 @@
 from django.http import HttpRequest
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+
+from ctf.models.contest import Contest
 
 
 @login_required
 def stats_view(request: HttpRequest, contest_id: str):
-    ctx = {}
+    contest = get_object_or_404(Contest, pk=contest_id)
+    ctx = {"contest": contest}
     return render(request, 'ctf/contest/monitor/stats.html', ctx)
