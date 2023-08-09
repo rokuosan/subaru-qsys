@@ -136,6 +136,20 @@ class ContestUtils:
         else:
             raise TypeError
 
+    def get_player_history(self, player: Player) -> list[History]:
+        """プレイヤーの回答履歴を返す
+
+        Args:
+            player (Player): 回答履歴を取得したいプレイヤー
+
+        Returns:
+            list[History]: 回答履歴
+        """
+        return list(History.objects.filter(
+            contest=self.contest,
+            player=player,
+        ).order_by("-created_at"))
+
     def get_solved_questions(self, target: Player | Team) -> list[Question]:
         """解答した問題を返す
 
