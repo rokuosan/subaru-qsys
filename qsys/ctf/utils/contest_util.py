@@ -1,3 +1,7 @@
+from typing import Callable
+from django.contrib import messages
+from django.http import HttpRequest
+from django.shortcuts import redirect
 from ctf.models.contest import Contest
 from ctf.models.team import Team
 from ctf.models.player import Player
@@ -10,6 +14,26 @@ class ContestUtils:
 
     def __init__(self, contest: Contest) -> None:
         self.contest = contest
+
+    def get_page_protection(
+        self, request: HttpRequest
+    ) -> (dict, (Callable[[], None] | None, list, dict)):
+        ctx = {"contest": self.contest}
+
+        if not self.contest.is_open:
+            messages.info(request, "このコンテストは非公開です")
+            if not request.user.is_admin:
+                return (ctx, (redirect, ["ctf:index"], {}))
+
+        if not self.contest.status != Contest.Status.RUNNING:
+            messages.info(request, "このコンテストは開催中ではありません")
+            if request.user.is_admin:
+                return (
+                    ctx,
+                    (redirect, ["ctf:home"], {"contest_id": self.contest.id}),
+                )
+
+        return (ctx, None)
 
     def get_team_by_player(self, player) -> Team | None:
         """プレイヤーが所属するチームを返す
