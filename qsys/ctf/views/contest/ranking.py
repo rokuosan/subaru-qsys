@@ -26,7 +26,7 @@ def ranking_view(request: HttpRequest, contest_id: str):
 
     # ランキング
     if contest.is_player_ranking_public or request.user.is_admin:
-        ctx["player_ranking"] = cu.make_player_ranking()
+        ctx["player_ranking"] = cu.make_player_ranking()[:10]
     if contest.is_team_ranking_public or request.user.is_admin:
         ctx["team_ranking"] = cu.make_team_ranking()
 

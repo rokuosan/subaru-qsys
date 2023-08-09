@@ -12,22 +12,66 @@
       </div>
     </div>
 
-    <div>
-      <ul>
-        {% for team in team_ranking %}
-        <li>
-          {{ team.rank }}, {{ team.name }}, {{ team.point }}
-        </li>
-        {% endfor %}
-      </ul>
-      <ul>
-        {% for team in player_ranking %}
-        <li>
-          {{ team.rank }}, {{ team.name }}, {{ team.point }}
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
+    <section class="row justify-content-around">
+      <section id="player_point_ranking" class="pt-4 col-md-6">
+        <div class="container">
+          <div class="p-lg-4">
+            <div>
+              <h3 class="bg-black px-3 text-white" style="width: fit-content;">Player Ranking</h3>
+            </div>
+            <table class="table table-striped table-hover">
+              <caption>Show top 10 players</caption>
+              <thead>
+                <tr class="row">
+                  <th scope="col" class="col-1 text-center">#</th>
+                  <th scope="col" class="col">Player name</th>
+                  <th scope="col" class="col">Point</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for player in player_ranking %}
+                <tr class="row">
+                  <th scope="row" class="col-1 text-center"> {{ player.rank }} </th>
+                  <td class="col">{{ player.name }}</td>
+                  <td class="col">{{ player.point }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="team_point_ranking" class="pt-4 col-md-6">
+        <div class="container">
+          <div class="p-lg-4">
+            <div>
+              <h3 class="bg-black px-3 text-white" style="width: fit-content;">Team Ranking</h3>
+            </div>
+            <table class="table table-striped table-hover">
+              <caption></caption>
+              <thead>
+                <tr class="row">
+                  <th scope="col" class="col-1 text-center">#</th>
+                  <th scope="col" class="col">Team name</th>
+                  <th scope="col" class="col">Point</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for team in team_ranking %}
+                <tr class="row">
+                  <th scope="row" class="col-1 text-center"> {{ team.rank }} </th>
+                  <td class="col">{{ team.name }}</td>
+                  <td class="col">{{ team.point }} pts</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </section>
+
   </div>
 </div>
 
