@@ -50,6 +50,9 @@ class ContestUtils:
         except Exception:
             return None
 
+    def get_history(self) -> list[History]:
+        return History.objects.filter(contest=self.contest)
+
     def get_team_by_player(self, player) -> Team | None:
         """プレイヤーが所属するチームを返す
 
