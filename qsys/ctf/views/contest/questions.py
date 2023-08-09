@@ -7,28 +7,27 @@ from django.contrib import messages
 from ctf.models.contest import Contest
 from ctf.models.question import Category, Question
 from ctf.models.history import History
+from ctf.utils.contest_util import ContestUtils
 
 
 @login_required
 def questions_view(request: HttpRequest, contest_id: str):
     """開催しているCTFで公開中の問題を表示するView"""
     contest: Contest = get_object_or_404(Contest, id=contest_id)
-    ctx = {"contest": contest}
-    if not contest.is_open:
-        messages.info(request, "このコンテストは非公開です")
-        if not request.user.is_admin:
-            return redirect("ctf:index")
+    cu = ContestUtils(contest)
 
-    if contest.status != Contest.Status.RUNNING:
-        messages.info(request, "このコンテストは開催中ではありません")
-        if not request.user.is_admin:
-            return redirect("ctf:index")
+    # 公開設定
+    fun = cu.get_page_protection(request)
+    if fun is not None:
+        return fun[0](*fun[1], **fun[2])
 
-    try:
-        player = request.user.player
-    except Exception:
+    # コンテキストの初期化
+    ctx = cu.set_initial_context(request)
+    if ctx["player"] is None:
         messages.info(request, "このコンテストに参加していません")
         return redirect("ctf:index")
+
+    player = ctx["player"]
 
     sets = []
     cats = Category.objects.all()
