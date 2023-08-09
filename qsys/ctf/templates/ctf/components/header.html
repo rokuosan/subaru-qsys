@@ -58,7 +58,7 @@
                 {% include 'icons/person-add.svg' %}
                 <span class="ms-1">User Manager</span>
               </a></li>
-            <li><a class="dropdown-item" href="{% url 'ctf:manager_team' %}">
+            <li><a class="dropdown-item" href="#" id="a-manager-team">
                 {% include 'icons/people.svg' %}
                 <span class="ms-1">Team Manager</span>
               </a></li>
@@ -112,6 +112,7 @@
     const questions = document.getElementById('a-questions');
     const account = document.getElementById('a-account');
     const ranking = document.getElementById('a-ranking');
+    const manager_team = document.getElementById('a-manager-team');
 
     if (!contest_id || contest_id == 'manager') {
       dashboard.href = '/ctf/';
@@ -119,6 +120,7 @@
       questions.hidden = true;
       account.hidden = true;
       ranking.hidden = true;
+      manager_team.hidden = true;
 
       return;
     }
@@ -127,6 +129,7 @@
     questions.href = `/ctf/${contest_id}/questions/`;
     account.href = `/ctf/${contest_id}/account/`;
     ranking.href = `/ctf/${contest_id}/ranking/`;
+    manager_team.href = `/ctf/${contest_id}/manager/team/`;
   })
 
 
