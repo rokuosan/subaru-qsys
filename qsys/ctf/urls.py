@@ -25,8 +25,11 @@ urlpatterns = [
     ),
     path("<str:contest_id>/account/", account_view, name="account"),
     path("<str:contest_id>/ranking/", ranking_view, name="ranking"),
-
     # Manager
     path("manager/contest/", manager_contest_view, name="manager_contest"),
-    path("<str:contest_id>/manager/team/", manager_team_view, name="manager_team"),
+    path(
+        "<str:contest_id>/manager/team/",
+        manager_team_view,
+        name="manager_team",
+    ),
 ]
