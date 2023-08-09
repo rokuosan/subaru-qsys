@@ -145,7 +145,7 @@ class ContestUtils:
         Returns:
             list[History]: 回答履歴
         """
-        history =  list(History.objects.filter(
+        history = list(History.objects.filter(
             contest=self.contest,
             player=player,
         ).order_by("-created_at"))
