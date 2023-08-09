@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 
 from ctf.models.contest import Contest
-from qsys.ctf.utils.contest_util import ContestUtils
+from ctf.utils.contest_util import ContestUtils
 
 
 @login_required
@@ -14,14 +14,9 @@ def ranking_view(request: HttpRequest, contest_id: str):
     cu = ContestUtils(contest)
 
     # 公開設定
-    if not contest.is_open:
-        messages.info(request, "このコンテストは非公開です")
-        if not request.user.is_admin:
-            return redirect("ctf:index")
-    if contest.status != Contest.Status.RUNNING:
-        messages.info(request, "このコンテストは開催中ではありません")
-        if not request.user.is_admin:
-            return redirect("ctf:index")
+    (ctx, fun) = cu.get_page_protection(request)
+    if fun is not None:
+        return fun[0](*fun[1], **fun[2])
 
     # 参加者情報
     try:
