@@ -10,7 +10,7 @@
   <div>
     <div class="row justify-content-center">
       <div class="col-md-4 mb-2">
-        <div class="input-group" style="z-index: -1000;">
+        <div class="input-group">
           <span class="input-group-text">Contest</span>
           <select id="contest-select" class="form-select" aria-label="Contest-Select" name="contest_id">
             {% for c in contests %}
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="col-md-6">
-        <div class="input-group" style="z-index: -1000;">
+        <div class="input-group">
           <span class="input-group-text">Team</span>
           <select id="team-select" class="form-select" aria-label="Team-Select" name="team_id">
             {% for team in all_teams %}
@@ -43,7 +43,7 @@
       <div class="col-lg-5">
         <h4>User List</h4>
         {% for p in players %}
-        <form class="input-group mb-2" style="z-index: -1000;"
+        <form class="input-group mb-2"
           action="{% url 'ctf:manager_team' %}?contest_id={{active_contest.id}}&team_id={{active_team.id}}" method="post">
           {% csrf_token %}
           <input type="hidden" name="type" value="add">
@@ -67,7 +67,7 @@
         <h4>Team Member List</h4>
 
         {% for member in team_members %}
-        <form class="input-group mb-2" style="z-index: -1000;"
+        <form class="input-group mb-2"
           action="{% url 'ctf:manager_team' %}?contest_id={{active_contest.id}}&team_id={{active_team.id}}" method="post">
           {% csrf_token %}
           <input type="hidden" name="type" value="remove">
