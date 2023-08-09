@@ -25,9 +25,9 @@ class ContestUtils:
             if not request.user.is_admin:
                 return (ctx, (redirect, ["ctf:index"], {}))
 
-        if not self.contest.status != Contest.Status.RUNNING:
+        if self.contest.status != Contest.Status.RUNNING:
             messages.info(request, "このコンテストは開催中ではありません")
-            if request.user.is_admin:
+            if not request.user.is_admin:
                 return (
                     ctx,
                     (redirect, ["ctf:home"], {"contest_id": self.contest.id}),
