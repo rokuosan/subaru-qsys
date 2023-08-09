@@ -6,6 +6,8 @@ from ctf.models.question import Question
 
 
 class ContestUtils:
+    """コンテストに関するユーティリティクラス"""
+
     def __init__(self, contest: Contest) -> None:
         self.contest = contest
 
