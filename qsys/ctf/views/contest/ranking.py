@@ -4,13 +4,14 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 
 from ctf.models.contest import Contest
-from ctf.utils.conutils import ConUtils
+from qsys.ctf.utils.contest_util import ContestUtils
 
 
 @login_required
 def ranking_view(request: HttpRequest, contest_id: str):
     contest: Contest = get_object_or_404(Contest, id=contest_id)
     ctx = {"contest": contest}
+    cu = ContestUtils(contest)
 
     # 公開設定
     if not contest.is_open:
@@ -35,8 +36,8 @@ def ranking_view(request: HttpRequest, contest_id: str):
 
     # ランキング
     if contest.is_player_ranking_public or request.user.is_admin:
-        ctx["player_ranking"] = ConUtils(contest).make_player_ranking()
+        ctx["player_ranking"] = cu.make_player_ranking()
     if contest.is_team_ranking_public or request.user.is_admin:
-        ctx["team_ranking"] = ConUtils(contest).make_team_ranking()
+        ctx["team_ranking"] = cu.make_team_ranking()
 
     return render(request, "ctf/contest/ranking.html", ctx)
