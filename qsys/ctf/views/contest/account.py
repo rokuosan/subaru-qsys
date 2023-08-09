@@ -4,7 +4,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 
 from ctf.models.contest import Contest
-from ctf.models.history import History
 from ctf.utils.contest_util import ContestUtils
 
 
@@ -28,22 +27,18 @@ def account_view(request: HttpRequest, contest_id: str):
     team = ctx["team"]
 
     # 回答履歴の取得
-    history = History.objects.filter(player=player, contest=contest).order_by(
-        "-created_at"
-    )
-    for h in history:
-        h.reason = History.ResultType.get_name(h.result)
+    history = cu.get_player_history(player)
     ctx["history"] = history
 
     # 点数と正答率の計算
-    p_point = History.get_player_point(contest, player)
-    p_acc = History.get_player_accuracy(contest, player)
-    t_point = History.get_team_point(contest, team)
-    t_acc = History.get_team_accuracy(contest, team)
+    p_point = cu.get_point(player)
+    p_acc = cu.get_accuracy(player)
+    t_point = cu.get_point(team)
+    t_acc = cu.get_accuracy(team)
 
     ctx["player_point"] = p_point
-    ctx["player_accuracy"] = round(p_acc, 2)
+    ctx["player_accuracy"] = p_acc
     ctx["team_point"] = t_point
-    ctx["team_accuracy"] = round(t_acc, 2)
+    ctx["team_accuracy"] = t_acc
 
     return render(request, "ctf/contest/account.html", ctx)
