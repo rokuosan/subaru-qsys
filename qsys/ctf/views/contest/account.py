@@ -33,8 +33,11 @@ def account_view(request: HttpRequest, contest_id: str):
     # 点数と正答率の計算
     p_point = cu.get_point(player)
     p_acc = cu.get_accuracy(player)
-    t_point = cu.get_point(team)
-    t_acc = cu.get_accuracy(team)
+    t_point = "-"
+    t_acc = "-"
+    if team is not None:
+        t_point = cu.get_point(team)
+        t_acc = cu.get_accuracy(team)
 
     ctx["player_point"] = p_point
     ctx["player_accuracy"] = p_acc

@@ -28,6 +28,9 @@ def questions_view(request: HttpRequest, contest_id: str):
         return redirect("ctf:index")
 
     player = ctx["player"]
+    if cu.get_team_by_player(player) is None:
+        messages.info(request, "チームに所属していません")
+        return redirect("ctf:home", contest_id)
 
     sets = []
     cats = Category.objects.all()
@@ -67,6 +70,10 @@ def question_detail_view(
     if question in solved:
         ctx["solved"] = True
 
+    if cu.get_team_by_player(player) is None:
+        messages.info(request, "チームに所属していません")
+        return redirect("ctf:home", contest_id)
+
     # Checks
     if not contest.is_open:
         messages.info(request, "このコンテストは非公開です")
@@ -104,7 +111,7 @@ def question_detail_view(
             }
 
         # 回答済み
-        if question.id in solved.values_list("question", flat=True):
+        if question in solved:
             set_result("warning", "既に回答済みです。")
             return redirect("ctf:question_detail", contest_id, question_id)
 
