@@ -17,23 +17,22 @@ class ContestUtils:
 
     def get_page_protection(
         self, request: HttpRequest
-    ) -> (dict, (Callable[[], None] | None, list, dict)):
-        ctx = {"contest": self.contest}
-
+    ) -> (Callable[[], None] | None, list, dict):
         if not self.contest.is_open:
             messages.info(request, "このコンテストは非公開です")
             if not request.user.is_admin:
-                return (ctx, (redirect, ["ctf:index"], {}))
+                return (redirect, ["ctf:index"], {})
 
         if self.contest.status != Contest.Status.RUNNING:
             messages.info(request, "このコンテストは開催中ではありません")
             if not request.user.is_admin:
                 return (
-                    ctx,
-                    (redirect, ["ctf:home"], {"contest_id": self.contest.id}),
+                    redirect,
+                    ["ctf:home"],
+                    {"contest_id": self.contest.id},
                 )
 
-        return (ctx, None)
+        return None
 
     def get_team_by_player(self, player) -> Team | None:
         """プレイヤーが所属するチームを返す

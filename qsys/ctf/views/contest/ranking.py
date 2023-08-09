@@ -14,7 +14,7 @@ def ranking_view(request: HttpRequest, contest_id: str):
     cu = ContestUtils(contest)
 
     # 公開設定
-    (ctx, fun) = cu.get_page_protection(request)
+    fun = cu.get_page_protection(request)
     if fun is not None:
         return fun[0](*fun[1], **fun[2])
 
