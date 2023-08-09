@@ -2,6 +2,7 @@ from typing import Callable
 from django.contrib import messages
 from django.http import HttpRequest
 from django.shortcuts import redirect
+from app.models.app_user import AppUser
 from ctf.models.contest import Contest
 from ctf.models.team import Team
 from ctf.models.player import Player
@@ -33,6 +34,21 @@ class ContestUtils:
                 )
 
         return None
+
+    def set_initial_context(self, request: HttpRequest) -> dict:
+        ctx = {"contest": self.contest}
+        player = self.get_player(request.user)
+        team = self.get_team_by_player(player)
+        ctx["player"] = player
+        ctx["team"] = team
+
+        return ctx
+
+    def get_player(self, user: AppUser) -> Player | None:
+        try:
+            return user.player
+        except Exception:
+            return None
 
     def get_team_by_player(self, player) -> Team | None:
         """プレイヤーが所属するチームを返す
