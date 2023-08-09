@@ -19,15 +19,10 @@ def ranking_view(request: HttpRequest, contest_id: str):
         return fun[0](*fun[1], **fun[2])
 
     # 参加者情報
-    try:
-        player = request.user.player
-    except Exception:
+    ctx = cu.set_initial_context(request)
+    if ctx["player"] is None:
         messages.info(request, "このコンテストに参加していません")
         return redirect("ctf:index")
-    team = contest.get_team_by_player(player)
-    ctx["user"] = request.user
-    ctx["player"] = player
-    ctx["team"] = team
 
     # ランキング
     if contest.is_player_ranking_public or request.user.is_admin:
