@@ -31,12 +31,12 @@ def questions_view(request: HttpRequest, contest_id: str):
 
     sets = []
     cats = Category.objects.all()
+    solved = cu.get_solved_questions(player)
     for c in cats:
         qs = c.questions.filter(is_open=True).order_by("point")
         if qs:
-            solved = History.get_player_solved(contest, player)
             for q in qs:
-                if q.id in solved.values_list("question", flat=True):
+                if q in solved:
                     q.solved = True
                 else:
                     q.solved = False
@@ -44,7 +44,7 @@ def questions_view(request: HttpRequest, contest_id: str):
 
     ctx["sets"] = sets
     ctx["total"] = sum([len(s["questions"]) for s in sets])
-    ctx["solved"] = History.get_player_solved_count(contest, player)
+    ctx["solved"] = len(solved)
 
     return render(request, "ctf/contest/questions.html", ctx)
 
@@ -57,13 +57,14 @@ def question_detail_view(
     contest: Contest = get_object_or_404(Contest, id=contest_id)
     question: Question = get_object_or_404(Question, id=question_id)
     ctx = {"contest": contest, "question": question}
+    cu = ContestUtils(contest)
     try:
         player = request.user.player
     except Exception:
         messages.info(request, "このコンテストに参加していません")
         return redirect("ctf:index")
-    solved = History.get_player_solved(contest, player)
-    if question.id in solved.values_list("question", flat=True):
+    solved = cu.get_solved_questions(player)
+    if question in solved:
         ctx["solved"] = True
 
     # Checks
