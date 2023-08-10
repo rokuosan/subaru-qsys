@@ -25,5 +25,9 @@ def manager_contest_view(request: HttpRequest, contest_id: str):
     if ctx["player"] is None:
         messages.info(request, "このコンテストに参加していません")
         return redirect("ctf:index")
+    ctx["msg"] = (
+        "このページでは、コンテストに関する情報を確認・編集することができます。"
+        + "プレイヤー・チーム・問題などの追加・編集・削除については各マネージャーにて行ってください。"
+    )
 
     return render(request, "ctf/contest/manager/contest.html", ctx)
