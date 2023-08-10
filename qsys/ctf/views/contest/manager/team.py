@@ -14,7 +14,7 @@ def manager_team_view(request: HttpRequest, contest_id: str):
     """チーム管理画面を表示するView"""
     contest: Contest = get_object_or_404(Contest, id=contest_id)
     if not request.user.is_admin:
-        return redirect("ctf:index")
+        return redirect("ctf:home", contest_id=contest.id)
     ctx = {}
     contests = Contest.objects.all()
     if not contests.exists():

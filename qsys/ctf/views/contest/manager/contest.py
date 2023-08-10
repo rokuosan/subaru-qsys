@@ -12,6 +12,9 @@ def manager_contest_view(request: HttpRequest, contest_id: str):
     contest: Contest = get_object_or_404(Contest, id=contest_id)
     cu = ContestUtils(contest)
 
+    if not request.user.is_admin:
+        return redirect("ctf:home", contest_id=contest.id)
+
     # 公開設定
     fun = cu.get_page_protection(request)
     if fun is not None:
@@ -22,8 +25,5 @@ def manager_contest_view(request: HttpRequest, contest_id: str):
     if ctx["player"] is None:
         messages.info(request, "このコンテストに参加していません")
         return redirect("ctf:index")
-
-    player = ctx["player"]
-    team = ctx["team"]
 
     return render(request, "ctf/contest/manager/contest.html", ctx)

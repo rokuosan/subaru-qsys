@@ -12,6 +12,9 @@ def manager_player_view(request: HttpRequest, contest_id: str):
     contest: Contest = get_object_or_404(Contest, id=contest_id)
     cu = ContestUtils(contest)
 
+    if not request.user.is_admin:
+        return redirect("ctf:home", contest_id=contest.id)
+
     # 公開設定
     fun = cu.get_page_protection(request)
     if fun is not None:
