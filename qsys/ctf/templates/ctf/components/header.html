@@ -50,7 +50,7 @@
             <li>
               <h6 class="dropdown-header lead">Managers</h6>
             </li>
-            <li><a class="dropdown-item" href="{% url 'ctf:manager_contest' %}">
+            <li><a class="dropdown-item" href="#" id="a-manager-contest">
                 {% include 'icons/flag.svg' %}
                 <span class="ms-1">Contest Manager</span>
               </a></li>
@@ -115,6 +115,7 @@
     const manager_team = document.getElementById('a-manager-team');
     const monitor_stats = document.getElementById('a-monitor-stats');
     const monitor_answer = document.getElementById('a-monitor-answer');
+    const manager_contest = document.getElementById('a-manager-contest');
 
     if (!contest_id || contest_id == 'manager') {
       dashboard.href = '/ctf/';
@@ -134,6 +135,7 @@
     manager_team.href = `/ctf/${contest_id}/manager/team/`;
     monitor_stats.href = `/ctf/${contest_id}/monitor/stats/`;
     monitor_answer.href = `/ctf/${contest_id}/monitor/answer/`;
+    manager_contest.href = `/ctf/${contest_id}/manager/contest/`;
   })
 
 
