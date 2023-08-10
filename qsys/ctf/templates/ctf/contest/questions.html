@@ -46,7 +46,7 @@
                         </div>
                         {% if q.solved %}
                         <div>
-                          <span class="badge bg-success">Solved</span>
+                          <span class="badge bg-{{ q.solved_budge }}">{{ q.solved_msg }}</span>
                         </div>
                         {% endif %}
                       </div>

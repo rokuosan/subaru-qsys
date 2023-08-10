@@ -35,14 +35,22 @@ def questions_view(request: HttpRequest, contest_id: str):
     sets = []
     cats = Category.objects.all()
     solved = cu.get_solved_questions(player)
+    team = ctx["team"]
+    solved_team = cu.get_solved_questions(team)
     for c in cats:
         qs = c.questions.filter(is_open=True).order_by("point")
         if qs:
             for q in qs:
                 if q in solved:
                     q.solved = True
+                    q.solved_msg = "Solved"
+                    q.solved_budge = "success"
                 else:
                     q.solved = False
+                    if q in solved_team:
+                        q.solved = True
+                        q.solved_msg = "Solved by team"
+                        q.solved_budge = "secondary"
             sets.append({"category": c, "questions": qs})
 
     ctx["sets"] = sets
@@ -67,8 +75,15 @@ def question_detail_view(
         messages.info(request, "このコンテストに参加していません")
         return redirect("ctf:index")
     solved = cu.get_solved_questions(player)
+    solved_team = cu.get_solved_questions(cu.get_team_by_player(player))
     if question in solved:
         ctx["solved"] = True
+        ctx["solved_msg"] = "Solved"
+        ctx["solved_budge"] = "success"
+    elif question in solved_team:
+        ctx["solved"] = True
+        ctx["solved_msg"] = "Solved by team"
+        ctx["solved_budge"] = "secondary"
 
     if cu.get_team_by_player(player) is None:
         messages.info(request, "チームに所属していません")
@@ -128,7 +143,7 @@ def question_detail_view(
                 set_result("success", "正解！")
                 result_type = History.ResultType.CORRECT
             else:
-                result_type = History.ResultType.SOLVED_BY_TEAM
+                result_type = History.ResultType.ANSWERED_BY_TEAM
                 set_result("success", "正解！チームが解答済みのため点数は加算されません。")
         else:
             set_result("warning", "不正解...")

@@ -19,8 +19,8 @@
         </h2>
         {% if solved %}
         <div class="ms-3 fst-normal d-flex align-items-center fs-4">
-          <span class="badge bg-success ms-3 fs-6" style="width: fit-content; height: fit-content;">
-            Solved
+          <span class="badge bg-{{ solved_budge }} ms-3 fs-6" style="width: fit-content; height: fit-content;">
+            {{ solved_msg }}
           </span>
         </div>
         {% endif %}
