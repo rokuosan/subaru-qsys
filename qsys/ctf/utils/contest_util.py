@@ -315,3 +315,55 @@ class ContestUtils:
                     team.rank = i + 1
 
         return teams
+
+    def make_player_accuracy_ranking(self):
+        """プレイヤーの正答率ランキングを作成する。
+        player.accuracyに正答率が格納されます。
+
+        Returns:
+            list[Player]: ランキングつきプレイヤーリスト
+        """
+        players = self.get_players()
+
+        # それぞれに正答率をつける
+        for player in players:
+            player.accuracy = self.get_accuracy(player)
+
+        # 順位をつけるが、同点の場合は同順位とする
+        players = sorted(players, key=lambda x: x.accuracy, reverse=True)
+        for i, player in enumerate(players):
+            if i == 0:
+                player.rank = 1
+            else:
+                if player.accuracy == players[i - 1].accuracy:
+                    player.rank = players[i - 1].rank
+                else:
+                    player.rank = i + 1
+
+        return players
+
+    def make_team_accuracy_ranking(self):
+        """チームの正答率ランキングを作成する。
+        team.accuracyに正答率が格納されます。
+
+        Returns:
+            list[Team]: ランキングつきチームリスト
+        """
+        teams = self.contest.teams.all()
+
+        # それぞれに正答率をつける
+        for team in teams:
+            team.accuracy = self.get_accuracy(team)
+
+        # 順位をつけるが、同点の場合は同順位とする
+        teams = sorted(teams, key=lambda x: x.accuracy, reverse=True)
+        for i, team in enumerate(teams):
+            if i == 0:
+                team.rank = 1
+            else:
+                if team.accuracy == teams[i - 1].accuracy:
+                    team.rank = teams[i - 1].rank
+                else:
+                    team.rank = i + 1
+
+        return teams
