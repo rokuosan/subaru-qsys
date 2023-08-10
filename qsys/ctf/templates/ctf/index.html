@@ -1,40 +1,54 @@
-{% extends "ctf/base.html"%}
-{% block title%} CTF | Q-Sys {% endblock title %}
-{% block content %}
+{% load django_bootstrap5 %}
+{% load static %}
 
-<div class="container">
-  <div class="p-lg-4">
-    {% for contest_type in all_contests %}
-    <div>
-      <h3>{{ contest_type.name }}</h3>
+<!DOCTYPE html>
+<html lang="ja">
 
-      <div class="mb-4">
-        {% for c in contest_type.contests %}
-        <div class="border px-3 py-2">
-          <h4>{{ c.name }} ({{ c.status }})</h4>
-          <form action="{% url 'ctf:manager_contest' %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="contest_id" value="{{ c.id }}">
-            <select name="status" id="contest_status">
-              <option value="preparing">PREPARING</option>
-              <option value="running">RUNNING</option>
-              <option value="paused">PAUSED</option>
-              <option value="finished">FINISHED</option>
-            </select>
-            <select name="is_open" id="is_open">
-              <option value="True">True</option>
-              <option value="False">False</option>
-            </select>
-            <button type="submit">変更</button>
-          </form>
-          <a href="{% url 'ctf:home' c.id %}">移動</a>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    {% endfor %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CTF | Q-Sys</title>
+  {% bootstrap_css %}
+</head>
+
+<body class="bg-light position-relative" style="min-height: 100dvh;">
+  <div class="position-fixed bottom-0 end-0 px-4" style="z-index: 5000;">
+    {% include 'django_bootstrap5/messages.html' %}
   </div>
-</div>
+  <div class="container">
+    <div class="p-lg-4">
+      {% for contest_type in all_contests %}
+      <div>
+        <h3>{{ contest_type.name }}</h3>
 
+        <div class="mb-4">
+          {% for c in contest_type.contests %}
+          <div class="border px-3 py-2">
+            <h4>{{ c.name }} ({{ c.status }})</h4>
+            <form action="{% url 'ctf:index' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="contest_id" value="{{ c.id }}">
+              <select name="status" id="contest_status">
+                <option value="preparing">PREPARING</option>
+                <option value="running">RUNNING</option>
+                <option value="paused">PAUSED</option>
+                <option value="finished">FINISHED</option>
+              </select>
+              <select name="is_open" id="is_open">
+                <option value="True">True</option>
+                <option value="False">False</option>
+              </select>
+              <button type="submit">変更</button>
+            </form>
+            <a href="{% url 'ctf:home' c.id %}">移動</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% bootstrap_javascript %}
+</body>
 
-{% endblock content %}
+</html>
