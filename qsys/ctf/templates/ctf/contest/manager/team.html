@@ -3,9 +3,16 @@
 {% block content %}
 
 {% include "ctf/components/header.html" %}
-<div class="container p-md-5" style="margin-top: 100px;">
-  <h3 class="text-center px-4 bg-black text-white mx-auto mb-4 fw-bolder" style="width: fit-content;">Team Manager
-  </h3>
+<div class="container" style="margin-top: 100px;">
+  <div class="p-lg-4">
+    <section class="d-flex">
+      <div>
+        <span class="lead lh-1">{{ contest.name }}</span>
+        <h2 class="fw-bolder">Statistics</h2>
+      </div>
+    </section>
+
+  </div>
 
   <div>
     <div class="row justify-content-center">

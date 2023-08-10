@@ -70,5 +70,6 @@ def manager_team_view(request: HttpRequest, contest_id: str):
     ctx["teams"] = teams
     ctx["selected_team"] = selected_team
     ctx["members"] = members
+    ctx["contest"] = selected_contest
 
     return render(request, "ctf/contest/manager/team.html", ctx)
