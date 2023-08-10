@@ -33,5 +33,7 @@ def stats_view(request: HttpRequest, contest_id: str):
     ctx["player_ranking"] = cu.make_player_ranking()[:10]
     ctx["team_ranking"] = cu.make_team_ranking()
     ctx["popular_questions"] = qs
+    ctx["player_accuracy_ranking"] = cu.make_player_accuracy_ranking()[:10]
+    ctx["team_accuracy_ranking"] = cu.make_team_accuracy_ranking()
 
     return render(request, 'ctf/contest/monitor/stats.html', ctx)
