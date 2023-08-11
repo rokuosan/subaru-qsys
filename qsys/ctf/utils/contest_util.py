@@ -367,3 +367,45 @@ class ContestUtils:
                     team.rank = i + 1
 
         return teams
+
+    def get_user(self, user_id: int) -> AppUser:
+        """ユーザーIDからユーザーを取得する
+
+        Args:
+            user_id (int): ユーザーID
+
+        Returns:
+            User: ユーザー
+        """
+        try:
+            return AppUser.objects.get(id=user_id)
+        except AppUser.DoesNotExist:
+            return None
+
+    def get_users(self) -> AppUser:
+        """ユーザーを全て取得する
+
+        Returns:
+            list[User]: ユーザーリスト
+        """
+        return AppUser.objects.all()
+
+    def create_player(self, user: AppUser, name: str) -> Player:
+        """プレイヤーを作成する
+
+        Args:
+            user_id (int): ユーザーID
+            name (str): プレイヤー名
+
+        Returns:
+            Player: 作成したプレイヤー
+        """
+        try:
+            player = Player.objects.create(
+                user=user,
+                name=name,
+            )
+            return player
+        except Exception as e:
+            print(e)
+            return None
