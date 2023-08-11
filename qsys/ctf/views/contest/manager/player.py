@@ -5,6 +5,7 @@ from django.contrib import messages
 
 from ctf.models.contest import Contest
 from ctf.utils.contest_util import ContestUtils
+from app.models.app_user import AppUser
 
 
 @login_required
@@ -25,5 +26,47 @@ def manager_player_view(request: HttpRequest, contest_id: str):
     if ctx["player"] is None:
         messages.info(request, "このコンテストに参加していません")
         return redirect("ctf:index")
+    ctx["msg"] = "このページでは、プレイヤーに関する操作を行うことができます。ユーザとプレイヤーについてはドキュメントを参照してください。"
+
+    players = cu.get_players()
+    ctx["players"] = players
+
+    all_players = cu.get_players(all=True)
+    ctx["all_players"] = all_players
+
+    users = AppUser.objects.filter(player__isnull=True)
+    ctx["users"] = users
 
     return render(request, "ctf/contest/manager/player.html", ctx)
+
+
+@login_required
+def create_player_view(request: HttpRequest, contest_id: str):
+    contest: Contest = get_object_or_404(Contest, id=contest_id)
+    cu = ContestUtils(contest)
+
+    # 拒否
+    if not request.user.is_admin:
+        return redirect("ctf:home", contest_id=contest.id)
+    if request.method != "POST":
+        return redirect("ctf:manager_player", contest_id=contest.id)
+
+    # ユーザの取得
+    user = cu.get_user(request.POST.get("user_id"))
+    if user is None:
+        messages.error(request, "ユーザが存在しません")
+        return redirect("ctf:manager_player", contest_id=contest.id)
+
+    # プレイヤーの作成
+    name = request.POST.get("name")
+    if name is None or name == "":
+        name = user.username
+    player = cu.create_player(user, name)
+
+    # メッセージの設定
+    if player is None:
+        messages.error(request, "プレイヤーの作成に失敗しました")
+    else:
+        messages.success(request, "プレイヤーを作成しました")
+
+    return redirect("ctf:manager_player", contest_id=contest.id)

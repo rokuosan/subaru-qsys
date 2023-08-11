@@ -9,7 +9,7 @@ from ctf.views.contest.account import account_view
 from ctf.views.contest.ranking import ranking_view
 from ctf.views.contest.monitor.stats import stats_view
 from ctf.views.contest.monitor.answer import answer_view
-from ctf.views.contest.manager.player import manager_player_view
+from ctf.views.contest.manager.player import create_player_view, manager_player_view
 
 
 app_name = "ctf"
@@ -18,6 +18,7 @@ app_name = "ctf"
 urlpatterns = [
     # Index
     path("", index_view, name="index"),
+
     # Contest
     path("<str:contest_id>/", contest_home_view, name="home"),
     path("<str:contest_id>/questions/", questions_view, name="questions"),
@@ -28,6 +29,7 @@ urlpatterns = [
     ),
     path("<str:contest_id>/account/", account_view, name="account"),
     path("<str:contest_id>/ranking/", ranking_view, name="ranking"),
+
     # Manager
     path(
         "<str:contest_id>/manager/contest/",
@@ -44,6 +46,12 @@ urlpatterns = [
         manager_player_view,
         name="manager_player",
     ),
+    path(
+        "<str:contest_id>/manager/player/create/",
+        create_player_view,
+        name="create_player",
+    ),
+
     # Monitor
     path(
         "<str:contest_id>/monitor/stats/",

@@ -3,11 +3,69 @@
 {% block content %}
 
 <div class="container" style="margin-top: 100px;">
-  <div class="p-lg-4">
+  <div class="p-lg-4 pb-lg-3">
     <section class="d-flex">
       <div>
         <span class="lead lh-1">{{ contest.name }}</span>
         <h2 class="fw-bolder">Player Manager</h2>
+      </div>
+    </section>
+    <section id="description" class="pt-3">
+      {% include 'ctf/components/alert_info.html' with text=msg %}
+    </section>
+  </div>
+  <hr class="py-2">
+  <div class="px-lg-5 row justify-content-around">
+    <section class="col-lg-6">
+      <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Create Player</h3>
+      <div class="container">
+        <ul>
+          <li>既存のユーザを選択して、プレイヤーを作成します。</li>
+          <li>名前を省略した場合は、ユーザー名と同じものが利用されます。</li>
+        </ul>
+        {% if users|length != 0 %}
+        <form action="{% url 'ctf:create_player' contest_id=contest.id %}" method="post">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <span class="input-group-text" >User</span>
+            <select class="form-select" name="user_id" id="user_id">
+              {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+              {% endfor %}
+            </select>
+            <span class="input-group-text" >Player Name</span>
+            <input type="text" class="form-control" placeholder="Player Name" name="name" aria-label="Player Name" aria-describedby="basic-addon2">
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Add Player</button>
+          </div>
+        </form>
+        {% else %}
+        <div class="alert alert-warning">
+          ユーザが存在しないか、全ユーザをプレイヤーとして登録しているため、この項目は利用できません。
+        </div>
+        {% endif %}
+      </div>
+    </section>
+    <section class="col-lg-6">
+      <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Delete Player</h3>
+      <div class="container">
+        <ul>
+          <li>この操作は危険です。危険性を理解したうえで操作してください。</li>
+        </ul>
+        <div class="alert alert-warning">
+          プレイヤーの削除は、Djangoの管理画面から行ってください。
+        </div>
+      </div>
+    </section>
+  </div>
+  <hr class="py-2">
+  <div>
+    <section class="px-lg-5 row justify-content-around">
+      <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Create User</h3>
+      <div class="container">
+        <ul>
+          <li>この操作ではユーザの作成を行います。</li>
+          <li>一度に多くのユーザを作成する場合は、</li>
+        </ul>
       </div>
     </section>
   </div>
