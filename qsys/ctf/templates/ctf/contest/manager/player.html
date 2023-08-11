@@ -58,14 +58,36 @@
     </section>
   </div>
   <hr class="py-2">
-  <div>
-    <section class="px-lg-5 row justify-content-around">
+  <div class="px-lg-5 row">
+    <section class="col-lg-6">
+      <div id="create-single-user" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bolder">ユーザ作成</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ここにフォーム
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">作成</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Create User</h3>
       <div class="container">
         <ul>
           <li>この操作ではユーザの作成を行います。</li>
-          <li>一度に多くのユーザを作成する場合は、</li>
         </ul>
+        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#create-single-user">
+          1人のユーザを作成
+        </button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#create-single-user">
+          複数のユーザを作成
+        </button>
       </div>
     </section>
   </div>
