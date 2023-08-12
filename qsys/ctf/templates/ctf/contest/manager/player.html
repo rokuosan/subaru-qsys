@@ -63,6 +63,8 @@
       <div id="create-single-user" class="modal fade" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <form class="modal-content" action="{% url 'ctf:create_player' contest.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="create_type" value="user">
             <div class="modal-header">
               <h5 class="modal-title fw-bolder">ユーザ作成</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -77,27 +79,7 @@
                 <input type="password" class="form-control" id="password" name="password" placeholder="パスワード">
               </div>
               <div class="mb-3">
-                <label for="password" class="form-label">パスワード(確認)</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="パスワード(確認)">
-              </div>
-              <div class="mb-3">
-                <label for="name" class="form-label">表示名</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="表示名">
-              </div>
-              <div class="mb-3">
-                <label for="email" class="form-label">メールアドレス</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="メールアドレス">
-              </div>
-              <div class="mb-3">
-                <label for="affiliation" class="form-label">所属</label>
-                <input type="text" class="form-control" id="affiliation" name="affiliation" placeholder="所属">
-              </div>
-              <div class="mb-3">
-                <label for="country" class="form-label">国</label>
-                <input type="text" class="form-control" id="country" name="country" placeholder="国">
-              </div>
-              <div class="mb-3">
-                <label for="is_staff" class="form-label">スタッフ</label>
+                <label for="is_staff" class="form-label">管理者</label>
                 <select class="form-select" name="is_staff" id="is_staff">
                   <option value="False">False</option>
                   <option value="True">True</option>
@@ -106,7 +88,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">作成</button>
+              <button type="submit" class="btn btn-primary">作成</button>
             </div>
           </form>
         </div>

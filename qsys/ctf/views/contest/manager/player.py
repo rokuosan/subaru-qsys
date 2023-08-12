@@ -51,22 +51,38 @@ def create_player_view(request: HttpRequest, contest_id: str):
     if request.method != "POST":
         return redirect("ctf:manager_player", contest_id=contest.id)
 
-    # ユーザの取得
-    user = cu.get_user(request.POST.get("user_id"))
-    if user is None:
-        messages.error(request, "ユーザが存在しません")
-        return redirect("ctf:manager_player", contest_id=contest.id)
+    create_type = request.POST.get("create_type")
+    if create_type is None:
+        # ユーザの取得
+        user = cu.get_user(request.POST.get("user_id"))
+        if user is None:
+            messages.error(request, "ユーザが存在しません")
+            return redirect("ctf:manager_player", contest_id=contest.id)
 
-    # プレイヤーの作成
-    name = request.POST.get("name")
-    if name is None or name == "":
-        name = user.username
-    player = cu.create_player(user, name)
+        # プレイヤーの作成
+        name = request.POST.get("name")
+        if name is None or name == "":
+            name = user.username
+        player = cu.create_player(user, name)
 
-    # メッセージの設定
-    if player is None:
-        messages.error(request, "プレイヤーの作成に失敗しました")
-    else:
-        messages.success(request, "プレイヤーを作成しました")
+        # メッセージの設定
+        if player is None:
+            messages.error(request, "プレイヤーの作成に失敗しました")
+        else:
+            messages.success(request, "プレイヤーを作成しました")
+    elif create_type == "user":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        if username is None or username == "":
+            messages.error(request, "ユーザ名を入力してください")
+            return redirect("ctf:manager_player", contest_id=contest.id)
+        if password is None or password == "":
+            messages.error(request, "パスワードを入力してください")
+            return redirect("ctf:manager_player", contest_id=contest.id)
+
+        user = cu.create_user(username, password)
+        if user is None:
+            messages.error(request, "ユーザの作成に失敗しました")
+            return redirect("ctf:manager_player", contest_id=contest.id)
 
     return redirect("ctf:manager_player", contest_id=contest.id)
