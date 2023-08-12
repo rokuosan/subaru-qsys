@@ -72,17 +72,17 @@
             <div class="modal-body">
               <div class="mb-3">
                 <label for="username" class="form-label">ユーザ名</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="ユーザ名">
+                <input type="text" class="form-control" id="username" name="username" placeholder="ユーザ名" autocomplete="off">
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">パスワード</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="パスワード">
+                <input type="password" class="form-control" id="password" name="password" placeholder="パスワード" autocomplete="new-password">
               </div>
               <div class="mb-3">
-                <label for="is_staff" class="form-label">管理者</label>
-                <select class="form-select" name="is_staff" id="is_staff">
-                  <option value="False">False</option>
-                  <option value="True">True</option>
+                <label for="is_admin" class="form-label">ユーザーレベル</label>
+                <select class="form-select" name="is_admin" id="is_admin">
+                  <option value="False" selected>一般ユーザ</option>
+                  <option value="True">管理者</option>
                 </select>
               </div>
             </div>
@@ -101,12 +101,21 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{% url 'ctf:create_player' contest_id=contest.id %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="create_type" value="multi">
               <div class="modal-body">
-                ここにフォーム
+                <ul>
+                  <li>一行に1人の名前を記入してください。</li>
+                  <li><code></code></li>
+                </ul>
+                <div class="form-floating">
+                  <textarea name="usernames" id="usernames" class="form-control" style="height: 30dvh;" placeholder="Yamada Taro"></textarea>
+                  <label for="usernames">Usernames</label>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">作成</button>
+                <button type="submit" class="btn btn-primary">作成</button>
               </div>
             </form>
           </div>

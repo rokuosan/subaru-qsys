@@ -73,6 +73,7 @@ def create_player_view(request: HttpRequest, contest_id: str):
     elif create_type == "user":
         username = request.POST.get("username")
         password = request.POST.get("password")
+        is_admin = request.POST.get("is_admin") == "True"
         if username is None or username == "":
             messages.error(request, "ユーザ名を入力してください")
             return redirect("ctf:manager_player", contest_id=contest.id)
@@ -80,9 +81,11 @@ def create_player_view(request: HttpRequest, contest_id: str):
             messages.error(request, "パスワードを入力してください")
             return redirect("ctf:manager_player", contest_id=contest.id)
 
-        user = cu.create_user(username, password)
+        user = cu.create_user(username, password, is_admin)
         if user is None:
             messages.error(request, "ユーザの作成に失敗しました")
             return redirect("ctf:manager_player", contest_id=contest.id)
+
+        messages.success(request, "ユーザを作成しました")
 
     return redirect("ctf:manager_player", contest_id=contest.id)
