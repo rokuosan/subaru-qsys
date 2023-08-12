@@ -152,10 +152,12 @@ class ContestUtils:
         Returns:
             list[History]: 回答履歴
         """
-        history = list(History.objects.filter(
-            contest=self.contest,
-            player=player,
-        ).order_by("-created_at"))
+        history = list(
+            History.objects.filter(
+                contest=self.contest,
+                player=player,
+            ).order_by("-created_at")
+        )
         for h in history:
             h.reason = History.ResultType.get_name(h.result)
         return history
@@ -410,7 +412,9 @@ class ContestUtils:
             print(e)
             return None
 
-    def create_user(self, username: str, password: str) -> AppUser:
+    def create_user(
+        self, username: str, password: str, is_admin: bool = False
+    ) -> AppUser:
         """ユーザーを作成する
 
         Args:
@@ -423,6 +427,7 @@ class ContestUtils:
         try:
             user = AppUser(
                 username=username,
+                is_admin=is_admin,
             )
             user.set_password(password)
             user.save()
