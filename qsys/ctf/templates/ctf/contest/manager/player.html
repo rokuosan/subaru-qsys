@@ -62,18 +62,71 @@
     <section class="col-lg-6">
       <div id="create-single-user" class="modal fade" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <div class="modal-content">
+          <form class="modal-content" action="{% url 'ctf:create_player' contest.id %}" method="post">
             <div class="modal-header">
               <h5 class="modal-title fw-bolder">ユーザ作成</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              ここにフォーム
+              <div class="mb-3">
+                <label for="username" class="form-label">ユーザ名</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="ユーザ名">
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">パスワード</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="パスワード">
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">パスワード(確認)</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="パスワード(確認)">
+              </div>
+              <div class="mb-3">
+                <label for="name" class="form-label">表示名</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="表示名">
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">メールアドレス</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="メールアドレス">
+              </div>
+              <div class="mb-3">
+                <label for="affiliation" class="form-label">所属</label>
+                <input type="text" class="form-control" id="affiliation" name="affiliation" placeholder="所属">
+              </div>
+              <div class="mb-3">
+                <label for="country" class="form-label">国</label>
+                <input type="text" class="form-control" id="country" name="country" placeholder="国">
+              </div>
+              <div class="mb-3">
+                <label for="is_staff" class="form-label">スタッフ</label>
+                <select class="form-select" name="is_staff" id="is_staff">
+                  <option value="False">False</option>
+                  <option value="True">True</option>
+                </select>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button type="button" class="btn btn-primary">作成</button>
             </div>
+          </form>
+        </div>
+      </div>
+      <div id="create-multi-user" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bolder">複数ユーザ作成</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'ctf:create_player' contest_id=contest.id %}" method="post">
+              <div class="modal-body">
+                ここにフォーム
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">作成</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -85,7 +138,7 @@
         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#create-single-user">
           1人のユーザを作成
         </button>
-        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#create-single-user">
+        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#create-multi-user">
           複数のユーザを作成
         </button>
       </div>
