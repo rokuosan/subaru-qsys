@@ -409,3 +409,24 @@ class ContestUtils:
         except Exception as e:
             print(e)
             return None
+
+    def create_user(self, username: str, password: str) -> AppUser:
+        """ユーザーを作成する
+
+        Args:
+            username (str): ユーザー名
+            password (str): パスワード
+
+        Returns:
+            User: 作成したユーザー
+        """
+        try:
+            user = AppUser(
+                username=username,
+            )
+            user.set_password(password)
+            user.save()
+            return user
+        except Exception as e:
+            print(e)
+            return None
