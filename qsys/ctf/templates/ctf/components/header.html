@@ -62,6 +62,10 @@
                 {% include 'icons/people.svg' %}
                 <span class="ms-1">Team Manager</span>
               </a></li>
+            <li><a class="dropdown-item" href="#" id="a-manager-question">
+                {% include 'icons/journal-plus.svg' %}
+                <span class="ms-1">Question Manager</span>
+              </a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
@@ -117,6 +121,7 @@
     const monitor_answer = document.getElementById('a-monitor-answer');
     const manager_contest = document.getElementById('a-manager-contest');
     const manager_player = document.getElementById('a-manager-player');
+    const manager_question = document.getElementById('a-manager-question');
 
     if (!contest_id || contest_id == 'manager') {
       dashboard.href = '/ctf/';
@@ -138,6 +143,7 @@
     monitor_answer.href = `/ctf/${contest_id}/monitor/answer/`;
     manager_contest.href = `/ctf/${contest_id}/manager/contest/`;
     manager_player.href = `/ctf/${contest_id}/manager/player/`;
+    manager_question.href = `/ctf/${contest_id}/manager/question/`;
   })
 
 
