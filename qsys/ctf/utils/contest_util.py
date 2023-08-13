@@ -435,3 +435,25 @@ class ContestUtils:
         except Exception as e:
             print(e)
             return None
+
+    def create_users(self, users: list[str]) -> list[tuple[str, str]]:
+        """ユーザーを作成する
+
+        Args:
+            users (list[str]): ユーザー名のリスト
+
+        Returns:
+            list[tuple[str, str]]: 作成したユーザーとパスワードのタプルのリスト
+        """
+        pws = []
+        for user in users:
+            if user == "":
+                continue
+            if AppUser.objects.filter(username=user).exists():
+                continue
+            password = AppUser.objects.make_random_password()
+            res = self.create_user(user, password)
+            if res:
+                pws.append((user, password))
+
+        return pws
