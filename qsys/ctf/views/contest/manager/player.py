@@ -1,5 +1,6 @@
+import re
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 
@@ -87,5 +88,28 @@ def create_player_view(request: HttpRequest, contest_id: str):
             return redirect("ctf:manager_player", contest_id=contest.id)
 
         messages.success(request, "ユーザを作成しました")
+    elif create_type == "multi":
+        usernames = request.POST.get("usernames")
+        if usernames is None or usernames == "":
+            messages.error(request, "ユーザ名を入力してください")
+            return redirect("ctf:manager_player", contest_id=contest.id)
+
+        usernames = usernames.split("\n")
+        usernames = [re.sub(r"\s", "", username) for username in usernames]
+
+        pws = cu.create_users(usernames)
+        if len(pws) == 0:
+            messages.error(request, "作成したユーザがありませんでした")
+            return redirect("ctf:manager_player", contest_id=contest.id)
+
+        # パスワードリストをCSVに変換
+        pws = "\n".join([f"{pw[0]},{pw[1]}" for pw in pws])
+        filename = f"{contest.name}_passwords.csv"
+        response = HttpResponse()
+        response.write(pws)
+        response["Content-Type"] = "text/csv"
+        response["Content-Disposition"] = f"attachment; filename={filename}"
+
+        return response
 
     return redirect("ctf:manager_player", contest_id=contest.id)

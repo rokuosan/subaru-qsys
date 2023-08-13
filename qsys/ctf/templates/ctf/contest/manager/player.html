@@ -105,8 +105,9 @@
               <input type="hidden" name="create_type" value="multi">
               <div class="modal-body">
                 <ul>
-                  <li>一行に1人の名前を記入してください。</li>
-                  <li><code></code></li>
+                  <li>作成したいユーザの名前を一行ずつ記入してください</li>
+                  <li>パスワードはランダムで作成され、ユーザーレベルはすべて一般ユーザとなります。</li>
+                  <li>ユーザ作成完了後、パスワードが書かれたCSVファイルが表示されます。</li>
                 </ul>
                 <div class="form-floating">
                   <textarea name="usernames" id="usernames" class="form-control" style="height: 30dvh;" placeholder="Yamada Taro"></textarea>
@@ -115,7 +116,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">作成</button>
+                <button id="create-multi-user-submit" type="submit" class="btn btn-primary">作成</button>
               </div>
             </form>
           </div>
@@ -129,12 +130,33 @@
         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#create-single-user">
           1人のユーザを作成
         </button>
-        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#create-multi-user">
+        <button id="create-multi-user-btn" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#create-multi-user">
           複数のユーザを作成
         </button>
       </div>
     </section>
+    <section class="col-lg-6">
+      <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Delete User</h3>
+      <div class="container">
+        <ul>
+          <li>この操作は危険です。危険性を理解したうえで操作してください。</li>
+        </ul>
+        <div class="alert alert-warning">
+          ユーザの削除は、Djangoの管理画面から行ってください。
+        </div>
+      </div>
+    </section>
   </div>
 </div>
+
+<script>
+  const usernames = document.getElementById('usernames');
+  const createMultiUserBtn = document.getElementById('create-multi-user-btn');
+  const createMultiUserSubmit = document.getElementById('create-multi-user-submit');
+
+  createMultiUserBtn.addEventListener('click', () => {
+    usernames.value = '';
+  });
+</script>
 
 {% endblock content %}
