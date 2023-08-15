@@ -109,6 +109,10 @@ def question_detail_view(
         ctx["result"] = request.session.get("result")
         request.session["result"] = None
 
+        if question.file_path != "":
+            file_name = question.file_path.split("/")[-1]
+            ctx["file_name"] = file_name
+
         return render(request, "ctf/contest/question_detail.html", ctx)
 
     if request.method == "POST":
