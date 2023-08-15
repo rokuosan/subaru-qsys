@@ -1,0 +1,162 @@
+{% extends "ctf/base.html"%}
+{% block title%} Player Manager | {{contest.name}} | Q-Sys {% endblock title %}
+{% block content %}
+
+<div class="container" style="margin-top: 100px;">
+  <div class="p-lg-4 pb-lg-3">
+    <section class="d-flex">
+      <div>
+        <span class="lead lh-1">{{ contest.name }}</span>
+        <h2 class="fw-bolder">Player Manager</h2>
+      </div>
+    </section>
+    <section id="description" class="pt-3">
+      {% include 'ctf/components/alert_info.html' with text=msg %}
+    </section>
+  </div>
+  <hr class="py-2">
+  <div class="px-lg-5 row justify-content-around">
+    <section class="col-lg-6">
+      <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Create Player</h3>
+      <div class="container">
+        <ul>
+          <li>既存のユーザを選択して、プレイヤーを作成します。</li>
+          <li>名前を省略した場合は、ユーザー名と同じものが利用されます。</li>
+        </ul>
+        {% if users|length != 0 %}
+        <form action="{% url 'ctf:create_player' contest_id=contest.id %}" method="post">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <span class="input-group-text" >User</span>
+            <select class="form-select" name="user_id" id="user_id">
+              {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+              {% endfor %}
+            </select>
+            <span class="input-group-text" >Player Name</span>
+            <input type="text" class="form-control" placeholder="Player Name" name="name" aria-label="Player Name" aria-describedby="basic-addon2">
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Add Player</button>
+          </div>
+        </form>
+        {% else %}
+        <div class="alert alert-warning">
+          ユーザが存在しないか、全ユーザをプレイヤーとして登録しているため、この項目は利用できません。
+        </div>
+        {% endif %}
+      </div>
+    </section>
+    <section class="col-lg-6">
+      <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Delete Player</h3>
+      <div class="container">
+        <ul>
+          <li>この操作は危険です。危険性を理解したうえで操作してください。</li>
+        </ul>
+        <div class="alert alert-warning">
+          プレイヤーの削除は、Djangoの管理画面から行ってください。
+        </div>
+      </div>
+    </section>
+  </div>
+  <hr class="py-2">
+  <div class="px-lg-5 row">
+    <section class="col-lg-6">
+      <div id="create-single-user" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <form class="modal-content" action="{% url 'ctf:create_player' contest.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="create_type" value="user">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bolder">ユーザ作成</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="username" class="form-label">ユーザ名</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="ユーザ名" autocomplete="off">
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">パスワード</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="パスワード" autocomplete="new-password">
+              </div>
+              <div class="mb-3">
+                <label for="is_admin" class="form-label">ユーザーレベル</label>
+                <select class="form-select" name="is_admin" id="is_admin">
+                  <option value="False" selected>一般ユーザ</option>
+                  <option value="True">管理者</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">作成</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="create-multi-user" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bolder">複数ユーザ作成</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'ctf:create_player' contest_id=contest.id %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="create_type" value="multi">
+              <div class="modal-body">
+                <ul>
+                  <li>作成したいユーザの名前を一行ずつ記入してください</li>
+                  <li>パスワードはランダムで作成され、ユーザーレベルはすべて一般ユーザとなります。</li>
+                  <li>ユーザ作成完了後、パスワードが書かれたCSVファイルが表示されます。</li>
+                </ul>
+                <div class="form-floating">
+                  <textarea name="usernames" id="usernames" class="form-control" style="height: 30dvh;" placeholder="Yamada Taro"></textarea>
+                  <label for="usernames">Usernames</label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="create-multi-user-submit" type="submit" class="btn btn-primary">作成</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Create User</h3>
+      <div class="container">
+        <ul>
+          <li>この操作ではユーザの作成を行います。</li>
+        </ul>
+        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#create-single-user">
+          1人のユーザを作成
+        </button>
+        <button id="create-multi-user-btn" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#create-multi-user">
+          複数のユーザを作成
+        </button>
+      </div>
+    </section>
+    <section class="col-lg-6">
+      <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Delete User</h3>
+      <div class="container">
+        <ul>
+          <li>この操作は危険です。危険性を理解したうえで操作してください。</li>
+        </ul>
+        <div class="alert alert-warning">
+          ユーザの削除は、Djangoの管理画面から行ってください。
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  const usernames = document.getElementById('usernames');
+  const createMultiUserBtn = document.getElementById('create-multi-user-btn');
+  const createMultiUserSubmit = document.getElementById('create-multi-user-submit');
+
+  createMultiUserBtn.addEventListener('click', () => {
+    usernames.value = '';
+  });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,81 @@
+{% extends "ctf/base.html"%}
+{% block title%} {{question.title}} | {{contest.name}} | Q-Sys {% endblock title %}
+{% block content %}
+
+<div class="container" style="margin-top: 100px;">
+  <div class="p-lg-4">
+    <!-- 問題情報 -->
+    <section id="question_title">
+      <div class="d-flex gap-3">
+        <a href="{% url 'ctf:questions' contest.id %}" class="text-decoration-none">
+          {% include 'app/icons/left-short.svg' %}
+          <span>Questions</span>
+        </a>
+        <span class="lead lh-1">{{ question.category }} / {{ question.difficulty }} / {{ question.point }}pts</span>
+      </div>
+      <div class="d-flex">
+        <h2 class="fw-bolder">
+          {{ question.title }}
+        </h2>
+        {% if solved %}
+        <div class="ms-3 fst-normal d-flex align-items-center fs-4">
+          <span class="badge bg-{{ solved_budge }} ms-3 fs-6" style="width: fit-content; height: fit-content;">
+            {{ solved_msg }}
+          </span>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- 問題本文 -->
+    <section id="question_description" class="pt-3">
+      <div class="bg-white rounded p-4 pt-5 shadow-sm">
+        <p class="fs-5">{{ question.description | safe | linebreaksbr }}</p>
+      </div>
+      {% if question.file_path != "" %}
+      <div class="bg-white rounded p-4 shadow-sm mt-2">
+        <a href="/{{ question.file_path }}" class="d-flex align-items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-arrow-down"
+            viewBox="0 0 16 16">
+            <path
+              d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293V6.5z" />
+            <path
+              d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+          </svg>
+          <div>
+            {{ file_name }}
+          </div>
+        </a>
+      </div>
+      {% endif %}
+    </section>
+
+    <!-- 回答エリア -->
+    <section id="answer" class="pt-3">
+      <div class="bg-white rounded p-4 shadow-sm">
+        <div class="d-flex pb-2">
+          <h4 class="fw-bolder text-muted align-text-bottom my-auto">Your Answer</h4>
+          {% if result %}
+          <span class="alert alert-{{ result.alert_type }} py-1 ms-3 my-auto align-top" role="alert">
+            {{ result.message }}
+          </span>
+          {% else %}
+          <span class="alert alert-secondary py-1 ms-3 my-auto align-top invisible" role="alert">
+            result here
+          </span>
+          {% endif %}
+        </div>
+        <form action="{% url 'ctf:question_detail' contest_id=contest.id question_id=question.id %}" method="post">
+          {% csrf_token %}
+          <div class="input-group">
+            <input type="text" class="form-control" name="answer" placeholder="flag{something}" aria-label="Answer"
+              aria-describedby="answer-button">
+            <button class="btn btn-outline-primary" type="submit" id="answer-button">Submit</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
+
+{% endblock content %}

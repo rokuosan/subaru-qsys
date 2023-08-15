@@ -18,15 +18,20 @@ class Question(models.Model, ExportModelOperationsMixin("question")):
         "Category",
         on_delete=models.CASCADE,
         help_text="カテゴリ",
+        related_name="questions",
     )
     difficulty = models.ForeignKey(
         "Difficulty",
         on_delete=models.CASCADE,
         help_text="難易度",
+        related_name="questions",
     )
     is_open = models.BooleanField(help_text="公開中かどうか", default=True)
     created_at = models.DateTimeField(auto_now_add=True, help_text="作成日時")
     updated_at = models.DateTimeField(auto_now=True, help_text="更新日時")
+    file_path = models.CharField(
+        max_length=255, help_text="問題ファイルパス", blank=True, default=""
+    )
 
     def __str__(self):
         return self.title
