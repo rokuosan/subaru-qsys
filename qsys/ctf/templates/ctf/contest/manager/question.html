@@ -27,9 +27,9 @@
       <div id="create-category" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <form method="post" action="{% url 'ctf:manager_question_create' contest.id %}" class="modal-content"
-            enctype="multipart/form-data" id="craete-category-form">
+            enctype="multipart/form-data" id="create-category-form">
             {% csrf_token %}
-            <input type="hidden" name="craete_type" value="category">
+            <input type="hidden" name="create_type" value="category">
             <div class="modal-header">
               <h5 class="modal-title fw-bolder">カテゴリ作成</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -66,9 +66,9 @@
       </div>
       <div id="create-difficulty" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <form method="post" action="{% url 'ctf:manager_question_create' contest.id %}" class="modal-content" enctype="multipart/form-data" id="craete-difficulty-form">
+          <form method="post" action="{% url 'ctf:manager_question_create' contest.id %}" class="modal-content" enctype="multipart/form-data" id="create-difficulty-form">
             {% csrf_token %}
-            <input type="hidden" name="craete_type" value="difficulty">
+            <input type="hidden" name="create_type" value="difficulty">
             <div class="modal-header">
               <h5 class="modal-title fw-bolder">難易度作成</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -104,9 +104,9 @@
       </div>
       <div id="create-question" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <form method="post" action="{% url 'ctf:manager_question_create' contest.id %}" class="modal-content" enctype="multipart/form-data" id="craete-question-form">
+          <form method="post" action="{% url 'ctf:manager_question_create' contest.id %}" class="modal-content" enctype="multipart/form-data" id="create_type-question-form">
             {% csrf_token %}
-            <input type="hidden" name="craete_type" value="question">
+            <input type="hidden" name="create_type" value="question">
             <div class="modal-header">
               <h5 class="modal-title fw-bolder">問題作成</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -198,7 +198,7 @@
 
 <script>
   const createQuestionButton = document.getElementById('create-question-button');
-  const createQuestionForm = document.getElementById('craete-question-form');
+  const createQuestionForm = document.getElementById('create-question-form');
 
   // フォームのバリデーション
   createQuestionButton.addEventListener('click', () => {
