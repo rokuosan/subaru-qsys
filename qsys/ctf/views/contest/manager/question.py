@@ -140,7 +140,11 @@ def manager_question_create_view(request: HttpRequest, contest_id: str):
         contest.questions.add(question)
         contest.save()
         path = os.path.join(
-            settings.BASE_DIR, "static", str(question.id), file.name
+            settings.BASE_DIR,
+            "static",
+            "questions",
+            str(question.id),
+            file.name,
         )
         if file is not None:
             os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -148,7 +152,7 @@ def manager_question_create_view(request: HttpRequest, contest_id: str):
                 for chunk in file.chunks():
                     f.write(chunk)
                 question.file_path = os.path.join(
-                    "static", str(question.id), file.name
+                    "static", "questions", str(question.id), file.name
                 )
                 question.save()
     except Exception as e:
