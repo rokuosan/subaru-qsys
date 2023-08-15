@@ -66,7 +66,6 @@ def manager_question_create_view(request: HttpRequest, contest_id: str):
         return redirect("ctf:index")
 
     # 値の取得
-    print(request.POST)
     title = request.POST.get("title")
     description = request.POST.get("description")
     flag = request.POST.get("flag")
