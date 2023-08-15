@@ -134,7 +134,7 @@ def question_detail_view(
 
         question_pts = 0
         result_type = History.ResultType.INCORRECT
-        if re.sub(r"\s", "", question.flag) == answer:
+        if question.flag == answer:
             hist = History.objects.filter(
                 contest=contest, question=question, team=team, is_correct=True
             )
