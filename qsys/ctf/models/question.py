@@ -29,6 +29,9 @@ class Question(models.Model, ExportModelOperationsMixin("question")):
     is_open = models.BooleanField(help_text="公開中かどうか", default=True)
     created_at = models.DateTimeField(auto_now_add=True, help_text="作成日時")
     updated_at = models.DateTimeField(auto_now=True, help_text="更新日時")
+    file_path = models.CharField(
+        max_length=255, help_text="問題ファイルパス", blank=True, default=""
+    )
 
     def __str__(self):
         return self.title
