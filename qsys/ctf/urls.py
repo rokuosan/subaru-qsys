@@ -13,7 +13,10 @@ from ctf.views.contest.manager.player import (
     create_player_view,
     manager_player_view,
 )
-from ctf.views.contest.manager.question import manager_question_view
+from ctf.views.contest.manager.question import (
+    manager_question_create_view,
+    manager_question_view,
+)
 
 
 app_name = "ctf"
@@ -57,6 +60,11 @@ urlpatterns = [
         "<str:contest_id>/manager/question/",
         manager_question_view,
         name="manager_question",
+    ),
+    path(
+        "<str:contest_id>/manager/question/create/",
+        manager_question_create_view,
+        name="manager_question_create",
     ),
     # Monitor
     path(
