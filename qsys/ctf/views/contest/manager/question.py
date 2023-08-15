@@ -139,14 +139,14 @@ def manager_question_create_view(request: HttpRequest, contest_id: str):
         question.save()
         contest.questions.add(question)
         contest.save()
-        path = os.path.join(
-            settings.BASE_DIR,
-            "static",
-            "questions",
-            str(question.id),
-            file.name,
-        )
         if file is not None:
+            path = os.path.join(
+                settings.BASE_DIR,
+                "static",
+                "questions",
+                str(question.id),
+                file.name,
+            )
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, "wb") as f:
                 for chunk in file.chunks():
