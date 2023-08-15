@@ -24,7 +24,36 @@
           カテゴリを作成する
         </button>
       </div>
+      <div id="create-category" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <form method="post" action="{% url 'ctf:manager_question_create' contest.id %}" class="modal-content"
+            enctype="multipart/form-data" id="craete-category-form">
+            {% csrf_token %}
+            <input type="hidden" name="craete_type" value="category">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bolder">カテゴリ作成</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column">
+              <ul>
+                <li>カテゴリ名はそのまま表示されます。</li>
+              </ul>
+              <div class="form-floating">
+                <input type="text" class="form-control" id="category_name" name="category_name" placeholder="カテゴリ名"
+                  autocomplete="off">
+                <label for="caetgory_name" class="form-label">カテゴリ名</label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" id="create-category-button">作成</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
+
+
     <section class="col-lg-4 pb-4">
       <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Create Difficulty</h3>
       <ul>
@@ -35,7 +64,34 @@
           難易度を作成する
         </button>
       </div>
+      <div id="create-difficulty" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <form method="post" action="{% url 'ctf:manager_question_create' contest.id %}" class="modal-content" enctype="multipart/form-data" id="craete-difficulty-form">
+            {% csrf_token %}
+            <input type="hidden" name="craete_type" value="difficulty">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bolder">難易度作成</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column">
+              <ul>
+                <li>難易度名はそのまま表示されます。</li>
+              </ul>
+              <div class="form-floating">
+                <input type="text" class="form-control" id="difficulty_name" name="difficulty_name" placeholder="難易度名" autocomplete="off">
+                <label for="difficulty_name" class="form-label">難易度名</label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" id="create-difficulty-button">作成</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
+
+
     <section class="col-lg-4 pb-4">
       <h3 class="border-start border-3 border-dark px-3 py-1 fw-bold">Create Question</h3>
       <ul>
@@ -46,7 +102,6 @@
           問題を作成する
         </button>
       </div>
-
       <div id="create-question" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <form method="post" action="{% url 'ctf:manager_question_create' contest.id %}" class="modal-content" enctype="multipart/form-data" id="craete-question-form">
@@ -200,6 +255,39 @@
     createQuestionForm.submit();
   })
 
+  const createCategoryButton = document.getElementById('create-category-button');
+  const createCategoryForm = document.getElementById('create-category-form');
+
+  // フォームのバリデーション
+  createCategoryButton.addEventListener('click', () => {
+    const name = document.getElementById('category_name');
+
+    if (name.value === '') {
+      name.classList.add('is-invalid');
+      return;
+    } else {
+      name.classList.remove('is-invalid');
+    }
+
+    createCategoryForm.submit();
+  })
+
+  const createDifficultyButton = document.getElementById('create-difficulty-button');
+  const createDifficultyForm = document.getElementById('create-difficulty-form');
+
+  // フォームのバリデーション
+  createDifficultyButton.addEventListener('click', () => {
+    const name = document.getElementById('difficulty_name');
+
+    if (name.value === '') {
+      name.classList.add('is-invalid');
+      return;
+    } else {
+      name.classList.remove('is-invalid');
+    }
+
+    createDifficultyForm.submit();
+  })
 </script>
 
 {% endblock content %}
