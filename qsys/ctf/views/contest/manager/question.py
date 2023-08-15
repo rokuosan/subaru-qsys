@@ -147,7 +147,9 @@ def manager_question_create_view(request: HttpRequest, contest_id: str):
             with open(path, "wb") as f:
                 for chunk in file.chunks():
                     f.write(chunk)
-                question.file_path = path
+                question.file_path = os.path.join(
+                    "static", str(question.id), file.name
+                )
                 question.save()
     except Exception as e:
         print(e)
