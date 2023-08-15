@@ -160,7 +160,7 @@ def question_detail_view(
             point=question_pts,
             is_correct=question.flag == answer,
             answer=answer,
-            result=result_type[0]
+            result=result_type[0],
         )
 
         return redirect("ctf:question_detail", contest_id, question_id)

@@ -25,9 +25,7 @@ def stats_view(request: HttpRequest, contest_id: str):
 
     # 人気な問題
     qs = cu.get_questions_with_statistics()
-    qs = sorted(
-        qs, key=lambda q: q.solved_count, reverse=True
-    )[:10]
+    qs = sorted(qs, key=lambda q: q.solved_count, reverse=True)[:10]
 
     # ランキング
     ctx["player_ranking"] = cu.make_player_ranking()[:10]
@@ -36,4 +34,4 @@ def stats_view(request: HttpRequest, contest_id: str):
     ctx["player_accuracy_ranking"] = cu.make_player_accuracy_ranking()[:10]
     ctx["team_accuracy_ranking"] = cu.make_team_accuracy_ranking()
 
-    return render(request, 'ctf/contest/monitor/stats.html', ctx)
+    return render(request, "ctf/contest/monitor/stats.html", ctx)

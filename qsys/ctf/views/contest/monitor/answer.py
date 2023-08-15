@@ -61,4 +61,4 @@ def answer_view(request: HttpRequest, contest_id: str):
             ctx["selected_team"] = team
 
     ctx["total"] = len(ctx["history"])
-    return render(request, 'ctf/contest/monitor/answer.html', ctx)
+    return render(request, "ctf/contest/monitor/answer.html", ctx)
