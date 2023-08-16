@@ -2,7 +2,10 @@ from django.urls import path
 
 from ctf.views.contest.questions import question_detail_view, questions_view
 from ctf.views.index import index_view
-from ctf.views.contest.manager.contest import manager_contest_view
+from ctf.views.contest.manager.contest import (
+    manager_contest_update_view,
+    manager_contest_view,
+)
 from ctf.views.contest.manager.team import manager_team_view
 from ctf.views.contest.home import contest_home_view
 from ctf.views.contest.account import account_view
@@ -40,6 +43,11 @@ urlpatterns = [
         "<str:contest_id>/manager/contest/",
         manager_contest_view,
         name="manager_contest",
+    ),
+    path(
+        "<str:contest_id>/manager/contest/create/",
+        manager_contest_update_view,
+        name="manager_contest_update",
     ),
     path(
         "<str:contest_id>/manager/team/",
