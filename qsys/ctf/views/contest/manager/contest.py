@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
+from django.utils import timezone
 
 from ctf.models.contest import Contest
 from ctf.utils.contest_util import ContestUtils
@@ -35,6 +36,46 @@ def manager_contest_view(request: HttpRequest, contest_id: str):
     ]
     ctx["status"] = status_table[contest.status]
     ctx["is_open"] = contest.is_open
+
+    # コンテスト情報を集計する
+    # 集計内容は以下に示す
+    # - プレイヤー数
+    # - チーム数
+    # - 問題数
+    # - 開催期間
+
+    # プレイヤー数
+    player_count = ("参加者数", len(cu.get_players()))
+
+    # チーム数
+    team_count = ("チーム数", contest.teams.count())
+
+    # 問題数
+    problem_count = ("登録問題数", contest.questions.count())
+
+    # 開催期間
+    start_time = contest.start_at
+    end_time = contest.end_at
+    duration = ("開催時間", end_time - start_time)
+    now = timezone.now()
+    if start_time > now:
+        time_status = "開催前"
+    elif end_time < now:
+        time_status = "開催期間超過"
+    else:
+        time_status = "開催期間内"
+
+    # 集計結果をコンテキストに追加
+    ctx["contest_info"] = [
+        ("コンテスト名", contest.name),
+        ("コンテストID", contest.id),
+        ("開催状況", time_status),
+        ("公開状況", "公開中" if contest.is_open else "非公開"),
+        player_count,
+        team_count,
+        problem_count,
+        duration,
+    ]
 
     return render(request, "ctf/contest/manager/contest.html", ctx)
 

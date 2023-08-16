@@ -29,6 +29,29 @@
     <section class="px-lg-5 p-4 py-2">
       <div class="pb-2">
         <span class="lead lh-1">Contest Manager</span>
+        <h3 class="fw-bolder">現在の開催設定</h3>
+      </div>
+      <table class="table table-striped border">
+        <tbody>
+          {% for i in contest_info %}
+          <tr>
+            <th scope="row" class="text-center">{{ i.0 }}</th>
+            <td>{{ i.1 }}</td>
+          </tr>
+          {% if i.0 == "コンテストID" %}
+          <tr>
+            <th scope="row" class="text-center">開催期間</th>
+            <td>{{ contest.start_at | date:"Y/m/d H:i" }} ~ {{ contest.end_at | date:"Y/m/d H:i" }}</td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="px-lg-5 p-4 py-2">
+      <div class="pb-2">
+        <span class="lead lh-1">Contest Manager</span>
         <h3 class="fw-bolder">開催設定</h3>
       </div>
 
@@ -78,6 +101,7 @@
                     <h4 class="card-title fw-bold py-3">コンテストを公開する</h4>
                     <div class="card-text">
                       <p>コンテストを全プレイヤーから表示できるようにします。</p>
+                      <p>コンテスト開催時は必ずONにする必要があります。</p>
                     </div>
                   </div>
                 </div>
