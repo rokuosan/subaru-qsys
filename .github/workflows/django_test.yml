@@ -6,6 +6,7 @@ on:
       - develop
     paths:
       - "qsys/**"
+      - ".github/workflows/django_test.yml"
 
 jobs:
     build:
