@@ -16,7 +16,7 @@ jobs:
                 working-directory: qsys
         strategy:
             matrix:
-                python-version: [3.10, 3.11.4]
+                python-version: ["3.10", "3.11.4"]
 
         steps:
           - name: Checkout
