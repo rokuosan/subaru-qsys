@@ -6,6 +6,7 @@ on:
       - develop
     paths:
       - "qsys/**"
+      - ".github/workflows/auto_format.yml"
 
 jobs:
     formatter:
