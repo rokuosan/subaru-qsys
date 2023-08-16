@@ -1,11 +1,19 @@
+{% load markdown_extras %}
+{% load django_bootstrap5 %}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ doc_name }}</title>
+  <title>{{ doc_name }} | Q-Sys Documentation</title>
+  {% bootstrap_css %}
 </head>
 <body>
-{{ doc_content }}
+  <div class="container">
+    {{ doc_content | markdown | safe }}
+  </div>
+  {% bootstrap_javascript %}
 </body>
 </html>
