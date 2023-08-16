@@ -40,7 +40,18 @@ def doc(request):
             title = yml.get("title", None)
             if title:
                 doc_name = title
-            doc_content = re.sub(r"---\n(.*)\n---", "", doc_content, re.DOTALL)
+            doc_content = re.sub(
+                r"^\-{3}[\n\r](.+)[\n\r]\-{3}",
+                "",
+                doc_content,
+                flags=re.DOTALL,
+            )
+
+            return render(
+                request,
+                "docs/doc.html",
+                {"doc_content": doc_content, "doc_name": doc_name, "yml": yml},
+            )
         else:
             doc_name = doc_name[:-3]
 
@@ -55,7 +66,7 @@ def doc(request):
 
 
 def get_data(text):
-    data = re.search(r"^\-{3}[\n\r](.+)[\n\r]\-{3}", text, re.DOTALL)
+    data = re.search(r"^\-{3}[\n\r](.+)[\n\r]\-{3}", text, flags=re.DOTALL)
     # data = re.search(r"---\n(.*)\n---", text, re.DOTALL)
     if data:
         return data.group(1)
