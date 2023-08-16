@@ -67,6 +67,9 @@ class CtfModelTests(TestCase):
 
     def test_manager_contest_view_redirect_check(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse("ctf:manager_contest"))
-        print(response)
+        response = self.client.get(
+            reverse(
+                "ctf:manager_contest", kwargs={"contest_id": self.contest.id}
+            )
+        )
         self.assertNotEqual(response.status_code, 200)
