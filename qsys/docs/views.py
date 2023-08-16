@@ -33,13 +33,11 @@ def doc(request):
                 data = get_data(doc_content)
                 if data:
                     yml = yaml.safe_load(data)
-                    print(yml)
         except Exception:
             return render(request, "docs/404.html")
 
         if yml:
             title = yml.get("title", None)
-            print(title)
             if title:
                 doc_name = title
             doc_content = re.sub(r"---\n(.*)\n---", "", doc_content, re.DOTALL)
@@ -57,8 +55,8 @@ def doc(request):
 
 
 def get_data(text):
-    data = re.search(r"^\-{3}[\n\r].+[\n\r]\-{3}", text, re.DOTALL)
-    data = re.search(r"---\n(.*)\n---", text, re.DOTALL)
+    data = re.search(r"^\-{3}[\n\r](.+)[\n\r]\-{3}", text, re.DOTALL)
+    # data = re.search(r"---\n(.*)\n---", text, re.DOTALL)
     if data:
         return data.group(1)
     else:
