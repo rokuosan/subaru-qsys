@@ -36,7 +36,7 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_question_detail(self):
-        d = Difficulty.objects.create(level=1, name="Easy")
+        d = Difficulty.objects.create(name="Easy")
         c = Category.objects.create(name="test")
 
         question = Question.objects.create(
