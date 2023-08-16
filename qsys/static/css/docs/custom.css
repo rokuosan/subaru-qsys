@@ -61,7 +61,7 @@ body {
 main {
     padding-top: 3rem;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto 5em auto;
 }
 
 h1 {
@@ -223,9 +223,43 @@ input[type=submit]+input[type=submit] {
 
 .author {
     margin-top: 0;
+    margin-bottom: 0;
     font-weight: thin;
 }
 
 .author::before {
     content: "by ";
+}
+
+.taglist{
+    list-style-type: none;
+    padding: 0.5em 0 0.5em 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+}
+
+.tag {
+    font-size: 0.75rem;
+    border: 1px solid gray;
+    border-radius: 0.25em;
+    padding: 0 0.5em 0em 0.5em;
+    text-decoration: none;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    padding: 0.5em;
+    border: 1px solid gray;
+}
+
+th {
+    background-color: var(--dark);
+    color: var(--light);
 }

@@ -1,6 +1,9 @@
 ---
-title: test
-author: John Doe
+title: 日本語のテスト
+author: 松本
+tags:
+- サンプル
+- テスト
 ---
 
 [TOC]

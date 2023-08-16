@@ -29,6 +29,13 @@
   <main>
     <h1 class="title">{{ doc_name }}</h1>
     <p class="author">{{ yml.author }}</p>
+    {% if yml.tags %}
+    <ul class="taglist">
+      {% for tag in yml.tags %}
+      <li class="tag">{{ tag }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
     {{ doc_content | markdown | safe }}
   </main>
 </body>
