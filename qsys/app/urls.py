@@ -44,6 +44,8 @@ urlpatterns = [
     path("answer-history/", answer_history, name="answer_history"),
     # CTF
     path("ctf/", include("ctf.urls")),
+    # Docs
+    path("docs/", include("docs.urls")),
 ]
 
 if settings.DEBUG:
