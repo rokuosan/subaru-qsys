@@ -6,7 +6,10 @@ from ctf.views.contest.manager.contest import (
     manager_contest_update_view,
     manager_contest_view,
 )
-from ctf.views.contest.manager.team import manager_team_view
+from ctf.views.contest.manager.team import (
+    manager_team_create_view,
+    manager_team_view,
+)
 from ctf.views.contest.home import contest_home_view
 from ctf.views.contest.account import account_view
 from ctf.views.contest.ranking import ranking_view
@@ -53,6 +56,11 @@ urlpatterns = [
         "<str:contest_id>/manager/team/",
         manager_team_view,
         name="manager_team",
+    ),
+    path(
+        "<str:contest_id>/manager/team/create/",
+        manager_team_create_view,
+        name="manager_team_create",
     ),
     path(
         "<str:contest_id>/manager/player/",

@@ -16,20 +16,6 @@
 
   <div>
     <div class="row justify-content-center">
-      <div class="col-md-4 mb-2">
-        <div class="input-group">
-          <span class="input-group-text">Contest</span>
-          <select id="contest-select" class="form-select" aria-label="Contest-Select" name="contest_id">
-            {% for c in contests %}
-            {% if c.id == selected_contest.id %}
-            <option value="{{c.id}}" selected>{{c.name}}</option>
-            {% else %}
-            <option value="{{c.id}}">{{c.name}}</option>
-            {% endif %}
-            {% endfor %}
-          </select>
-        </div>
-      </div>
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-text">Team</span>
@@ -44,39 +30,71 @@
           </select>
         </div>
       </div>
+      <div class="col-md-2 d-flex justify-content-center">
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#create-team">チームを追加</button>
+
+        <div id="create-team" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <form method="post" action="{% url 'ctf:manager_team_create' contest.id %}" class="modal-content"
+              id="create-team-form">
+              {% csrf_token %}
+              <input type="hidden" name="create_type" value="team">
+              <div class="modal-header">
+                <h5 class="modal-title fw-bolder">チーム作成</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body d-flex flex-column">
+                <ul>
+                  <li>チーム名はそのまま表示されます。</li>
+                </ul>
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="team_name" name="team_name" placeholder="チーム名"
+                    autocomplete="off">
+                  <label for="team_name" class="form-label">チーム名</label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="create-team-button">作成</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="row justify-content-center mt-3">
       <div class="col-lg-5">
-        <h4>Players</h4>
-        {% for p in players %}
-        <form class="input-group mb-2"
-          action="{% url 'ctf:manager_team' selected_contest.id %}?contest_id={{selected_contest.id}}&team_id={{selected_team.id}}"
-          method="post">
+        {% for g in players %}
+        <div class="mb-4">
+          <h4 class="border-start border-3 border-dark px-3 py-1 fw-bold">{{ g.type }}</h4>
+          {% for p in g.players %}
+          <form class="input-group mb-2"
+            action="{% url 'ctf:manager_team' contest.id %}?team_id={{selected_team.id}}"
+            method="post">
           {% csrf_token %}
-          <input type="hidden" name="type" value="add">
-          <input type="hidden" name="player_id" value="{{p.id}}">
-          <div type="text" class="form-control" readonly>{{p.name}}</div>
-          <div type="text" class="form-control" readonly>{{p.team}}</div>
-          <button class="btn btn-outline-success" type="submit">追加</button>
-        </form>
-        {% endfor %}
-        {% if players|length == 0 %}
-        <div class="alert alert-info">
-          {% if team_members|length != 0 %}
-          チーム無所属のユーザーはいません
-          {% else %}
-          ContestとTeamを選択するとここに表示されます
+            <input type="hidden" name="type" value="add">
+            <input type="hidden" name="player_id" value="{{p.id}}">
+            <div type="text" class="form-control" readonly>{{p.name}}</div>
+            {% if p.team %}
+            <div type="text" class="form-control" readonly>{{p.team}}</div>
+            {% endif %}
+            <button class="btn btn-outline-success" type="submit">追加</button>
+          </form>
+          {% endfor %}
+          {% if g.players|length == 0 %}
+          <div class="alert alert-info">
+            {{ g.type }}のユーザーはいません
+          </div>
           {% endif %}
         </div>
-        {% endif %}
+        {% endfor %}
       </div>
       <div class="col-lg-5">
-        <h4>Team: {{ selected_team.name }}</h4>
-
+        <h4 class="border-start border-3 border-dark px-3 py-1 fw-bold">Team: {{ selected_team.name }}</h4>
         {% for member in members %}
         <form class="input-group mb-2"
-          action="{% url 'ctf:manager_team' selected_contest.id %}?contest_id={{selected_contest.id}}&team_id={{selected_team.id}}"
+          action="{% url 'ctf:manager_team' contest.id %}?team_id={{selected_team.id}}"
           method="post">
           {% csrf_token %}
           <input type="hidden" name="type" value="remove">
@@ -91,7 +109,7 @@
           {% if players|length != 0 %}
           このチームにメンバーはいません
           {% else %}
-          ContestとTeamを選択するとここに表示されます
+          Teamを選択するとここに表示されます
           {% endif %}
         </div>
         {% endif %}
@@ -102,29 +120,27 @@
 </div>
 <script>
   const teamSelect = document.getElementById('team-select');
-  const contestSelect = document.getElementById('contest-select');
 
   teamSelect.addEventListener('change', () => {
     const teamId = teamSelect.value;
-    const contestId = contestSelect.value;
-    window.location.href = `{% url 'ctf:manager_team' selected_contest.id %}?contest_id=${contestId}&team_id=${teamId}`;
+    window.location.href = `{% url 'ctf:manager_team' contest.id %}?team_id=${teamId}`;
   });
 
-  contestSelect.addEventListener('change', () => {
-    const teamId = teamSelect.value;
-    const contestId = contestSelect.value;
-    window.location.href = `{% url 'ctf:manager_team' selected_contest.id %}?contest_id=${contestId}&team_id=${teamId}`;
+  const createTeamButton = document.getElementById('create-team-button');
+  const createTeamForm = document.getElementById('create-team-form');
+
+  createTeamButton.addEventListener('click', () => {
+    const name = document.getElementById('team_name');
+
+    if (name.value == '' || name.value.length > 20 || name.value.length < 4) {
+      name.classList.add('is-invalid');
+      return;
+    }else {
+      name.classList.remove('is-invalid');
+    }
+
+    createTeamForm.submit();
   });
 
-  // window.onload = () => {
-  //   const teamId = teamSelect.value;
-  //   const contestId = contestSelect.value;
-  //   window.location.href = `{% url 'manager_team' %}?contest_id=${contestId}&team_id=${teamId}`;
-  // }
-  // window.onpageshow = () => {
-  //   const teamId = teamSelect.value;
-  //   const contestId = contestSelect.value;
-  //   window.location.href = `{% url 'manager_team' %}?contest_id=${contestId}&team_id=${teamId}`;
-  // }
 </script>
 {% endblock content %}
