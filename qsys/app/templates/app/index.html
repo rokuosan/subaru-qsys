@@ -1,5 +1,5 @@
 {% extends "base.html"%}
-{% block title%} Dashboard | Subaru CTF {% endblock title %}
+{% block title%} Home | Subaru Q-Sys {% endblock title %}
 {% block content %}
 
 <body class="h-100">
@@ -16,9 +16,6 @@
         <h1 class="display-5 fw-bold">Subaru Q-Sys</h1>
         {% endif %}
         <div class="col-lg-6 mx-auto">
-          <p class="lead mb-4">
-
-          </p>
           <div class="d-grid d-sm-flex justify-content-sm-center">
             {% if request.user.is_anonymous %}
             <a href="{% url 'login' %}" type="button" class="btn btn-primary btn-lg px-4" >Login</a>
@@ -26,10 +23,37 @@
           </div>
         </div>
       </div>
-    </div>
 
+      <div>
+        <div>
+          <span class="lead lh-1">Q-Sys Services</span>
+          <h2 class="fw-bolder">利用可能なサービス</h2>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="p-4 col-3">
+            <a class="card shadow-sm q-item block text-decoration-none text-dark" href="{% url 'ctf:index' %}">
+              <div class="card-body">
+                <h6 class="m-0 text-truncate fw-light">Q-Sys CTF</h6>
+                <h4 class="m-0 pb-1 card-title fw-bold text-truncate">Capture The Flag</h4>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
+<style>
+  .q-item {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
 
+  .q-item:hover {
+    transform: scale(1.05);
+  }
+</style>
 </html>
 {% endblock content %}
