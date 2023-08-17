@@ -16,8 +16,20 @@
   {% include 'docs/header.html' %}
 
   <main>
-    <h1 class="title">{{ doc_name }}</h1>
-    <p class="author">{{ yml.author }}</p>
+    <h1 class="title">
+      {% if yml.title %}
+        {{ yml.title }}
+      {% else %}
+        {{ doc_name }}
+      {% endif %}
+    </h1>
+    <p class="author">
+      {% if yml.author %}
+        {{ yml.author }}
+      {% else %}
+        Unknown
+      {% endif %}
+    </p>
     {% if yml.tags %}
     <ul class="taglist">
       {% for tag in yml.tags %}

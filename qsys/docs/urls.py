@@ -5,12 +5,13 @@ from . import views
 app_name = "docs"
 
 
-urlpatterns = [
-    path("", views.index, name="index"),
-]
+urlpatterns = []
 
-# Get all documents from ./documents directory
-# and create a path for each one
+docs = views.get_docs()
+if not docs:
+    urlpatterns.append(
+        path("", views.index, name="index")
+    )
 for doc in views.get_docs():
     print("Registered: " + doc[0])
     urlpatterns.append(
