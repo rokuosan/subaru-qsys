@@ -10,6 +10,10 @@
 - 運営者向けドキュメント
   - [クイックスタートガイド](./admin/quick-start.md)
   - [autosetup による自動セットアップについて](./admin/autosetup-by-command.md)
+  - [コンテストについて](./admin/about-contest.md)
+  - [プレイヤー/ユーザについて](./admin/about-player-and-user.md)
+  - [問題について](./admin/about-question.md)
+  - [チームについて](./admin/about-team.md)
 - 開発者向けドキュメント
   - [autosetup について](./developer/about-autosetup.md)
   - [init.yaml について](./developer/syntax-of-init-yaml.md)
