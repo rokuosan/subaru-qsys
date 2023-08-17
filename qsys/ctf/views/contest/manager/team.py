@@ -20,14 +20,9 @@ def manager_team_view(request: HttpRequest, contest_id: str):
     if not contests.exists():
         messages.info(request, "コンテストが登録されていません")
 
-    cid = request.GET.get("contest_id")
-    selected_contest = get_object_or_404(Contest, id=cid) if cid else None
-    if selected_contest is None:
-        selected_contest = contest
-
-    cu = ContestUtils(selected_contest)
+    cu = ContestUtils(contest)
     players = cu.get_players(all=True)
-    teams = selected_contest.teams.all()
+    teams = contest.teams.all()
 
     for p in players:
         p.team = cu.get_team_by_player(p)
@@ -58,18 +53,64 @@ def manager_team_view(request: HttpRequest, contest_id: str):
 
         params = request.GET.copy()
         return redirect(
-            reverse("ctf:manager_team", args=[selected_contest.id])
+            reverse("ctf:manager_team", args=[contest.id])
             + f"?{params.urlencode()}"
         )
 
     players = [p for p in players if p not in members]
 
+    no_team = []
+    on_team = []
+    for p in players:
+        t = cu.get_team_by_player(p)
+        if t:
+            on_team.append(p)
+        else:
+            no_team.append(p)
+
     ctx["contests"] = contests
-    ctx["selected_contest"] = selected_contest
-    ctx["players"] = players
+    ctx["contest"] = contest
+    ctx["players"] = [
+        {
+            "type": "未加入",
+            "players": no_team,
+        },
+        {
+            "type": "チーム加入済み",
+            "players": on_team,
+        },
+    ]
     ctx["teams"] = teams
     ctx["selected_team"] = selected_team
     ctx["members"] = members
-    ctx["contest"] = selected_contest
 
     return render(request, "ctf/contest/manager/team.html", ctx)
+
+
+@login_required
+def manager_team_create_view(request: HttpRequest, contest_id: str):
+    contest = get_object_or_404(Contest, id=contest_id)
+    cu = ContestUtils(contest)
+    if not request.user.is_admin:
+        return redirect("ctf:home", contest_id=contest.id)
+
+    if request.method != "POST":
+        return redirect("ctf:manager_team", contest_id=contest.id)
+
+    name = request.POST.get("team_name")
+    if not name:
+        messages.error(request, "チーム名を入力してください")
+        return redirect("ctf:manager_team", contest_id=contest.id)
+
+    teams = contest.teams.all()
+    if teams.filter(name=name).exists():
+        messages.error(request, "そのチーム名は既に使用されています")
+        return redirect("ctf:manager_team", contest_id=contest.id)
+
+    team = cu.create_team(name)
+    if team is None:
+        messages.error(request, "チームの作成に失敗しました")
+        return redirect("ctf:manager_team", contest_id=contest.id)
+
+    messages.success(request, "チームを作成しました")
+    return redirect("ctf:manager_team", contest_id=contest.id)

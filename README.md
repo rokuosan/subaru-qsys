@@ -2,28 +2,23 @@
 
 これは校内CTFを実施するためのDjangoアプリケーションです。
 
-## Attention
-
-このプロジェクトは現在開発中です。バグや要望などあればIssueやPRなどよろしくお願いします。
-
 ## Documentation
 
 詳細なドキュメントは[docs/README.md](docs/README.md)を参照してください。
 
-## Installation
-
-### Requirements
+## Requirements
 
 - Python 3.10+
 - Docker
 - Docker Compose
+- Git
 
-### Setup
+## Installation
 
 > **Note**
-> Q-Sysを起動して、ダッシュボードを起動するまでの方法をここに記載します。
+> ここではPythonのコマンドを``python``として記述します。
 
-このアプリケーションをダウンロードします。
+このリポジトリをクローンします。
 
 ```bash
 $ git clone git@github.com:rokuosan/subaru-qsys.git
@@ -31,16 +26,21 @@ $ cd subaru-qsys
 ```
 
 > **Note**
-> もしPython仮想環境を利用する場合は以下のコマンドで仮想環境を作成できます。
+> 仮想環境を作成して実行することを推奨します。以下のコマンドで仮想環境を作成することができます。
 > ```
 > $ python -m venv venv
 > ```
 
-以下コマンドを使ってデータベースを作成します。
+以下のコマンドで依存パッケージをインストールします。
 
 ```bash
 $ cd qsys
-$ python manage.py makemigrations
+$ pip install -r requirements.txt
+```
+
+以下コマンドを使ってデータベースを作成します。
+
+```bash
 $ python manage.py migrate
 ```
 
@@ -70,7 +70,7 @@ $ docker compose up -d
 
 | Name | Version |
 | :- | :-: |
-| Django | 4.2.3 |
+| Django | 4.2.4 |
 | Bootstrap | 5.2.3 |
 | django-bootstrap5 | 23.3 |
 | django-prometheus | 2.3.1 |

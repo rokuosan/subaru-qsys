@@ -457,3 +457,29 @@ class ContestUtils:
                 pws.append((user, password))
 
         return pws
+
+    def create_team(self, name: str) -> Team:
+        """チームを作成する
+
+        Args:
+            name (str): チーム名
+
+        Returns:
+            Team: 作成したチーム
+        """
+        try:
+            teams = self.contest.teams.all()
+            for team in teams:
+                if team.name == name:
+                    return None
+
+            team = Team.objects.create(
+                name=name,
+            )
+
+            self.contest.teams.add(team)
+
+            return team
+        except Exception as e:
+            print(e)
+            return None

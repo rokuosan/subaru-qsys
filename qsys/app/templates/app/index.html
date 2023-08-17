@@ -1,5 +1,5 @@
 {% extends "base.html"%}
-{% block title%} Dashboard | Subaru CTF {% endblock title %}
+{% block title%} Home | Subaru Q-Sys {% endblock title %}
 {% block content %}
 
 <body class="h-100">
@@ -13,12 +13,9 @@
         {% if not request.user.is_anonymous %}
         <h1 class="display-5 fw-bold">Welcome, {{ request.user.username }}</h1>
         {% else %}
-        <h1 class="display-5 fw-bold">Subaru CTF</h1>
+        <h1 class="display-5 fw-bold">Subaru Q-Sys</h1>
         {% endif %}
         <div class="col-lg-6 mx-auto">
-          <p class="lead mb-4">
-
-          </p>
           <div class="d-grid d-sm-flex justify-content-sm-center">
             {% if request.user.is_anonymous %}
             <a href="{% url 'login' %}" type="button" class="btn btn-primary btn-lg px-4" >Login</a>
@@ -26,48 +23,39 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <section class="container">
-      <div class="container py-2 px-5 h2 bg-black text-white mx-auto fw-bolder mb-2" style="width: fit-content; transform: skewX(-25deg);">
-        <div style="transform: skewX(25deg);">
-          開催中のCTF
+      {% if not request.user.is_anonymous %}
+      <div>
+        <div>
+          <span class="lead lh-1">Q-Sys Services</span>
+          <h2 class="fw-bolder">利用可能なサービス</h2>
         </div>
-      </div>
-
-      <div class="row justify-content-evenly mt-3">
-        <div class="col-xl-4 col-lg-6 col-md-8 col-12">
-          {% if contest %}
-          <div class="card">
-            <div class="card-body py-3 px-4">
-              <p class="mb-0 text-muted">name</p>
-              <h2 class="mb-2">{{ contest.name }}</h2>
-              <p class="lead mb-1">{{ contest.description }}</p>
-              <hr>
-              <div class="d-flex justify-content-between">
-                <div class="d-flex flex-column">
-                  <p class="mb-0 text-muted">Start</p>
-                  <p class="mb-0">{{ contest.start_at }}</p>
-                </div>
-                <div class="d-flex flex-column">
-                  <p class="mb-0 text-muted">End</p>
-                  <p class="mb-0">{{ contest.end_at }}</p>
-                </div>
+        <hr>
+        <div class="row">
+          <div class="p-4 col-3">
+            <a class="card shadow-sm q-item block text-decoration-none text-dark" href="{% url 'ctf:index' %}">
+              <div class="card-body">
+                <h6 class="m-0 text-truncate fw-light">Q-Sys CTF</h6>
+                <h4 class="m-0 pb-1 card-title fw-bold text-truncate">Capture The Flag</h4>
               </div>
-            </div>
+            </a>
           </div>
-          {% else %}
-          <div class="alert">
-            <div class="alert alert-warning" role="alert">
-              <strong>CTFが開催されていません</strong>
-            </div>
-          </div>
-          {% endif %}
         </div>
       </div>
-    </section>
+      {% endif %}
+    </div>
   </div>
 </body>
+<style>
+  .q-item {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
 
+  .q-item:hover {
+    transform: scale(1.05);
+  }
+</style>
 </html>
 {% endblock content %}
