@@ -20,10 +20,8 @@ from django.urls import include, path
 urlpatterns = [
     # Admin
     path("admin/", admin.site.urls),
-
     # App
     path("", include("app.urls")),
-
     # Prometheus
     path("", include("django_prometheus.urls")),
 ]

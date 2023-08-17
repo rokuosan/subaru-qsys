@@ -14,10 +14,8 @@ urlpatterns = [
         ),
         name="login",
     ),
-
     # CTF
     path("ctf/", include("ctf.urls")),
-
     # Docs
     path("docs/", include("docs.urls")),
 ]
