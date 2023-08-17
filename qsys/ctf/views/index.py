@@ -1,7 +1,6 @@
 from django.http import HttpRequest
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib import messages
+from django.shortcuts import redirect, render
 
 from ctf.models.contest import Contest
 from ctf.utils.contest_util import ContestUtils
