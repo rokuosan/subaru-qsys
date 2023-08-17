@@ -11,5 +11,4 @@ docs = views.get_docs()
 if not docs:
     urlpatterns.append(path("", views.index, name="index"))
 for doc in views.get_docs():
-    print("Registered: " + doc[0])
     urlpatterns.append(path(doc[0], views.doc, name=doc[1]))
