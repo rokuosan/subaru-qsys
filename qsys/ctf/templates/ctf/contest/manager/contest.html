@@ -162,6 +162,78 @@
           </div>
         </div>
 
+        <div class="col">
+          <div class="card">
+            <div class="card-body p-0">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="px-4 py-3">
+                    <h4 class="card-title fw-bold py-3">チームランキングを表示する</h4>
+                    <div class="card-text">
+                      <p>Rankingでチームランキングを表示します。</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="h-100 bg-light rounded-end border-start p-4">
+                    <div class="d-flex justify-content-around align-items-center h-100">
+                      <div class="form-check form-switch">
+                        <form action="{% url 'ctf:manager_contest_update' contest.id %}" method="post" id="form-team-ranking">
+                          {% csrf_token %}
+                          <input type="hidden" name="update_type" value="team-ranking">
+                          {% if team_ranking %}
+                          <input checked class="form-check-input" type="checkbox" id="btn-team-ranking"
+                            style="transform: scale(180%);" name="team-ranking">
+                          {% else %}
+                          <input class="form-check-input" type="checkbox" id="btn-team-ranking" style="transform: scale(180%);"
+                            name="team-ranking">
+                          {% endif %}
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+            <div class="card-body p-0">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="px-4 py-3">
+                    <h4 class="card-title fw-bold py-3">プレイヤーランキングを表示する</h4>
+                    <div class="card-text">
+                      <p>Rankingでプレイヤーランキングを表示します。</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="h-100 bg-light rounded-end border-start p-4">
+                    <div class="d-flex justify-content-around align-items-center h-100">
+                      <div class="form-check form-switch">
+                        <form action="{% url 'ctf:manager_contest_update' contest.id %}" method="post" id="form-player-ranking">
+                          {% csrf_token %}
+                          <input type="hidden" name="update_type" value="player-ranking">
+                          {% if player_ranking %}
+                          <input checked class="form-check-input" type="checkbox" id="btn-player-ranking"
+                            style="transform: scale(180%);" name="player-ranking">
+                          {% else %}
+                          <input class="form-check-input" type="checkbox" id="btn-player-ranking" style="transform: scale(180%);"
+                            name="player-ranking">
+                          {% endif %}
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   </div>
@@ -184,6 +256,20 @@
 
   btnVisibility.addEventListener('change', () => {
     formVisibility.submit();
+  });
+
+  const btnTeamRanking = document.getElementById('btn-team-ranking');
+  const formTeamRanking = document.getElementById('form-team-ranking');
+
+  btnTeamRanking.addEventListener('change', () => {
+    formTeamRanking.submit();
+  });
+
+  const btnPlayerRanking = document.getElementById('btn-player-ranking');
+  const formPlayerRanking = document.getElementById('form-player-ranking');
+
+  btnPlayerRanking.addEventListener('change', () => {
+    formPlayerRanking.submit();
   });
 </script>
 

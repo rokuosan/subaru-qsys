@@ -36,6 +36,8 @@ def manager_contest_view(request: HttpRequest, contest_id: str):
     ]
     ctx["status"] = status_table[contest.status]
     ctx["is_open"] = contest.is_open
+    ctx["team_ranking"] = contest.is_team_ranking_public
+    ctx["player_ranking"] = contest.is_player_ranking_public
 
     # コンテスト情報を集計する
     # 集計内容は以下に示す
@@ -122,5 +124,21 @@ def manager_contest_update_view(request: HttpRequest, contest_id: str):
         contest.save()
         messages.success(request, "コンテストの可視性を更新しました")
         return redirect("ctf:manager_contest", contest_id=contest.id)
+    elif update_type == "player-ranking":
+        # プレイヤーのランキングの可視性を更新する
+        val = request.POST.get("player-ranking")
+        if val == "on":
+            contest.is_player_ranking_public = True
+        else:
+            contest.is_player_ranking_public = False
+        contest.save()
+    elif update_type == "team-ranking":
+        # チームのランキングの可視性を更新する
+        val = request.POST.get("team-ranking")
+        if val == "on":
+            contest.is_team_ranking_public = True
+        else:
+            contest.is_team_ranking_public = False
+        contest.save()
 
     return redirect("ctf:manager_contest", contest_id=contest.id)
