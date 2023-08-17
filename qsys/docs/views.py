@@ -33,7 +33,7 @@ def get_docs() -> tuple:
 
 def doc(request):
     if request.path == "/docs/":
-        if '' in [d[0] for d in get_docs()]:
+        if "" in [d[0] for d in get_docs()]:
             try:
                 with open("docs/documents/index.md", "r") as f:
                     doc_content = f.read()
