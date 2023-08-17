@@ -11,13 +11,13 @@
       <div class="row justify-content-center">
         <div class="col-md-4 mb-2">
           <div class="input-group">
-            <span class="input-group-text">CTF</span>
+            <span class="input-group-text">Contest</span>
             <select id="ctf-select" class="form-select" aria-label="CTF-Select" name="ctf_id">
-              {% for ctf in all_ctfs %}
-              {% if ctf.ctf_id == active_ctf.ctf_id %}
-              <option value="{{ctf.ctf_id}}" selected>{{ctf.name}}</option>
+              {% for c in all_contests %}
+              {% if c.id == active_contest.id %}
+              <option value="{{c.id}}" selected>{{c.name}}</option>
               {% else %}
-              <option value="{{ctf.ctf_id}}">{{ctf.name}}</option>
+              <option value="{{c.id}}">{{c.name}}</option>
               {% endif %}
               {% endfor %}
             </select>
@@ -28,10 +28,10 @@
             <span class="input-group-text">Team</span>
             <select id="team-select" class="form-select" aria-label="Team-Select" name="team_id">
               {% for team in all_teams %}
-              {% if team.team_id == active_team.team_id %}
-              <option value="{{team.team_id}}" selected>{{team.name}}</option>
+              {% if team.id == active_team.id %}
+              <option value="{{team.id}}" selected>{{team.name}}</option>
               {% else %}
-              <option value="{{team.team_id}}">{{team.name}}</option>
+              <option value="{{team.id}}">{{team.name}}</option>
               {% endif %}
               {% endfor %}
             </select>
@@ -42,17 +42,17 @@
       <div class="row justify-content-center mt-3">
         <div class="col-lg-5">
           <h4>User List</h4>
-          {% for user in users %}
-          <form class="input-group mb-2" action="{% url 'manager_team' %}?ctf_id={{active_ctf.ctf_id}}&team_id={{active_team.team_id}}" method="post">
+          {% for p in players %}
+          <form class="input-group mb-2" action="{% url 'manager_team' %}?contest_id={{active_contest.id}}&team_id={{active_team.id}}" method="post">
             {% csrf_token %}
             <input type="hidden" name="type" value="add">
-            <input type="hidden" name="user_id" value="{{user.id}}">
-            <div type="text" class="form-control" readonly>{{user.username}}</div>
-            <div type="text" class="form-control" readonly>{{user.team}}</div>
+            <input type="hidden" name="user_id" value="{{p.id}}">
+            <div type="text" class="form-control" readonly>{{p.name}}</div>
+            <div type="text" class="form-control" readonly>{{p.team}}</div>
             <button class="btn btn-outline-success" type="submit">追加</button>
           </form>
           {% endfor %}
-          {% if users|length == 0 %}
+          {% if players|length == 0 %}
           <div class="alert alert-info">
             {% if team_members|length != 0 %}
             チーム無所属のユーザーはいません
@@ -66,18 +66,18 @@
           <h4>Team Member List</h4>
 
           {% for member in team_members %}
-          <form class="input-group mb-2" action="{% url 'manager_team' %}?ctf_id={{active_ctf.ctf_id}}&team_id={{active_team.team_id}}" method="post">
+          <form class="input-group mb-2" action="{% url 'manager_team' %}?contest_id={{active_contest.id}}&team_id={{active_team.id}}" method="post">
             {% csrf_token %}
             <input type="hidden" name="type" value="remove">
             <input type="hidden" name="user_id" value="{{member.id}}">
-            <div type="text" class="form-control" readonly>{{member.username}}</div>
-            <div type="text" class="form-control" readonly>{{member.team}}</div>
+            <div type="text" class="form-control" readonly>{{member.name}}</div>
+            <div type="text" class="form-control" readonly>{{member.team }}</div>
             <button class="btn btn-outline-danger" type="submit">削除</button>
           </form>
           {% endfor %}
           {% if team_members|length == 0 %}
           <div class="alert alert-info">
-            {% if users|length != 0 %}
+            {% if players|length != 0 %}
             このチームにメンバーはいません
             {% else %}
             CTFとTeamを選択するとここに表示されます
@@ -96,13 +96,13 @@
     teamSelect.addEventListener('change', () => {
       const teamId = teamSelect.value;
       const ctfId = ctfSelect.value;
-      window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
+      window.location.href = `{% url 'manager_team' %}?contest_id=${ctfId}&team_id=${teamId}`;
     });
 
     ctfSelect.addEventListener('change', () => {
       const teamId = teamSelect.value;
       const ctfId = ctfSelect.value;
-      window.location.href = `{% url 'manager_team' %}?ctf_id=${ctfId}&team_id=${teamId}`;
+      window.location.href = `{% url 'manager_team' %}?contest_id=${ctfId}&team_id=${teamId}`;
     });
 
     // window.onload = () => {

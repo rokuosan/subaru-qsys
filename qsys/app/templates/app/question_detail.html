@@ -22,10 +22,10 @@
         <h2>{{ question.title }}</h2>
       </div>
       <div class="col pb-4">
-        <p>{{ question.content | safe | linebreaksbr }}</p>
+        <p>{{ question.description | safe | linebreaksbr }}</p>
       </div>
       <div class="col border-top py-4">
-        <form action="{% url 'question_detail' question.question_id %}" method="post">
+        <form action="{% url 'question_detail' question.id %}" method="post">
           <div class="mb-3">
             {% csrf_token %}
             <label for="answer" class="form-label">Answer</label>

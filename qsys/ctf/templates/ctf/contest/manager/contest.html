@@ -1,0 +1,190 @@
+{% extends "ctf/base.html"%}
+{% block title%} Contest Manager | {{contest.name}} | Q-Sys {% endblock title %}
+{% block content %}
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+    <path
+      d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+  </symbol>
+</svg>
+
+<div class="container" style="margin-top: 100px;">
+  <div class="p-lg-4 pb-0">
+    <section class="d-flex">
+      <div>
+        <span class="lead lh-1">{{ contest.name }}</span>
+        <h2 class="fw-bolder">Contest Manager</h2>
+      </div>
+      <div class="ms-3 mt-3 fst-normal d-flex align-items-center fs-4">
+        <span style="width: fit-content; height: fit-content;" class="badge bg-{{ status.1 }}">
+          {{ status.0 }}
+        </span>
+      </div>
+    </section>
+    <section id="description" class="py-3">
+      {% include 'ctf/components/alert_info.html' with text=msg %}
+    </section>
+
+    <section class="px-lg-5 p-4 py-2">
+      <div class="pb-2">
+        <span class="lead lh-1">Contest Manager</span>
+        <h3 class="fw-bolder">現在の開催設定</h3>
+      </div>
+      <table class="table table-striped border">
+        <tbody>
+          {% for i in contest_info %}
+          <tr>
+            <th scope="row" class="text-center">{{ i.0 }}</th>
+            <td>{{ i.1 }}</td>
+          </tr>
+          {% if i.0 == "コンテストID" %}
+          <tr>
+            <th scope="row" class="text-center">開催期間</th>
+            <td>{{ contest.start_at | date:"Y/m/d H:i" }} ~ {{ contest.end_at | date:"Y/m/d H:i" }}</td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="px-lg-5 p-4 py-2">
+      <div class="pb-2">
+        <span class="lead lh-1">Contest Manager</span>
+        <h3 class="fw-bolder">開催設定</h3>
+      </div>
+
+      <div class="row row-cols-1 g-3">
+        <div class="col">
+          <div class="card">
+            <div class="card-body p-0">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="px-4 py-3">
+                    <h4 class="card-title fw-bold py-3">開催状況の変更</h4>
+                    <div class="card-text">
+                      <p>この項目ではコンテストの開催状況を変更することができます。</p>
+                      <p>一時停止中はプレイヤーの回答などの行動が制限されます。</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="h-100 bg-light rounded-end border-start p-4">
+                    <form class="d-flex justify-content-around align-items-center h-100 flex-wrap" action="{% url 'ctf:manager_contest_update' contest.id %}" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="update_type" value="status">
+                      <select name="status" id="select-status" class="form-select w-75">
+                        {% for r in status_table %}
+                        {% if r.0 == status.2 %}
+                        <option value="{{ r.0 }}" selected>{{ r.1 }}</option>
+                        {% else %}
+                        <option value="{{ r.0 }}">{{ r.1 }}</option>
+                        {% endif %}
+                        {% endfor %}
+                      </select>
+                      <button type="submit" class="btn btn-primary" id="btn-status-apply" disabled>適用</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+            <div class="card-body p-0">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="px-4 py-3">
+                    <h4 class="card-title fw-bold py-3">コンテストを公開する</h4>
+                    <div class="card-text">
+                      <p>コンテストを全プレイヤーから表示できるようにします。</p>
+                      <p>コンテスト開催時は必ずONにする必要があります。</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="h-100 bg-light rounded-end border-start p-4">
+                    <div class="d-flex justify-content-around align-items-center h-100">
+                      <div class="form-check form-switch">
+                        <form action="{% url 'ctf:manager_contest_update' contest.id %}" method="post" id="form-visibility">
+                          {% csrf_token %}
+                          <input type="hidden" name="update_type" value="visibility">
+                          {% if is_open %}
+                          <input checked class="form-check-input" type="checkbox" id="btn-visibility" style="transform: scale(180%);" name="visibility">
+                          {% else %}
+                          <input class="form-check-input" type="checkbox" id="btn-visibility" style="transform: scale(180%);" name="visibility">
+                          {% endif %}
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+            <div class="card-body p-0">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="px-4 py-3">
+                    <h4 class="card-title fw-bold py-3">開催期間の変更</h4>
+                    <div class="card-text">
+                      <p>開催期間の変更はDjango管理サイト(Django Admin Panel)から行ってください</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="h-100 bg-light rounded-end border-start p-4">
+                    <div class="d-flex justify-content-around align-items-center h-100">
+                      <a href="/admin/ctf/contest/" target="_blank" rel="noopener noreferrer">
+                        <button class="btn btn-primary">
+                          Django管理サイトへ移動する
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                              d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+                            <path fill-rule="evenodd"
+                              d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+                          </svg>
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  const selectStatus = document.getElementById('select-status');
+  const btnStatusApply = document.getElementById('btn-status-apply');
+
+  selectStatus.addEventListener('change', () => {
+    if (selectStatus.value == '{{ status.2 }}') {
+      btnStatusApply.disabled = true;
+    } else {
+      btnStatusApply.disabled = false;
+    }
+  });
+
+  const btnVisibility = document.getElementById('btn-visibility');
+  const formVisibility = document.getElementById('form-visibility');
+
+  btnVisibility.addEventListener('change', () => {
+    formVisibility.submit();
+  });
+</script>
+
+{% endblock content %}

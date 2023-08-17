@@ -37,21 +37,21 @@
 
       <div class="row justify-content-evenly mt-3">
         <div class="col-xl-4 col-lg-6 col-md-8 col-12">
-          {% if ctf %}
+          {% if contest %}
           <div class="card">
             <div class="card-body py-3 px-4">
               <p class="mb-0 text-muted">name</p>
-              <h2 class="mb-2">{{ ctf.name }}</h2>
-              <p class="lead mb-1">{{ ctf.description }}</p>
+              <h2 class="mb-2">{{ contest.name }}</h2>
+              <p class="lead mb-1">{{ contest.description }}</p>
               <hr>
               <div class="d-flex justify-content-between">
                 <div class="d-flex flex-column">
                   <p class="mb-0 text-muted">Start</p>
-                  <p class="mb-0">{{ ctf.start_at }}</p>
+                  <p class="mb-0">{{ contest.start_at }}</p>
                 </div>
                 <div class="d-flex flex-column">
                   <p class="mb-0 text-muted">End</p>
-                  <p class="mb-0">{{ ctf.end_at }}</p>
+                  <p class="mb-0">{{ contest.end_at }}</p>
                 </div>
               </div>
             </div>

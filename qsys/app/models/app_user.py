@@ -3,8 +3,6 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django_prometheus.models import ExportModelOperationsMixin
 
-from .team import CtfTeam
-
 
 class AppUserManager(BaseUserManager):
     """App User Manager"""
@@ -41,7 +39,6 @@ class AppUser(
         max_length=255,
         unique=True,
     )
-    team = models.ForeignKey(CtfTeam, models.CASCADE, null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

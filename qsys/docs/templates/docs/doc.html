@@ -1,0 +1,44 @@
+{% load markdown_extras %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ doc_name }} | Q-Sys Documentation</title>
+  <!-- <link rel="stylesheet" href="{% static '/css/docs/neat.css' %}"> -->
+  <link rel="stylesheet" href="{% static '/css/docs/custom.css' %}">
+</head>
+<body>
+
+  {% include 'docs/header.html' %}
+
+  <main>
+    <h1 class="title">
+      {% if yml.title %}
+        {{ yml.title }}
+      {% else %}
+        {{ doc_name }}
+      {% endif %}
+    </h1>
+    <p class="author">
+      {% if yml.author %}
+        {{ yml.author }}
+      {% else %}
+        Unknown
+      {% endif %}
+    </p>
+    {% if yml.tags %}
+    <ul class="taglist">
+      {% for tag in yml.tags %}
+      <li class="tag">{{ tag }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {{ doc_content | markdown | safe }}
+  </main>
+</body>
+
+</html>

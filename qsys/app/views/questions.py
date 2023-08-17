@@ -1,11 +1,12 @@
-from app.models.category import CtfQuestionCategory
-from app.models.history import CtfAnswerHistory as history
-from app.models.question import CtfQuestion
-from app.models.ctf_information import CtfInformation
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
+
+from ctf.models.contest import Contest
+from ctf.models.player import Player
+from ctf.models.history import History
+from ctf.models.question import Category, Question
 
 
 @login_required
@@ -13,29 +14,30 @@ def questions(request: HttpRequest):
     """問題一覧を表示するView"""
     ctx = {}
 
-    ctf = None
-    ctfs = CtfInformation.objects.filter(is_active=True)
-    if not ctfs:
-        ctx["message"] = "CTFが開催されていません"
+    contest = None
+    player = Player.get_player(request.user)
+    contests = Contest.get_active_contests()
+    if not contests:
+        ctx["message"] = "コンテストが開催されていません"
         return render(request, "app/questions.html", ctx)
-    for c in ctfs:
-        if request.user in c.participants.all():
-            ctf = c
+    for c in contests:
+        if player in c.get_joined_players():
+            contest = c
             break
 
-    if ctf is None:
-        messages.error(request, "参加中のCTFはありません")
+    if contest is None:
+        messages.error(request, "参加中のコンテストはありません")
         return redirect("index")
 
-    if ctf.is_ended:
+    if contest.is_over:
         if request.user.is_admin:
-            messages.error(request, "このCTFの開催期間は終了しました")
+            messages.error(request, "このコンテストの開催期間は終了しました")
             messages.info(request, "管理者として閲覧しています")
         else:
             messages.error(request, "開催期間が過ぎているため、問題を閲覧できません")
             return redirect("index")
 
-    if ctf.is_paused:
+    if contest.status == Contest.Status.PAUSED:
         if request.user.is_admin:
             messages.error(request, "CTFは一時中止されています")
             messages.info(request, "管理者として閲覧しています")
@@ -44,32 +46,37 @@ def questions(request: HttpRequest):
             return redirect("index")
 
     # 公開中の問題を取得
-    all_questions = CtfQuestion.objects.filter(is_published=True)
+    all_questions = contest.questions.filter(is_open=True)
 
     # 回答済みの問題を取得
-    solved = history.objects.filter(
-        user=request.user, is_correct=True, ctf=ctf
+    solved = History.objects.filter(
+        player=player, is_correct=True, contest=contest
     ).values_list("question", flat=True)
-    print(solved)
-    solved_team = None
-    if request.user.team:
-        solved_team = (
-            history.objects.filter(
-                team=request.user.team, is_correct=True
-            ).exclude(user=request.user)
-        ).values_list("question", flat=True)
+
+    teams = player.teams.all()
+    team = None
+    for t in teams:
+        if t in contest.teams.all():
+            team = t
+            break
+
+    solved_team = (
+        History.objects.filter(team=team, is_correct=True, contest=contest)
+        .exclude(player=player)
+        .values_list("question", flat=True)
+    )
 
     # カテゴリごとに問題を分類し、リストに追加
     lst = []
-    categories = CtfQuestionCategory.objects.all()
+    categories = Category.objects.all()
     for cat in categories:
         questions = []
         cat_questions = all_questions.filter(category=cat)
         cat_questions = cat_questions.order_by("difficulty")
         for question in cat_questions:
-            if question.question_id in solved:
+            if question.id in solved:
                 question.is_answered = True
-            elif request.user.team and question.question_id in solved_team:
+            elif team and question.id in solved_team:
                 question.is_answered = True
                 question.is_answered_by_team = True
             questions.append(question)
@@ -85,39 +92,45 @@ def questions(request: HttpRequest):
 
 
 @login_required
-def question_detail(request: HttpRequest, question_id: int):
+def question_detail(request: HttpRequest, question_id: str):
     """問題の詳細を表示するView"""
     ctx = {}
-    question = get_object_or_404(CtfQuestion, pk=question_id)
+    question = get_object_or_404(Question, pk=question_id)
     ctx["question"] = question
 
     # 未公開
-    if not question.is_published:
+    if not question.is_open:
         messages.error(request, "この問題は公開されていません")
         return redirect("questions")
 
-    # CTFが開催されていない
-    ctfs = CtfInformation.objects.filter(is_active=True)
-    if not ctfs:
-        messages.warning(request, "CTFが開催されていません")
+    # コンテストが開催されていない
+    contests = Contest.get_active_contests()
+    if not contests:
+        messages.warning(request, "コンテストが開催されていません")
         return redirect("questions")
 
-    # CTFが終了済み
-    ctf = ctfs.first()
-    if ctf.is_ended:
-        messages.warning(request, "このCTFは終了しました")
+    # コンテストを取得
+    player = Player.get_player(request.user)
+    for c in contests:
+        if player in c.get_joined_players():
+            contest = c
+            break
+
+    # コンテストが終了済み
+    if contest.is_over:
+        messages.warning(request, "このコンテストは終了しました")
         if not request.user.is_admin:
             return redirect("questions")
 
-    # CTFが一時停止
-    if ctf.is_paused:
-        messages.warning(request, "このCTFは一時停止されています")
+    # コンテストが一時停止
+    if contest.status == Contest.Status.PAUSED:
+        messages.warning(request, "このコンテストは一時停止されています")
         if not request.user.is_admin:
             return redirect("questions")
 
     # 未開始
-    if not ctf.is_started:
-        messages.warning(request, "このCTFは開始されていません")
+    if contest.status == Contest.Status.PREPARING:
+        messages.warning(request, "このコンテストは開始されていません")
         if not request.user.is_admin:
             return redirect("questions")
 
@@ -139,19 +152,22 @@ def question_detail(request: HttpRequest, question_id: int):
             return redirect("question_detail", question_id=question_id)
 
         # 回答済み
-        if history.objects.filter(
-            question=question, user=request.user, is_correct=True
+        if History.objects.filter(
+            question=question, player=player, is_correct=True
         ).exists():
             messages.error(request, "既に回答済みです")
             return redirect("question_detail", question_id=question_id)
 
         # 回答済み（チーム）
-        if (
-            request.user.team
-            and history.objects.filter(
-                question=question, team=request.user.team, is_correct=True
-            ).exists()
-        ):
+        team = None
+        for t in player.teams.all():
+            if t in contest.teams.all():
+                team = t
+                break
+
+        if History.objects.filter(
+            question=question, team=team, is_correct=True
+        ).exists():
             messages.error(request, "既にチームで回答済みです")
             return redirect("question_detail", question_id=question_id)
 
@@ -169,13 +185,14 @@ def question_detail(request: HttpRequest, question_id: int):
             }
 
         # 回答履歴を保存
-        history.objects.create(
+        History.objects.create(
+            contest=contest,
             question=question,
-            user=request.user,
-            team=request.user.team,
+            player=player,
+            team=team,
             is_correct=answer == question.flag,
-            content=answer,
-            ctf=ctf,
+            answer=answer,
+            point=question.point,
         ).save()
 
         return redirect("question_detail", question_id=question_id)

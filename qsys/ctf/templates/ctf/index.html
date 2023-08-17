@@ -1,0 +1,88 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CTF | Q-Sys</title>
+  {% bootstrap_css %}
+</head>
+
+<body class="bg-light position-relative" style="min-height: 100dvh;">
+  <div class="position-fixed bottom-0 end-0 px-4" style="z-index: 5000;">
+    {% include 'django_bootstrap5/messages.html' %}
+  </div>
+  <div class="container" style="margin-top: 50px;">
+    <div class="p-lg-4">
+      <div class="my-5 mt-4">
+        <div class="mb-3">
+          <a href="{% url 'index' %}" class="text-decoration-none">
+            {% include 'app/icons/left-short.svg' %}
+            <span>Q-Sys Home</span>
+          </a>
+        </div>
+        <div>
+          <span class="lead lh-1">Online Contest</span>
+          <h2 class="fw-bolder">公開中のコンテスト</h2>
+        </div>
+        <hr>
+
+        <section>
+          <div class="row">
+            {% for c in opened_contests %}
+            <div class="p-4 col-3">
+              <a class="card shadow-sm q-item block text-decoration-none text-dark" href="{% url 'ctf:home' c.id %}">
+                <div class="card-body">
+                  <h6 class="m-0 text-truncate fw-light">{{ c.id }}</h6>
+                  <h4 class="m-0 card-title fw-bold text-truncate">{{ c.name }}</h4>
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+
+      {% if closed_contests %}
+      <div class="my-5">
+        <div>
+          <span class="lead lh-1">Offline Contest</span>
+          <h2 class="fw-bolder">非公開のコンテスト</h2>
+        </div>
+        <hr>
+
+        <section>
+          <div class="row">
+            {% for c in closed_contests %}
+            <div class="p-4 col-3">
+              <a class="card shadow-sm q-item block text-decoration-none text-dark" href="{% url 'ctf:home' c.id %}">
+                <div class="card-body">
+                  <h6 class="m-0 text-truncate fw-light">{{ c.id }}</h6>
+                  <h4 class="m-0 card-title fw-bold text-truncate">{{ c.name }}</h4>
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% bootstrap_javascript %}
+</body>
+<style>
+  .q-item {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  .q-item:hover {
+    transform: scale(1.05);
+  }
+</style>
+</html>

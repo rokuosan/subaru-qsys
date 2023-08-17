@@ -1,0 +1,78 @@
+{% extends "ctf/base.html"%}
+{% block title%} Questions | {{contest.name}} | Q-Sys {% endblock title %}
+{% block content %}
+
+<div class="container" style="margin-top: 100px;">
+  <div class="p-lg-4">
+    <div class="d-flex">
+      <div>
+        <span class="lead lh-1">{{ contest.name }}</span>
+        <h2 class="fw-bolder">Questions</h2>
+      </div>
+      <div class="ms-3 mt-3 fst-normal d-flex align-items-center fs-4">
+        <span style="width: fit-content; height: fit-content;" class="badge bg-dark">
+          {{solved}} / {{ total }}
+        </span>
+      </div>
+    </div>
+    <div class="container px-md-2 py-md-2 d-flex flex-column gap-0">
+      {% for set in sets %}
+      <div class="accordion accordion-flush p-3" id="accordion-{{ set.category.id }}">
+        <div class="accordion-item bg-light">
+          <div id="accordion-{{ set.category.id }}-h1" class="w-100 d-flex justify-content-between p-3 pt-2 pb-0">
+            <h3 class="fw-bolder fst-italic d-flex align-items-center my-auto py-2" style="border-left-style: solid;padding-left: 12px;">
+              <span>{{ set.category.name | capfirst }}</span>
+            </h3>
+            <div class="d-flex align-items-center">
+              <button class="accordion-button position-relative right-0 rounded shadow-sm" style="width: fit-content;" type="button"
+                data-bs-toggle="collapse" data-bs-target="#accordion-{{ set.category.id }}-collapse" aria-expanded="true"
+                aria-controls="accordion-{{ set.category.id }}-collapse">
+              </button>
+            </div>
+          </div>
+          <div id="accordion-{{ set.category.id }}-collapse" class="accordion-collapse collapse show"
+            aria-labelledby="accordion-{{ set.category.id }}-h1">
+            <div class="accordion-body">
+              <div class="row pt-0 pb-2 d-flex">
+                {% for q in set.questions %}
+                <div class="position-static col-md-3 q-item">
+                  <a href="{% url 'ctf:question_detail' contest_id=contest.id question_id=q.id %}"
+                    class="text-dark text-decoration-none">
+                    <div class="bg-white shadow-sm rounded px-3 py-2 mb-2">
+                      <div class="d-flex justify-content-between">
+                        <div>
+                          <span class="fw-light">{{ q.difficulty }}</span>
+                          <span class="fw-light">{{ q.point }} pts</span>
+                        </div>
+                        {% if q.solved %}
+                        <div>
+                          <span class="badge bg-{{ q.solved_budge }}">{{ q.solved_msg }}</span>
+                        </div>
+                        {% endif %}
+                      </div>
+                      <h4 class="fw-bold text-truncate pt-2">{{ q.title }}</h4>
+                    </div>
+                  </a>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<style>
+.q-item {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.q-item:hover {
+  transform: scale(1.05);
+}
+</style>
+{% endblock content %}

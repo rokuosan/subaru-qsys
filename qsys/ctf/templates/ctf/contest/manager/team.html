@@ -1,0 +1,130 @@
+{% extends "base.html"%}
+{% block title%} Team Manager | Q-Sys {% endblock title %}
+{% block content %}
+
+{% include "ctf/components/header.html" %}
+<div class="container" style="margin-top: 100px;">
+  <div class="p-lg-4">
+    <section class="d-flex">
+      <div>
+        <span class="lead lh-1">{{ contest.name }}</span>
+        <h2 class="fw-bolder">Team Manager</h2>
+      </div>
+    </section>
+
+  </div>
+
+  <div>
+    <div class="row justify-content-center">
+      <div class="col-md-4 mb-2">
+        <div class="input-group">
+          <span class="input-group-text">Contest</span>
+          <select id="contest-select" class="form-select" aria-label="Contest-Select" name="contest_id">
+            {% for c in contests %}
+            {% if c.id == selected_contest.id %}
+            <option value="{{c.id}}" selected>{{c.name}}</option>
+            {% else %}
+            <option value="{{c.id}}">{{c.name}}</option>
+            {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-text">Team</span>
+          <select id="team-select" class="form-select" aria-label="Team-Select" name="team_id">
+            {% for team in teams %}
+            {% if team.id == selected_team.id %}
+            <option value="{{team.id}}" selected>{{team.name}}</option>
+            {% else %}
+            <option value="{{team.id}}">{{team.name}}</option>
+            {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-3">
+      <div class="col-lg-5">
+        <h4>Players</h4>
+        {% for p in players %}
+        <form class="input-group mb-2"
+          action="{% url 'ctf:manager_team' selected_contest.id %}?contest_id={{selected_contest.id}}&team_id={{selected_team.id}}"
+          method="post">
+          {% csrf_token %}
+          <input type="hidden" name="type" value="add">
+          <input type="hidden" name="player_id" value="{{p.id}}">
+          <div type="text" class="form-control" readonly>{{p.name}}</div>
+          <div type="text" class="form-control" readonly>{{p.team}}</div>
+          <button class="btn btn-outline-success" type="submit">追加</button>
+        </form>
+        {% endfor %}
+        {% if players|length == 0 %}
+        <div class="alert alert-info">
+          {% if team_members|length != 0 %}
+          チーム無所属のユーザーはいません
+          {% else %}
+          ContestとTeamを選択するとここに表示されます
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-lg-5">
+        <h4>Team: {{ selected_team.name }}</h4>
+
+        {% for member in members %}
+        <form class="input-group mb-2"
+          action="{% url 'ctf:manager_team' selected_contest.id %}?contest_id={{selected_contest.id}}&team_id={{selected_team.id}}"
+          method="post">
+          {% csrf_token %}
+          <input type="hidden" name="type" value="remove">
+          <input type="hidden" name="player_id" value="{{member.id}}">
+          <div type="text" class="form-control" readonly>{{member.name}}</div>
+          <div type="text" class="form-control" readonly>{{member.team }}</div>
+          <button class="btn btn-outline-danger" type="submit">削除</button>
+        </form>
+        {% endfor %}
+        {% if members|length == 0 %}
+        <div class="alert alert-info">
+          {% if players|length != 0 %}
+          このチームにメンバーはいません
+          {% else %}
+          ContestとTeamを選択するとここに表示されます
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+  const teamSelect = document.getElementById('team-select');
+  const contestSelect = document.getElementById('contest-select');
+
+  teamSelect.addEventListener('change', () => {
+    const teamId = teamSelect.value;
+    const contestId = contestSelect.value;
+    window.location.href = `{% url 'ctf:manager_team' selected_contest.id %}?contest_id=${contestId}&team_id=${teamId}`;
+  });
+
+  contestSelect.addEventListener('change', () => {
+    const teamId = teamSelect.value;
+    const contestId = contestSelect.value;
+    window.location.href = `{% url 'ctf:manager_team' selected_contest.id %}?contest_id=${contestId}&team_id=${teamId}`;
+  });
+
+  // window.onload = () => {
+  //   const teamId = teamSelect.value;
+  //   const contestId = contestSelect.value;
+  //   window.location.href = `{% url 'manager_team' %}?contest_id=${contestId}&team_id=${teamId}`;
+  // }
+  // window.onpageshow = () => {
+  //   const teamId = teamSelect.value;
+  //   const contestId = contestSelect.value;
+  //   window.location.href = `{% url 'manager_team' %}?contest_id=${contestId}&team_id=${teamId}`;
+  // }
+</script>
+{% endblock content %}

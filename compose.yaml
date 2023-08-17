@@ -1,13 +1,28 @@
 volumes:
   prometheus-data:
+  socket:
 
 services:
-  server:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./qsys/static:/etc/nginx/static
+      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./services/nginx/conf.d:/etc/nginx/conf.d
+      - ./services/nginx/html:/usr/share/nginx/html
+      - ./services/nginx/log:/var/log/nginx
+      - socket:/var/run/uwsgi
+    restart: unless-stopped
+    depends_on:
+      - django
+
+  django:
     build: ./qsys/
     volumes:
       - ./qsys/:/app
-    ports:
-      - "80:8000"
+      - socket:/var/run/uwsgi
 
   prometheus:
     image: prom/prometheus
