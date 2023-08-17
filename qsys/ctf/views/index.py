@@ -1,42 +1,40 @@
 from django.http import HttpRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages
 
 from ctf.models.contest import Contest
+from ctf.utils.contest_util import ContestUtils
 
 
 @login_required
 def index_view(request: HttpRequest):
-    if not request.user.is_admin:
-        return redirect("ctf:index")
+    ctx = {}
 
-    if request.method == "POST":
-        contest_id = request.POST.get("contest_id")
-        contest = get_object_or_404(Contest, id=contest_id)
+    try:
+        player = request.user.player
+    except Exception:
+        return redirect("index")
 
-        status = request.POST.get("status")
-        contest.status = status
+    contests = Contest.objects.all()
+    ctx["contests"] = contests
 
-        is_open = request.POST.get("is_open")
-        contest.is_open = is_open == "True"
+    joined_contests = []
+    for contest in contests:
+        cu = ContestUtils(contest)
+        if player in cu.get_players():
+            joined_contests.append(contest)
 
-        contest.save()
-        return redirect("ctf:manager_contest")
+    opened_contests = []
+    closed_contests = []
+    for contest in contests:
+        if contest.is_open:
+            opened_contests.append(contest)
+        else:
+            closed_contests.append(contest)
 
-    open_contests = Contest.objects.filter(is_open=True)
-    closed_contests = Contest.objects.filter(is_open=False)
-
-    ctx = {
-        "all_contests": [
-            {
-                "name": "Public Contests",
-                "contests": open_contests,
-            },
-            {
-                "name": "Private Contests",
-                "contests": closed_contests,
-            },
-        ]
-    }
+    ctx["opened_contests"] = opened_contests
+    if request.user.is_admin:
+        ctx["closed_contests"] = closed_contests
 
     return render(request, "ctf/index.html", ctx)

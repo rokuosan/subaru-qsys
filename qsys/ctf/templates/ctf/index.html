@@ -15,40 +15,74 @@
   <div class="position-fixed bottom-0 end-0 px-4" style="z-index: 5000;">
     {% include 'django_bootstrap5/messages.html' %}
   </div>
-  <div class="container">
+  <div class="container" style="margin-top: 50px;">
     <div class="p-lg-4">
-      {% for contest_type in all_contests %}
-      <div>
-        <h3>{{ contest_type.name }}</h3>
-
-        <div class="mb-4">
-          {% for c in contest_type.contests %}
-          <div class="border px-3 py-2">
-            <h4>{{ c.name }} ({{ c.status }})</h4>
-            <form action="{% url 'ctf:index' %}" method="post">
-              {% csrf_token %}
-              <input type="hidden" name="contest_id" value="{{ c.id }}">
-              <select name="status" id="contest_status">
-                <option value="preparing">PREPARING</option>
-                <option value="running">RUNNING</option>
-                <option value="paused">PAUSED</option>
-                <option value="finished">FINISHED</option>
-              </select>
-              <select name="is_open" id="is_open">
-                <option value="True">True</option>
-                <option value="False">False</option>
-              </select>
-              <button type="submit">変更</button>
-            </form>
-            <a href="{% url 'ctf:home' c.id %}">移動</a>
-          </div>
-          {% endfor %}
+      <div class="my-5 mt-4">
+        <div class="mb-3">
+          <a href="{% url 'index' %}" class="text-decoration-none">
+            {% include 'app/icons/left-short.svg' %}
+            <span>Q-Sys Home</span>
+          </a>
         </div>
+        <div>
+          <span class="lead lh-1">Online Contest</span>
+          <h2 class="fw-bolder">公開中のコンテスト</h2>
+        </div>
+        <hr>
+
+        <section>
+          <div class="row">
+            {% for c in opened_contests %}
+            <div class="p-4 col-3">
+              <a class="card shadow-sm q-item block text-decoration-none text-dark" href="{% url 'ctf:home' c.id %}">
+                <div class="card-body">
+                  <h6 class="m-0 text-truncate fw-light">{{ c.id }}</h6>
+                  <h4 class="m-0 card-title fw-bold text-truncate">{{ c.name }}</h4>
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
       </div>
-      {% endfor %}
+
+      {% if closed_contests %}
+      <div class="my-5">
+        <div>
+          <span class="lead lh-1">Offline Contest</span>
+          <h2 class="fw-bolder">非公開のコンテスト</h2>
+        </div>
+        <hr>
+
+        <section>
+          <div class="row">
+            {% for c in closed_contests %}
+            <div class="p-4 col-3">
+              <a class="card shadow-sm q-item block text-decoration-none text-dark" href="{% url 'ctf:home' c.id %}">
+                <div class="card-body">
+                  <h6 class="m-0 text-truncate fw-light">{{ c.id }}</h6>
+                  <h4 class="m-0 card-title fw-bold text-truncate">{{ c.name }}</h4>
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+      {% endif %}
     </div>
   </div>
   {% bootstrap_javascript %}
 </body>
+<style>
+  .q-item {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
 
+  .q-item:hover {
+    transform: scale(1.05);
+  }
+</style>
 </html>
