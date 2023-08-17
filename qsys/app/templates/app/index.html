@@ -24,6 +24,7 @@
         </div>
       </div>
 
+      {% if not request.user.is_anonymous %}
       <div>
         <div>
           <span class="lead lh-1">Q-Sys Services</span>
@@ -41,6 +42,7 @@
           </div>
         </div>
       </div>
+      {% endif %}
     </div>
   </div>
 </body>
