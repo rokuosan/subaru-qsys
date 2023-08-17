@@ -5,9 +5,16 @@
 
 <section id="title" style="height: 90dvh;background-image: url('/static/img/wallpaper-ctf.jpg'); background-size: cover; background-position: center;">
   <div class="container h-100" style="padding-top: 120px;">
-    <div class="p-lg-4 h-100 d-flex justify-content-center flex-column">
+    <div class="p-lg-4 h-100 d-flex justify-content-left">
       <div class="my-auto bg-white p-4 pe-5" style="width: fit-content;">
-        <span class="lead lh-1">Contest</span>
+        <div class="d-flex">
+          <span class="lead lh-1">Contest</span>
+          <div class="ms-3 fst-normal d-flex align-items-center">
+            <span style="width: fit-content; height: fit-content;" class="badge bg-{{ status.1 }}">
+              {{ status.0 }}
+            </span>
+          </div>
+        </div>
         <h1 class="fw-bolder">{{ contest.name }}</h1>
       </div>
     </div>
@@ -19,34 +26,20 @@
     <section id="content-body" class="container px-md-2 py-md-2 mt-3">
       <section id="contest-info" class="container">
         <h3 class="fw-bolder text-white bg-dark px-4 mx-auto" style="width: fit-content;">コンテスト情報</h3>
-        <div class="d-flex justify-content-center flex-column col-lg-6 mx-auto text-center">
-          <!-- 開催日時 -->
-          <div class="row mt-3">
-            <div class="col-md-4">
-              <span class="fw-bold">開催日時</span>
-            </div>
-            <div class="col-md-8">
-              <span>{{ contest.start_at | date:"Y/m/d H:i" }} ~ {{ contest.end_at | date:"Y/m/d H:i" }}</span>
-            </div>
-          </div>
-          <!-- 開催期間 -->
-          <div class="row mt-3">
-            <div class="col-md-4">
-              <span class="fw-bold">開催期間</span>
-            </div>
-            <div class="col-md-8">
-              <span>{{ contest.duration }}時間</span>
-            </div>
-          </div>
-          <!-- 参加者数 -->
-          <div class="row mt-3">
-            <div class="col-md-4">
-              <span class="fw-bold">参加者数</span>
-            </div>
-            <div class="col-md-8">
-              <span>{{ contest.players.count }}人</span>
-            </div>
-        </div>
+        <table class="table table-striped border mx-auto" style="max-width: 800px;">
+          <tbody>
+            <tr>
+              <th scope="row" class="text-center">予定期間</th>
+              <td>{{ contest.start_at | date:"Y/m/d H:i" }} ~ {{ contest.end_at | date:"Y/m/d H:i" }}</td>
+            </tr>
+            {% for i in contest_info %}
+            <tr>
+              <th scope="row" class="text-center">{{ i.0 }}</th>
+              <td>{{ i.1 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </section>
     </section>
   </div>
