@@ -18,15 +18,6 @@ class Contest(models.Model, ExportModelOperationsMixin("ctf")):
     - status -> str: CTFの状態\n
     - is_team_ranking_public -> bool: チームランキング(Team Ranking)を公開する\n
     - is_player_ranking_public -> bool: プレイヤーランキング(Player Ranking)を公開する\n
-
-    Methods:\n
-    - is_running -> bool: コンテストが開催中かどうかを返す\n
-    - is_paused -> bool: コンテストが一時停止中かどうかを返す\n
-    - is_finished -> bool: コンテストが終了しているかどうかを返す\n
-    - is_preparing -> bool: コンテストが準備中かどうかを返す\n
-    - is_open -> bool: コンテストが実施中かどうかを返す\n
-    - is_over -> bool: コンテストが開催期間を過ぎているかどうかを返す\n
-    - is_started_on_time -> bool: 開催期間を基準にコンテストが開催しているかどうかを返す\n
     """
 
     id = models.CharField(
