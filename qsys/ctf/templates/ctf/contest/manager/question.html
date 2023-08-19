@@ -104,7 +104,7 @@
       </div>
       <div id="create-question" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <form method="post" action="{% url 'ctf:manager_question_create' contest.id %}" class="modal-content" enctype="multipart/form-data" id="create_type-question-form">
+          <form method="post" action="{% url 'ctf:manager_question_create' contest.id %}" class="modal-content" enctype="multipart/form-data" id="create-question-form">
             {% csrf_token %}
             <input type="hidden" name="create_type" value="question">
             <div class="modal-header">
