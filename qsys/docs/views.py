@@ -1,7 +1,5 @@
 import glob
-import os
 import re
-from django.http import HttpResponse
 from django.shortcuts import render
 import yaml
 
@@ -61,7 +59,6 @@ def doc(request):
             return render(request, "docs/index.html")
 
     doc_name = request.path.replace("/docs/", "", 1)
-    print(doc_name)
     docs = [d[0] for d in get_docs()]
     if doc_name in docs:
         data = ""
