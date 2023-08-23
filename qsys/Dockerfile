@@ -19,4 +19,5 @@ RUN pip install -r requirements.txt && pip install uwsgi
 #     chmod +x /usr/local/bin/entrypoint.sh
 # ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
-CMD ["uwsgi", "--ini", "uwsgi.ini", "--enable-threads"]
+# Run entrypoint.sh
+CMD ["/bin/bash", "entrypoint.sh"]

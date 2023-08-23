@@ -1,5 +1,10 @@
 #!/bin/bash
 
-export HOME=/home/django
+# Generate static files
+python manage.py collectstatic --noinput
 
-exec /usr/sbin/gosu django "$@"
+# Apply database migrations
+python manage.py migrate
+
+# Start server
+uwsgi --ini uwsgi.ini --enable-threads
