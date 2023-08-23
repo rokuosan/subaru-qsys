@@ -1,4 +1,5 @@
 from django.http import HttpRequest
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
@@ -13,6 +14,7 @@ def index_view(request: HttpRequest):
     try:
         player = request.user.player
     except Exception:
+        messages.error(request, "紐づけされたプレイヤーデータがありません")
         return redirect("index")
 
     contests = Contest.objects.all()

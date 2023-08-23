@@ -32,14 +32,20 @@ def manager_team_view(request: HttpRequest, contest_id: str):
     if selected_team is None:
         selected_team = teams.first()
 
-    members = selected_team.members.all()
-    for m in members:
-        m.team = selected_team
+    if selected_team is not None:
+        members = selected_team.members.all()
+        for m in members:
+            m.team = selected_team
 
     if request.method == "POST":
         player_id = request.POST.get("player_id")
         player = get_object_or_404(Player, id=player_id)
         ctrl_type = request.POST.get("type")
+
+        if selected_team is None:
+            messages.error(request, "チームが選択されていません")
+            return redirect("ctf:manager_team", contest_id=contest.id)
+
         if ctrl_type == "add":
             before = cu.get_team_by_player(player)
             if before is not None:
@@ -57,7 +63,10 @@ def manager_team_view(request: HttpRequest, contest_id: str):
             + f"?{params.urlencode()}"
         )
 
-    players = [p for p in players if p not in members]
+    if selected_team is not None:
+        players = [p for p in players if p not in members]
+    else:
+        members = []
 
     no_team = []
     on_team = []

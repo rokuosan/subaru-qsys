@@ -13,7 +13,7 @@ services:
       - ./services/nginx/conf.d:/etc/nginx/conf.d
       - ./services/nginx/html:/usr/share/nginx/html
       - ./services/nginx/log:/var/log/nginx
-      - socket:/var/run/uwsgi
+      - ./services/socket:/var/run/uwsgi
     restart: unless-stopped
     depends_on:
       - django
@@ -22,7 +22,7 @@ services:
     build: ./qsys/
     volumes:
       - ./qsys/:/app
-      - socket:/var/run/uwsgi
+      - ./services/socket:/var/run/uwsgi
 
   prometheus:
     image: prom/prometheus
