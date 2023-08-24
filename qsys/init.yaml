@@ -35,6 +35,7 @@ qsys:
       - username: 'admin'
         is_admin: true
         is_superuser: true
+        is_staff: true
         password: 'admin'
         team: 'Admin Team'
       - username: 'Yamada Taro'
