@@ -166,10 +166,11 @@ class Command(BaseCommand):
                     return
 
         # Print password list as csv
-        csv = "\n".join([f"{u}, {p}" for u, p in pw_list])
-        rand = random.randrange(1000, 10000)
-        with open(f"passwords_{rand}.csv", "w") as f:
-            f.write(csv)
+        if len(pw_list) > 0:
+            csv = "\n".join([f"{u}, {p}" for u, p in pw_list])
+            rand = random.randrange(1000, 10000)
+            with open(f"passwords_{rand}.csv", "w") as f:
+                f.write(csv)
 
         print("Users Done.")
         print()
