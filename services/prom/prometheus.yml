@@ -11,4 +11,4 @@ scrape_configs:
       - targets: ['172.19.0.1:8000']
   - job_name: 'ctf-prod'
     static_configs:
-      - targets: ['server:8000']
+      - targets: ['nginx']
