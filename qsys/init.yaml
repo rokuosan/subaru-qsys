@@ -14,6 +14,7 @@ qsys:
     - Reverse
     - Misc
   team:
+    - Admin Team
     - Team A
     - Team B
     - Team C
@@ -31,6 +32,11 @@ qsys:
     # ユーザを詳細に設定する場合は以下のように記述する
     # username以外は省略可能
     detailed:
+      - username: 'admin'
+        is_admin: true
+        is_superuser: true
+        password: 'admin'
+        team: 'Admin Team'
       - username: 'Yamada Taro'
         team: 'Team A'
         is_admin: false
@@ -41,6 +47,7 @@ qsys:
         password: 'sample'
 
   player:
+    - 'admin'
     - 'Yamada Taro'
     - 'Suzuki Hanako'
 
