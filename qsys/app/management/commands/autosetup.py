@@ -4,18 +4,25 @@ import uuid
 import os
 import shutil
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 import yaml
 
 from app.models.app_user import AppUser
 from ctf.models.player import Player
 from ctf.models.team import Team
 from ctf.models.question import Question, Category, Difficulty
+from ctf.models.contest import Contest
 
 
 class Command(BaseCommand):
     help = "init.yamlに定義した内容をもとに、Q-Sysのセットアップを行います。"
 
     def read_yaml(self) -> dict:
+        """init.yamlを読み込みます。
+
+        Returns:
+            dict: init.yamlの内容
+        """
         print(self.help)
 
         text = None
@@ -39,6 +46,13 @@ class Command(BaseCommand):
         return data
 
     def simple_setup(self, yml: dict, key: str, model):
+        """名前のみのモデルをセットアップします。
+
+        Args:
+            yml (dict): YAMLオブジェクト
+            key (str): レコードのキー
+            model (_type_): モデル
+        """
         print(f"Setting up {key}...")
         data = yml[key]
         for item in data:
@@ -59,6 +73,11 @@ class Command(BaseCommand):
         print()
 
     def setup_questions(self, yml: dict):
+        """問題をセットアップします。
+
+        Args:
+            yml (dict): YAMLオブジェクト
+        """
         print("Setting up Questions...")
         questions = yml["question"]
         for q in questions:
@@ -113,9 +132,15 @@ class Command(BaseCommand):
         print()
 
     def setup_users(self, yml: dict):
+        """ユーザーをセットアップします。
+
+        Args:
+            yml (dict): YAMLオブジェクト
+        """
         data = yml["user"]
         pw_list = []
 
+        # Roughed Users
         roughed = data.get("roughed", None)
         if roughed is not None and type(roughed) is list:
             print("Setting up Roughed Users...")
@@ -137,6 +162,7 @@ class Command(BaseCommand):
                     print(e)
                     return
 
+        # Detailed Users
         detailed = data.get("detailed", None)
         if detailed is not None and type(detailed) is list:
             print("Setting up Detailed Users...")
@@ -181,7 +207,7 @@ class Command(BaseCommand):
                     print(e)
                     return
 
-        # Print password list as csv
+        # CSVファイルを出力
         if len(pw_list) > 0:
             csv = "\n".join([f"{u}, {p}" for u, p in pw_list])
             uid = uuid.uuid4()
@@ -194,6 +220,11 @@ class Command(BaseCommand):
         print()
 
     def setup_player(self, yml: dict):
+        """プレイヤーをセットアップします。
+
+        Args:
+            yml (dict): YAMLオブジェクト
+        """
         print("Setting up Players...")
         data = yml["player"]
         for player in data:
@@ -214,6 +245,87 @@ class Command(BaseCommand):
         print("Players Done.")
         print()
 
+    def setup_contest(self, yml: dict):
+        """コンテストをセットアップします。
+
+        Args:
+            yml (dict): YAMLオブジェクト
+        """
+        print("Setting up Contest...")
+        data = yml["contest"]
+        for contest in data:
+            cid = contest.get("id", None)
+            if cid is None:
+                print("Contest ID is not defined")
+                continue
+            print(f"- {cid}", end=" ")
+
+            dname = contest.get("display_name", None)
+            desc = contest.get("description", None)
+            start = contest.get("start_at", None)
+            end = contest.get("end_at", None)
+            status = contest.get("status", "preparing")
+            questions = contest.get("questions", None)
+            teams = contest.get("teams", None)
+            is_open = contest.get("is_open", True)
+            team_rank = contest.get("is_team_ranking_public", True)
+            player_rank = contest.get("is_player_ranking_public", False)
+
+            try:
+                start = datetime.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+                end = datetime.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+                start = timezone.make_aware(start)
+                end = timezone.make_aware(end)
+            except Exception as e:
+                print("Failed")
+                print(e)
+                continue
+
+            if status not in ["running", "paused", "finished", "preparing"]:
+                print("Unknown status")
+                continue
+
+            try:
+                c = Contest.objects.create(
+                    id=cid,
+                    display_name=dname,
+                    description=desc,
+                    start_at=start,
+                    end_at=end,
+                    status=status,
+                    is_open=is_open,
+                    is_team_ranking_public=team_rank,
+                    is_player_ranking_public=player_rank,
+                )
+                c.save()
+            except Exception as e:
+                print("Failed")
+                print(e)
+                continue
+
+            if questions is not None:
+                for q in questions:
+                    try:
+                        qdata = Question.objects.get(title=q)
+                        c.questions.add(qdata)
+                    except Exception:
+                        print("No such question: ", q)
+                        continue
+
+            if teams is not None:
+                for t in teams:
+                    try:
+                        tdata = Team.objects.get(name=t)
+                        c.teams.add(tdata)
+                    except Exception:
+                        print("No such team: ", t)
+                        continue
+
+            print("OK")
+
+        print("Contest Done.")
+        print()
+
     def handle(self, *args, **options):
         data = self.read_yaml()
         if data is None:
@@ -224,6 +336,7 @@ class Command(BaseCommand):
         self.simple_setup(qsys, "category", Category)
         self.simple_setup(qsys, "team", Team)
         self.setup_questions(qsys)
+        self.setup_contest(qsys)
         self.setup_users(qsys)
         self.setup_player(qsys)
 
