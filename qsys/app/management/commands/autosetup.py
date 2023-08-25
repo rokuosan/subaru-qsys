@@ -1,4 +1,8 @@
-import random
+import datetime
+import hashlib
+import uuid
+import os
+import shutil
 from django.core.management.base import BaseCommand
 import yaml
 
@@ -70,7 +74,7 @@ class Command(BaseCommand):
                 if Question.objects.filter(title=title).exists():
                     print("Already exists")
                     continue
-                q = Question(
+                qdata = Question(
                     title=title,
                     description=description,
                     flag=flag,
@@ -79,7 +83,27 @@ class Command(BaseCommand):
                     difficulty=difficulty,
                     is_open=is_open,
                 )
-                q.save()
+                qdata.save()
+
+                filepath = q.get("file", None)
+                if filepath is not None:
+                    # ファイルの存在確認
+                    is_file = os.path.isfile(filepath)
+                    if not is_file:
+                        print("File not found")
+                        continue
+                    # ディレクトリの作成
+                    qid = qdata.id
+                    qdir = f"./static/questions/{qid}/"
+                    os.makedirs(qdir, exist_ok=True)
+                    # ファイルのコピー
+                    shutil.copy(filepath, qdir)
+
+                    qdata.file_path = (
+                        f"static/questions/{qid}/{os.path.basename(filepath)}"
+                    )
+                    qdata.save()
+
                 print("OK")
             except Exception as e:
                 print("Failed")
@@ -128,14 +152,6 @@ class Command(BaseCommand):
                     # Password
                     pw = user.get("password", None)
 
-                    # Team
-                    # team = user.get("team", None)
-                    # if team is not None:
-                    #     try:
-                    #         team = CtfTeam.objects.get(name=team)
-                    #     except CtfTeam.DoesNotExist:
-                    #         print("Team not found")
-
                     # Flags
                     is_admin = user.get("is_admin", False)
                     is_staff = user.get("is_staff", False)
@@ -168,8 +184,10 @@ class Command(BaseCommand):
         # Print password list as csv
         if len(pw_list) > 0:
             csv = "\n".join([f"{u}, {p}" for u, p in pw_list])
-            rand = random.randrange(1000, 10000)
-            with open(f"passwords_{rand}.csv", "w") as f:
+            uid = uuid.uuid4()
+            today = datetime.date.today()
+            hash = hashlib.sha256(f"{uid}{today}".encode()).hexdigest()
+            with open(f"passwords_{hash}.csv", "w") as f:
                 f.write(csv)
 
         print("Users Done.")
