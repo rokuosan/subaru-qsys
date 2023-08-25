@@ -260,8 +260,12 @@ class Command(BaseCommand):
                 continue
             print(f"- {cid}", end=" ")
 
+            if Contest.objects.filter(id=cid).exists():
+                print("Already exists")
+                continue
+
             dname = contest.get("display_name", None)
-            desc = contest.get("description", None)
+            desc = contest.get("description", "")
             start = contest.get("start_at", None)
             end = contest.get("end_at", None)
             status = contest.get("status", "preparing")
@@ -272,10 +276,24 @@ class Command(BaseCommand):
             player_rank = contest.get("is_player_ranking_public", False)
 
             try:
-                start = datetime.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
-                end = datetime.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
-                start = timezone.make_aware(start)
-                end = timezone.make_aware(end)
+                is_naive_start = True
+                is_naive_end = True
+                if start is None:
+                    start = timezone.now()
+                    is_naive_start = False
+                if end is None:
+                    end = timezone.now() + datetime.timedelta(hours=1)
+                    is_naive_end = False
+                if type(start) is str:
+                    start = datetime.datetime.strptime(
+                        start, "%Y-%m-%d %H:%M:%S"
+                    )
+                if type(end) is str:
+                    end = datetime.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+                if is_naive_start:
+                    start = timezone.make_aware(start)
+                if is_naive_end:
+                    end = timezone.make_aware(end)
             except Exception as e:
                 print("Failed")
                 print(e)
