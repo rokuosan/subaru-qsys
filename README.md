@@ -4,7 +4,7 @@
 
 ## Documentation
 
-詳細なドキュメントは[docs/README.md](docs/README.md)を参照してください。
+詳細なドキュメントは[docs/README.md](./docs/README.md)を参照してください。
 
 ## Requirements
 
@@ -16,7 +16,7 @@
 ## Installation
 
 > **Note**
-> ここではPythonのコマンドを``python``として記述します。
+> ここではQ-Sysの起動方法を説明します。
 
 このリポジトリをクローンします。
 
@@ -25,48 +25,21 @@ $ git clone git@github.com:rokuosan/subaru-qsys.git
 $ cd subaru-qsys
 ```
 
-> **Note**
-> 仮想環境を作成して実行することを推奨します。以下のコマンドで仮想環境を作成することができます。
-> ```
-> $ python -m venv venv
-> ```
-
-以下のコマンドで依存パッケージをインストールします。
+Docker Composeを利用してサービスを起動します。
 
 ```bash
-$ cd qsys
-$ pip install -r requirements.txt
-```
-
-以下コマンドを使ってデータベースを作成します。
-
-```bash
-$ python manage.py migrate
-```
-
-スーパーユーザー(管理者アカウント)を作成します。
-
-```bash
-$ python manage.py createsuperuser
-Username: 任意の名前を入力
-Password: パスワードを入力(表示されません)
-Password (again): パスワードを再入力(表示されません)
-```
-
-サーバーとその他サービスを起動します。
-
-```bash
-$ cd ..
 $ docker compose up -d
 ```
 
 以下のURLからダッシュボードに接続します。
 
+初回起動ではDBのセットアップが行われるため、接続までに時間がかかる場合があります。
+
 - [http://localhost/](http://localhost/)
 
 ## Libraries
 
-使用したライブラリは以下の通りです。
+使用した主要なライブラリは以下の通りです。
 
 | Name | Version |
 | :- | :-: |
