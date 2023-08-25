@@ -120,3 +120,20 @@ qsys:
       flag: 'flag{network-3}'
       description: 'flag{network-3}'
       point: 300
+
+  contest:
+    - id: sample_contest
+      display_name: 'Sample Contest'
+      start_at: '2024-01-01 00:00:00'
+      end_at: '2024-01-01 00:00:00'
+      description: 'This is a sample contest.'
+      is_open: true
+      is_team_ranking_visible: true
+      is_player_ranking_visible: true
+      status: 'preparing'
+      questions:
+        - 'Prac 1'
+        - 'Prac 2'
+      teams:
+        - 'Admin Team'
+        - 'Team A'
