@@ -14,7 +14,9 @@ qsys:
     - Reverse
     - Misc
   team:
-    - Admin Team
+    - name: Admin Team
+      players:
+        - 'admin'
     - Team A
     - Team B
     - Team C
