@@ -8,6 +8,8 @@ python manage.py migrate
 
 # Auto setup
 python manage.py autosetup
+# Fix permission
+chown django:django /app/static -R
 
 # Set write permission
 chmod 666 db.sqlite3

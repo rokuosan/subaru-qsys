@@ -38,7 +38,7 @@ def questions_view(request: HttpRequest, contest_id: str):
     team = ctx["team"]
     solved_team = cu.get_solved_questions(team)
     for c in cats:
-        qs = c.questions.filter(is_open=True).order_by("point")
+        qs = contest.questions.filter(category=c, is_open=True)
         if qs:
             for q in qs:
                 if q in solved:
@@ -66,7 +66,9 @@ def question_detail_view(
 ):
     """開催しているCTFで公開中の問題を表示するView"""
     contest: Contest = get_object_or_404(Contest, id=contest_id)
-    question: Question = get_object_or_404(Question, id=question_id)
+    question: Question = get_object_or_404(
+        contest.questions.all(), id=question_id
+    )
     ctx = {"contest": contest, "question": question}
     cu = ContestUtils(contest)
     try:

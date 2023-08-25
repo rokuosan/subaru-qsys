@@ -14,7 +14,9 @@ qsys:
     - Reverse
     - Misc
   team:
-    - Admin Team
+    - name: Admin Team
+      players:
+        - 'admin'
     - Team A
     - Team B
     - Team C
@@ -24,10 +26,26 @@ qsys:
     # ユーザを簡易に追加する場合は以下のように記述する
     # パスワードはランダムに生成される
     roughed:
-      - 'Sample User 1'
-      - 'Sample User 2'
-      - 'Sample User 3'
-      - 'Sample User 4'
+      - 佐藤
+      - 鈴木
+      - 高橋
+      - 田中
+      - 伊藤
+      - 渡辺
+      - 山本
+      - 中村
+      - 小林
+      - 加藤
+      - 吉田
+      - 山田
+      - 佐々木
+      - 山口
+      - 松本
+      - 井上
+      - 木村
+      - 林
+      - 斎藤
+      - 清水
 
     # ユーザを詳細に設定する場合は以下のように記述する
     # username以外は省略可能
@@ -37,20 +55,29 @@ qsys:
         is_superuser: true
         is_staff: true
         password: 'admin'
-        team: 'Admin Team'
-      - username: 'Yamada Taro'
-        team: 'Team A'
-        is_admin: false
-        password: 'sample'
-      - username: 'Suzuki Hanako'
-        team: 'Team B'
-        is_admin: false
-        password: 'sample'
 
   player:
     - 'admin'
-    - 'Yamada Taro'
-    - 'Suzuki Hanako'
+    - 佐藤
+    - 鈴木
+    - 高橋
+    - 田中
+    - 伊藤
+    - 渡辺
+    - 山本
+    - 中村
+    - 小林
+    - 加藤
+    - 吉田
+    - 山田
+    - 佐々木
+    - 山口
+    - 松本
+    - 井上
+    - 木村
+    - 林
+    - 斎藤
+    - 清水
 
   question:
     - title: 'Prac 1'
@@ -59,6 +86,7 @@ qsys:
       flag: 'flag{1}'
       description: 'flag{1}'
       point: 100
+      file: ./question_data/prac1.txt
 
     - title: 'Prac 2'
       difficulty: Tutorial
@@ -94,3 +122,20 @@ qsys:
       flag: 'flag{network-3}'
       description: 'flag{network-3}'
       point: 300
+
+  contest:
+    - id: sample_contest
+      display_name: 'Sample Contest'
+      start_at: '2024-01-01 00:00:00'
+      end_at: '2024-01-01 00:00:00'
+      description: 'This is a sample contest.'
+      is_open: true
+      is_team_ranking_visible: true
+      is_player_ranking_visible: true
+      status: 'preparing'
+      questions:
+        - 'Prac 1'
+        - 'Prac 2'
+      teams:
+        - 'Admin Team'
+        - 'Team A'
