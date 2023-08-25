@@ -326,6 +326,64 @@ class Command(BaseCommand):
         print("Contest Done.")
         print()
 
+    def setup_team(self, yml: dict):
+        """チームをセットアップします。
+
+        Args:
+            yml (dict): YAMLオブジェクト
+        """
+        print("Setting up Teams...")
+        data = yml["team"]
+        for team in data:
+            if type(team) is dict:
+                name = team.get("name", None)
+                if name is None:
+                    print("Team name is not defined")
+                    continue
+                print(f"- {name}", end=" ")
+
+                try:
+                    t = Team.objects.filter(name=name)
+                    if t.exists():
+                        print("Already exists")
+                        continue
+                    t = Team(name=name)
+                    t.save()
+                    players = team.get("players", None)
+                    if players is None:
+                        print("OK")
+                        continue
+                    for p in players:
+                        try:
+                            pdata = Player.objects.get(name=p)
+                            t.members.add(pdata)
+                        except Exception:
+                            print("No such player: ", p)
+                            continue
+                    print("OK")
+
+                except Exception as e:
+                    print("Failed")
+                    print(e)
+                    continue
+
+            else:
+                print(f"- {team}", end=" ")
+                try:
+                    t = Team.objects.filter(name=team)
+                    if t.exists():
+                        print("Already exists")
+                        continue
+                    t = Team(name=team)
+                    t.save()
+                    print("OK")
+                except Exception as e:
+                    print("Failed")
+                    print(e)
+                    continue
+        print("Teams Done.")
+        print()
+
     def handle(self, *args, **options):
         data = self.read_yaml()
         if data is None:
@@ -334,10 +392,10 @@ class Command(BaseCommand):
 
         self.simple_setup(qsys, "difficulty", Difficulty)
         self.simple_setup(qsys, "category", Category)
-        self.simple_setup(qsys, "team", Team)
-        self.setup_questions(qsys)
-        self.setup_contest(qsys)
         self.setup_users(qsys)
         self.setup_player(qsys)
+        self.setup_team(qsys)
+        self.setup_questions(qsys)
+        self.setup_contest(qsys)
 
         print("All Setup Completed.")
