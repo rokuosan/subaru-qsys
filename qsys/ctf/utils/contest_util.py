@@ -425,12 +425,16 @@ class ContestUtils:
             User: 作成したユーザー
         """
         try:
-            user = AppUser(
-                username=username,
-                is_admin=is_admin,
-            )
-            user.set_password(password)
-            user.save()
+            if is_admin:
+                user = AppUser.objects.create_superuser(
+                    username=username,
+                    password=password,
+                )
+            else:
+                user = AppUser.objects.create_user(
+                    username=username,
+                    password=password,
+                )
             return user
         except Exception as e:
             print(e)
