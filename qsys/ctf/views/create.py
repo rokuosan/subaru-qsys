@@ -121,9 +121,7 @@ class _CreateContestForm(forms.Form):
 
             for player in team.members.all():
                 if player in am:
-                    raise forms.ValidationError(
-                        "同じ人物を含むチームがあります。"
-                    )
+                    raise forms.ValidationError("同じ人物を含むチームがあります。")
                 am.append(player)
 
         return teams
@@ -137,9 +135,7 @@ class _CreateContestForm(forms.Form):
             end_at=self.cleaned_data["end_at"],
             status=self.cleaned_data["status"],
             is_open=self.cleaned_data["is_open"],
-            is_team_ranking_public=self.cleaned_data[
-                "is_team_ranking_public"
-            ],
+            is_team_ranking_public=self.cleaned_data["is_team_ranking_public"],
             is_player_ranking_public=self.cleaned_data[
                 "is_player_ranking_public"
             ],

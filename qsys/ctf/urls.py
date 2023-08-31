@@ -32,10 +32,8 @@ app_name = "ctf"
 urlpatterns = [
     # Index
     path("", index_view, name="index"),
-
     # Create
     path("create/", create_view, name="create"),
-
     # Contest
     path("<str:contest_id>/", contest_home_view, name="home"),
     path("<str:contest_id>/questions/", questions_view, name="questions"),
