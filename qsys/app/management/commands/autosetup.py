@@ -27,8 +27,12 @@ class Command(BaseCommand):
 
         text = None
         try:
-            with open("init.yaml", "r") as f:
-                text = f.read()
+            if os.name == "nt":
+                with open("init.yaml", "r", encoding="utf-8_sig") as f:
+                    text = f.read()
+            else:
+                with open("init.yaml", "r", encoding="utf-8") as f:
+                    text = f.read()
         except FileNotFoundError:
             print("init.yaml not found")
             return None
