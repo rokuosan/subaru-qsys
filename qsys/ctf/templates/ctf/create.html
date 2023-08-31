@@ -1,0 +1,50 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Contest | Q-Sys</title>
+
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/base.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}" />
+
+  <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+  {{ form.media }}
+  <script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+  <script type="text/javascript" src="{% static 'admin/js/admin/RelatedObjectLookups.js' %}"></script>
+
+  {% bootstrap_css %}
+</head>
+<body class="bg-light position-relative">
+  <div class="position-fixed bottom-0 end-0 px-4" style="z-index: 5000;">
+    {% include 'django_bootstrap5/messages.html' %}
+  </div>
+
+  <div class="container p-lg-4 pt-4">
+    <div class="container ">
+      <form action="{% url 'ctf:create' %}" method="post" class="form mx-auto d-flex flex-column gap-3" id="from">
+        {% csrf_token %}
+
+        {% bootstrap_form form layout='horizontal' %}
+
+        <input type="submit" value="作成" class="btn btn-primary ">
+        {% bootstrap_form_errors form %}
+      </form>
+    </div>
+  </div>
+</body>
+
+<style>
+  .form {
+    max-width: 600px;
+  }
+
+  #id_status {
+    height: 3rem;
+  }
+</style>
+
+</html>
