@@ -3,6 +3,7 @@
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,19 +19,36 @@
 
   {% bootstrap_css %}
 </head>
+
 <body class="bg-light position-relative">
   <div class="position-fixed bottom-0 end-0 px-4" style="z-index: 5000;">
     {% include 'django_bootstrap5/messages.html' %}
   </div>
 
   <div class="container p-lg-4 pt-4">
-    <div class="container ">
-      <form action="{% url 'ctf:create' %}" method="post" class="form mx-auto d-flex flex-column gap-3" id="from">
+
+    <section class="header">
+      <div class="d-flex justify-content-between py-3">
+        <div class="d-flex align-items-center">
+          <a href="{% url 'index' %}" class="text-decoration-none">
+            {% include 'app/icons/left-short.svg' %}
+            <span>Q-Sys Home</span>
+          </a>
+        </div>
+
+      </div>
+      <div>
+        <span class="lead lh-1">Q-Sys CTF</span>
+        <h2 class="fw-bolder">Create Contest</h2>
+      </div>
+      <hr class="mb-4">
+    </section>
+
+    <div class="container pt-4">
+      <form action="{% url 'ctf:create' %}" method="post" class="form mx-auto d-flex flex-column" id="from">
         {% csrf_token %}
-
         {% bootstrap_form form layout='horizontal' %}
-
-        <input type="submit" value="作成" class="btn btn-primary ">
+        <button type="submit" class="btn btn-primary">作成</button>
         {% bootstrap_form_errors form %}
       </form>
     </div>
