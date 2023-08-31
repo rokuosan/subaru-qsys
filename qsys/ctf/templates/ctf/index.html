@@ -34,7 +34,7 @@
 
           {% if request.user.is_admin %}
           <div>
-            <a href="/admin/ctf/contest/add/" class="btn btn-outline-primary">
+            <a href="{% url 'ctf:create' %}" class="btn btn-outline-primary">
               <span>コンテストを新規作成</span>
             </a>
           </div>
