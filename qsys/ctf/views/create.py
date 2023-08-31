@@ -105,6 +105,10 @@ class _CreateContestForm(forms.Form):
         if len(Contest.objects.filter(id=id)) > 0:
             raise forms.ValidationError("既にコンテストが存在します。")
 
+        # 予約済みのIDかどうか
+        if id in ["create", "admin", "manager"]:
+            raise forms.ValidationError("予約済みのIDです。")
+
         return id
 
     def clean_teams(self):
