@@ -2,6 +2,7 @@ from django.urls import path
 
 from ctf.views.contest.questions import question_detail_view, questions_view
 from ctf.views.index import index_view
+from ctf.views.create import create_view
 from ctf.views.contest.manager.contest import (
     manager_contest_update_view,
     manager_contest_view,
@@ -22,6 +23,7 @@ from ctf.views.contest.manager.player import (
 from ctf.views.contest.manager.question import (
     manager_question_create_view,
     manager_question_view,
+    manager_question_edit_view,
 )
 
 
@@ -31,6 +33,8 @@ app_name = "ctf"
 urlpatterns = [
     # Index
     path("", index_view, name="index"),
+    # Create
+    path("create/", create_view, name="create"),
     # Contest
     path("<str:contest_id>/", contest_home_view, name="home"),
     path("<str:contest_id>/questions/", questions_view, name="questions"),
@@ -81,6 +85,11 @@ urlpatterns = [
         "<str:contest_id>/manager/question/create/",
         manager_question_create_view,
         name="manager_question_create",
+    ),
+    path(
+        "<str:contest_id>/manager/question/edit/<str:question_id>/",
+        manager_question_edit_view,
+        name="manager_question_edit",
     ),
     # Monitor
     path(
