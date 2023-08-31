@@ -182,12 +182,16 @@
         </thead>
         <tbody>
           {% for q in questions %}
-          <tr>
+          <tr id="record-{{q.id}}" onclick="handleRecordClick('{{q.id}}')" data-bs-toggle="modal" data-bs-target="#question-edit">
             <td scope="row">{{ q.title }}</td>
             <td>{{ q.category }}</td>
             <td>{{ q.difficulty }}</td>
             <td>{{ q.point }} pts</td>
             <td>{{ q.is_open }}</td>
+            <td class="visually-hidden">{{ q.description }}</td>
+            <td class="visually-hidden">{{ q.category.id }}</td>
+            <td class="visually-hidden">{{ q.difficulty.id }}</td>
+            <td class="visually-hidden">{{ q.flag }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -196,7 +200,104 @@
   </div>
 </div>
 
+<div id="question-edit" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <form method="post" action="" class="modal-content" enctype="multipart/form-data"
+      id="question-edit-form">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title fw-bolder" id="e-modal-title"> タイトル </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body d-flex flex-column gap-3">
+        <div>
+          問題の編集を行います。提供ファイルについては、更新する場合のみアップロードしてください。
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="e-title" name="title" placeholder="タイトル" autocomplete="off">
+          <label for="title" class="form-label">問題タイトル</label>
+        </div>
+        <div class="form-floating">
+          <select name="category" id="e-category" class="form-select">
+            {% for c in category %}
+            <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+          </select>
+          <label for="category">カテゴリ</label>
+        </div>
+        <div class="form-floating">
+          <select name="difficulty" id="e-difficulty" class="form-select">
+            {% for d in difficulty %}
+            <option value="{{ d.id }}">{{ d.name }}</option>
+            {% endfor %}
+          </select>
+          <label for="difficulty">難易度</label>
+        </div>
+        <div class="form-floating">
+          <textarea class="form-control" placeholder="問題文" id="e-description" style="height: 100px"
+            name="description"></textarea>
+          <label for="description">問題文</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="e-flag" name="flag" placeholder="flag" autocomplete="off">
+          <label for="flag" class="form-label">正解flag</label>
+        </div>
+        <div class="form-floating">
+          <input type="number" class="form-control" id="e-point" name="point" placeholder="ポイント" autocomplete="off">
+          <label for="flag" class="form-label">ポイント</label>
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">問題データ</span>
+          <input class="form-control" type="file" id="e-file" name="file">
+        </div>
+        <div>
+          <input type="checkbox" class="form-check-input" id="e-is_open" name="is_open" value="True" checked>
+          <label for="is_open" class="form-check-label">公開する</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="question-edit-button">更新</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
+  const handleRecordClick = (qid) => {
+    const regex = /[^0-9]/g;
+
+    const record = document.getElementById(`record-${qid}`);
+    const title = record.children[0].innerText;
+    const category = record.children[1].innerText;
+    const difficulty = record.children[2].innerText;
+    const point = parseInt(record.children[3].innerText.replace(regex, ''));
+    const is_open = record.children[4].innerText == "True";
+    const description = record.children[5].innerText;
+    const category_id = record.children[6].innerText;
+    const difficulty_id = record.children[7].innerText;
+    const flag = record.children[8].innerText;
+
+    const form = document.getElementById('question-edit-form');
+    form.action = `{% url 'ctf:manager_question' contest.id %}edit/${qid}/`;
+    document.getElementById('e-modal-title').innerText = `問題編集: ${title}`;
+    document.getElementById('e-title').value = title;
+    document.getElementById('e-description').value = description;
+    document.getElementById('e-category').value = category_id;
+    document.getElementById('e-difficulty').value = difficulty_id;
+    document.getElementById('e-point').value = point;
+    document.getElementById('e-flag').value = flag;
+
+    if (is_open) {
+      document.getElementById('e-is_open').checked = true;
+    } else {
+      document.getElementById('e-is_open').checked = false;
+    }
+  }
+
+
+
+
   const createQuestionButton = document.getElementById('create-question-button');
   const createQuestionForm = document.getElementById('create-question-form');
 

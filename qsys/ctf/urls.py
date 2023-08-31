@@ -23,6 +23,7 @@ from ctf.views.contest.manager.player import (
 from ctf.views.contest.manager.question import (
     manager_question_create_view,
     manager_question_view,
+    manager_question_edit_view,
 )
 
 
@@ -84,6 +85,11 @@ urlpatterns = [
         "<str:contest_id>/manager/question/create/",
         manager_question_create_view,
         name="manager_question_create",
+    ),
+    path(
+        "<str:contest_id>/manager/question/edit/<str:question_id>/",
+        manager_question_edit_view,
+        name="manager_question_edit",
     ),
     # Monitor
     path(
